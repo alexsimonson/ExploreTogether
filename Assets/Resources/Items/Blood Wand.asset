@@ -9,13 +9,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8bc08a7321d1d804ebb08eea32645b55, type: 3}
-  m_Name: BloodWand
+  m_Script: {fileID: 11500000, guid: 953e002efd5149e43b777ce1ddb9f110, type: 3}
+  m_Name: Blood Wand
   m_EditorClassIdentifier: 
-  id: 666
+  id: 1339
   name: Blood Wand
-  description: Blood Healing
-  weight: 3
+  description: Blood wand as a weapon
+  weight: 0
   stack: 0
   max_stack_size: 0
   icon: {fileID: 21300000, guid: 5f018c45773b4f04796eeebdf6a96606, type: 3}
+  type: 8
