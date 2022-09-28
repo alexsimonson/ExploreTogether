@@ -1,0 +1,123 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class WaveSurvival : MonoBehaviour {
+
+    int current_round = 0;
+    int score = 0;
+    static int enemies_spawned_this_round_max_default = 5;
+    int enemies_spawned_this_round_max = enemies_spawned_this_round_max_default;  // how many enemies will spawn and be defeated before the round ends
+    int enemies_spawned_max = 10;
+    int enemies_currently_spawned = 0;
+    int enemies_spawned_this_round = 0;
+    int enemies_eliminated_this_round = 0;
+    bool transition_period = false;
+    public GameObject enemy_prefab;
+
+    private GameObject canvas;
+
+    GameObject[] respawns;
+    GameObject playerRespawns;
+    GameObject enemyRespawns;
+    // Start is called before the first frame update
+    void Start(){
+        canvas = GameObject.Find("Canvas");
+        respawns = GameObject.FindGameObjectsWithTag("Respawn");
+        FilterRespawns();
+        EndRound();
+    }
+
+    // Update is called once per frame
+    void Update(){
+        if(!transition_period){
+            SpawnEnemies();
+        }
+    }
+
+    void SpawnEnemies(){
+        while(enemies_currently_spawned < enemies_spawned_max && enemies_spawned_this_round < enemies_spawned_this_round_max){
+            SpawnEnemy();
+        }
+        if(enemies_currently_spawned==enemies_spawned_max){
+            // Debug.Log("Awaiting enemy death before spawning more");
+        }
+        if(enemies_spawned_this_round==enemies_spawned_this_round_max){
+            // Debug.Log("No more enemies will be spawned this round.");
+        }
+        if(enemies_eliminated_this_round==enemies_spawned_this_round_max){
+            EndRound();
+        }
+    }
+
+    // this function will be ran after all enemies are defeated
+    void EndRound(){
+        StartCoroutine(BeginTransitionPeriod());
+        SetupNextRound();
+    }
+
+    void SetupNextRound(){
+        current_round += 1;
+        canvas.transform.GetChild(0).gameObject.GetComponent<Text>().text = "Round " + current_round.ToString();
+        IncreaseEnemies();
+        RewardRoundBonus();
+        ResetRoundDefaults();
+    }
+
+    // this algorithm will determine how many enemies are present in each round
+    void IncreaseEnemies(){
+        enemies_spawned_this_round_max += 1;
+    }
+
+    void RewardRoundBonus(){
+        score += 1000;
+    }
+
+    void ResetRoundDefaults(){
+        enemies_eliminated_this_round = 0;
+        enemies_currently_spawned = 0;
+        enemies_spawned_this_round = 0;
+    }
+
+    void SpawnEnemy(){
+        Instantiate(enemy_prefab, enemyRespawns.transform.position, enemyRespawns.transform.rotation);
+        enemies_currently_spawned += 1;
+        enemies_spawned_this_round += 1;
+    }
+
+    IEnumerator BeginTransitionPeriod(){
+        transition_period = true;
+        Debug.Log("Transition period started");
+        yield return new WaitForSeconds(1);
+        Debug.Log("Transition period ending.");
+        transition_period = false;
+    }
+
+    public void EnemyKilled(){
+        enemies_currently_spawned -= 1;
+        enemies_eliminated_this_round += 1;
+    }
+
+    public void ResetGameMode(){
+        current_round = 0;
+        enemies_spawned_this_round_max = enemies_spawned_this_round_max_default;
+        GameObject[] npcs = GameObject.FindGameObjectsWithTag("NPC");
+        foreach(GameObject npc in npcs){
+            Destroy(npc);
+        }
+        var player = GameObject.Find("Player");
+        player.transform.position = playerRespawns.transform.position;
+        EndRound();
+    }
+
+    private void FilterRespawns(){
+        foreach(GameObject respawn in respawns){
+            if(respawn.GetComponent<RespawnPoint>().isPlayerSpawn){
+                playerRespawns = respawn;
+            }else{
+                enemyRespawns = respawn;
+            }
+        }
+    }
+}
