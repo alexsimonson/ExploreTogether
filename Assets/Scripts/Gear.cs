@@ -13,6 +13,7 @@ public class Gear : Inventory {
         var i=0;
         foreach(Transform child in content.transform){
             slots[i] = child.gameObject;
+            slots[i].GetComponent<SlotContainer>().index = i;
             i++;
         }
         RelevantScrollView.SetActive(false);

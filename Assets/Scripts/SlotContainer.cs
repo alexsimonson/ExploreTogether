@@ -10,6 +10,8 @@ public class SlotContainer : MonoBehaviour, IDropHandler {
     public GearUI gearUI;
     public int index;
     public bool isEquipmentSlot;
+    private static string[] valid_types = {"Equipment", "Weapon"};
+    private List<string> valid_types_list = new List<string>(valid_types);
 
     void Start(){
         inventoryUI = GameObject.Find("Canvas").transform.GetChild(3).gameObject.GetComponent<InventoryUI>();
@@ -49,7 +51,13 @@ public class SlotContainer : MonoBehaviour, IDropHandler {
 
         if(isEquipmentSlot){
             Debug.Log("Run this code when I drop inside an equipment slot");
-            EquipItem(eventData);
+            if(draggingEquipment){
+                Debug.Log("Swap Item(Equipments)");
+                SwapEquipment(eventData);
+            }else{
+                Debug.Log("Normal equip");
+                EquipItem(eventData);
+            }
         }else{
             Debug.Log("Run this code because I dropped inside an item slot");
             if(draggingEquipment){
@@ -92,6 +100,41 @@ public class SlotContainer : MonoBehaviour, IDropHandler {
         }
     }
 
+    // this function may simply never be necessary with type requirements...
+    void SwapEquipment(PointerEventData eventData){
+        // at this point in time, inventorySlot represents the slot where our mouse let go of the button
+        // this logic is necessary for preventing a bug at this time
+        Equipment originalItem = inventorySlot.GetComponent<EquipmentSlot>().item;   // I need this value when the bool is false
+        int originalStackSize = inventorySlot.GetComponent<EquipmentSlot>().stack_size;   // I need this value when the bool is false
+        bool shouldBeEmpty = originalItem==null ? true : false; 
+
+        Transform pointerDragParent = eventData.pointerDrag.transform.parent;
+        GameObject pointerDragSlotContainer = pointerDragParent.gameObject;
+        GameObject dragSlot = pointerDragParent.GetComponent<SlotContainer>().inventorySlot;
+        int drag_index = pointerDragParent.GetComponent<SlotContainer>().index;
+        GameObject tempSlot = inventorySlot;
+
+        inventorySlot.GetComponent<EquipmentSlot>().item = dragSlot.GetComponent<EquipmentSlot>().item;
+        inventorySlot.GetComponent<EquipmentSlot>().stack_size = dragSlot.GetComponent<EquipmentSlot>().stack_size;
+        inventorySlot.transform.SetParent(gameObject.transform, false);
+        inventorySlot.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 0, 0);
+        
+        dragSlot.GetComponent<EquipmentSlot>().item = shouldBeEmpty ? null : originalItem;
+        dragSlot.GetComponent<EquipmentSlot>().stack_size = shouldBeEmpty ? 0 : originalStackSize;
+        dragSlot.transform.SetParent(pointerDragParent, false);
+        dragSlot.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 0, 0);
+        
+        gearUI.UpdateSlot(index, inventorySlot.GetComponent<EquipmentSlot>().item, inventorySlot);
+        if(shouldBeEmpty){
+            // something with this logic is causing an item slot to be messed up
+            Debug.Log("Testing 6");
+            gearUI.UpdateSlot(drag_index, null, dragSlot);
+        }else{
+            Debug.Log("Testing 7");
+            gearUI.UpdateSlot(drag_index, originalItem, dragSlot);
+        }
+    }
+
     void EquipItem(PointerEventData eventData){
         // same code to start as SwapItem, but I will be adjusting things as necessary
         // at this point in time, inventorySlot represents the slot where our mouse let go of the button
@@ -105,28 +148,44 @@ public class SlotContainer : MonoBehaviour, IDropHandler {
         GameObject dragSlot = pointerDragParent.GetComponent<SlotContainer>().inventorySlot;
         int drag_index = pointerDragParent.GetComponent<SlotContainer>().index;
         GameObject tempSlot = inventorySlot;
-        Debug.Log("Item type in question: " + dragSlot.GetComponent<InventorySlot>().item.GetType().ToString());
-        if(dragSlot.GetComponent<InventorySlot>().item.GetType().ToString()=="Equipment"){
-            inventorySlot.GetComponent<EquipmentSlot>().item = (Equipment)dragSlot.GetComponent<InventorySlot>().item;
-            inventorySlot.GetComponent<EquipmentSlot>().stack_size = dragSlot.GetComponent<InventorySlot>().stack_size;
-            inventorySlot.transform.SetParent(gameObject.transform, false);
-            inventorySlot.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 0, 0);
-            
-            dragSlot.GetComponent<InventorySlot>().item = shouldBeEmpty ? null : originalItem;
-            dragSlot.GetComponent<InventorySlot>().stack_size = shouldBeEmpty ? 0 : originalStackSize;
-            dragSlot.transform.SetParent(pointerDragParent, false);
-            dragSlot.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 0, 0);
-            
-            gearUI.UpdateSlot(index, inventorySlot.GetComponent<EquipmentSlot>().item, inventorySlot);
-            if(shouldBeEmpty){
-                Debug.Log("Inventory slot should be empty");
-                inventoryUI.UpdateSlot(drag_index, null, dragSlot);
+        string dragSlotType = dragSlot.GetComponent<InventorySlot>().item.GetType().ToString();
+        Debug.Log("Item type in question: " + dragSlotType);
+        if(valid_types_list.Contains(dragSlotType)){
+            // before we just go through with it, we need to ensure this item is of the correct type
+            // we will need the type we are looking for, from this dropped on slot
+            Equipment testThis = (Equipment)dragSlot.GetComponent<InventorySlot>().item;
+            if(dragSlotType=="Weapon"){
+                testThis = (Weapon)dragSlot.GetComponent<InventorySlot>().item;
+            }
+            string dragSlotItemType = testThis.type.ToString();
+            string dropSlotItemType = inventorySlot.GetComponent<EquipmentSlot>().type.ToString();
+            Debug.Log("The type of slot we just dragged to: " + inventorySlot.GetComponent<EquipmentSlot>().type.ToString());
+            if(dropSlotItemType==dragSlotItemType){
+                // this means that the equipment slot types match and we should go through with equipping the item
+                inventorySlot.GetComponent<EquipmentSlot>().item = (Equipment)dragSlot.GetComponent<InventorySlot>().item;
+                inventorySlot.GetComponent<EquipmentSlot>().stack_size = dragSlot.GetComponent<InventorySlot>().stack_size;
+                inventorySlot.transform.SetParent(gameObject.transform, false);
+                inventorySlot.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 0, 0);
+                
+                dragSlot.GetComponent<InventorySlot>().item = shouldBeEmpty ? null : originalItem;
+                dragSlot.GetComponent<InventorySlot>().stack_size = shouldBeEmpty ? 0 : originalStackSize;
+                dragSlot.transform.SetParent(pointerDragParent, false);
+                dragSlot.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 0, 0);
+                
+                gearUI.UpdateSlot(index, inventorySlot.GetComponent<EquipmentSlot>().item, inventorySlot);
+                if(shouldBeEmpty){
+                    Debug.Log("Inventory slot should be empty");
+                    inventoryUI.UpdateSlot(drag_index, null, dragSlot);
+                }else{
+                    Debug.Log("Replacing inventory slot with original equipped item");
+                    inventoryUI.UpdateSlot(drag_index, (Item)originalItem, dragSlot);
+                }
             }else{
-                Debug.Log("Replacing inventory slot with original equipped item");
-                inventoryUI.UpdateSlot(drag_index, (Item)originalItem, dragSlot);
+                Debug.Log("Item doesn't match the equipment slot type requirement.");
+                return;
             }
         }else{
-            Debug.Log("Failed to equip");
+            Debug.Log("Failed to equip via equipitem");
             return;
         }
     }
@@ -145,12 +204,17 @@ public class SlotContainer : MonoBehaviour, IDropHandler {
         int drag_index = pointerDragParent.GetComponent<SlotContainer>().index;
         GameObject tempSlot = inventorySlot;
         Debug.Log("Item type in question: " + dragSlot.GetComponent<EquipmentSlot>().item.GetType().ToString());
-        if(dragSlot.GetComponent<EquipmentSlot>().item.GetType().ToString()=="Equipment"){
+        if(valid_types_list.Contains(dragSlot.GetComponent<EquipmentSlot>().item.GetType().ToString())){
             inventorySlot.GetComponent<InventorySlot>().item = (Item)dragSlot.GetComponent<EquipmentSlot>().item;
             inventorySlot.GetComponent<InventorySlot>().stack_size = dragSlot.GetComponent<EquipmentSlot>().stack_size;
             inventorySlot.transform.SetParent(gameObject.transform, false);
             inventorySlot.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 0, 0);
             
+            // need to check if the originalItem is of the Equipment Type or not
+            if(originalItem!=null && !valid_types_list.Contains(originalItem.GetType().ToString())){            
+                Debug.Log("Preventing specified cast not valid");
+                return;
+            }
             dragSlot.GetComponent<EquipmentSlot>().item = shouldBeEmpty ? null : (Equipment)originalItem;
             dragSlot.GetComponent<EquipmentSlot>().stack_size = shouldBeEmpty ? 0 : originalStackSize;
             dragSlot.transform.SetParent(pointerDragParent, false);
@@ -168,7 +232,7 @@ public class SlotContainer : MonoBehaviour, IDropHandler {
                 gearUI.UpdateSlot(drag_index, (Equipment)originalItem, dragSlot);
             }
         }else{
-            Debug.Log("Failed to equip");
+            Debug.Log("Failed to equip via unequipitem");
             return;
         }
     }
