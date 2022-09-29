@@ -27,6 +27,7 @@ public class EquipmentSlot : MonoBehaviour, IPointerDownHandler, IBeginDragHandl
             stack_size_text = gameObject.transform.GetChild(2).gameObject;
             stack_size_text.GetComponent<Text>().text = type.ToString();
         }
+        Debug.Log("Equipment slot type: " + type.ToString());
     }
 
     void Update(){
