@@ -10,12 +10,10 @@ public class InventoryUI : MonoBehaviour {
     public GameObject slotContainerPrefab;
     public GameObject inventorySlotButtonPrefab;
     public bool isPlayerInventory;
-    private static Item default_item;
 
     public List<GameObject> inventorySlots = new List<GameObject>();
     // Start is called before the first frame update
     void Awake(){
-        default_item = Resources.Load<Item>("Items/DefaultItem");
         content = gameObject.transform.GetChild(0).GetChild(0).gameObject;
         if(isPlayerInventory){
             inventory = GameObject.Find("Player").GetComponent<Inventory>();
@@ -76,7 +74,7 @@ public class InventoryUI : MonoBehaviour {
 
     public void EmptySlot(int slot_index){
         // I need to make this actually just reset to an empty slot, instead of default item...
-        inventory.slots[slot_index].GetComponent<SlotContainer>().inventorySlot.transform.GetChild(0).GetComponent<Text>().text = default_item.name;
+        inventory.slots[slot_index].GetComponent<SlotContainer>().inventorySlot.transform.GetChild(0).GetComponent<Text>().text = null;
         inventory.slots[slot_index].GetComponent<SlotContainer>().inventorySlot.transform.GetChild(1).GetComponent<Image>().sprite = null;
     }
 }

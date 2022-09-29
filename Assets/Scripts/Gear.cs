@@ -2,25 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Inventory : MonoBehaviour {
-
-    public int max_slots;  // number of items an inventory can hold before full
-    public GameObject[] slots;
-    public bool isPlayerInventory;
-    public GameObject RelevantScrollView;
-    public GameObject content;
+public class Gear : Inventory {
 
     void Awake(){
-        if(max_slots==0){
-            max_slots=28;
-        }
+        max_slots=9;
         slots = new GameObject[max_slots];
     }
 
     // Start is called before the first frame update
     void Start(){
-        content = GameObject.Find("Canvas").transform.GetChild(3).GetChild(0).GetChild(0).gameObject;
-        RelevantScrollView = GameObject.Find("InventoryScrollView");
+        content = GameObject.Find("Canvas").transform.GetChild(5).GetChild(0).GetChild(0).gameObject;
+        RelevantScrollView = GameObject.Find("EquipmentScrollView");
         RelevantScrollView.SetActive(false);
         ListInventory();
     }

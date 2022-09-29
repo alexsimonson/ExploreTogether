@@ -102,6 +102,7 @@ GameObject:
   - component: {fileID: -3053763300026531410}
   - component: {fileID: 6489062375140490175}
   - component: {fileID: 6654121761325831222}
+  - component: {fileID: 4202415353013811586}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -276,6 +277,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53d6c78ee3f8c8242b8fa789b6631bee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  max_slots: 0
   slots:
   - {fileID: 0}
   - {fileID: 0}
@@ -305,10 +307,11 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  test_item: {fileID: 11400000, guid: b3ccbd6f1267d384d9523154feded93d, type: 2}
   isPlayerInventory: 1
+  RelevantScrollView: {fileID: 0}
   slotContainerPrefab: {fileID: 6573132279585769175, guid: 7991cc8ac80f6694c80b2853556a1ba4, type: 3}
   inventorySlotButtonPrefab: {fileID: 7767290774722935335, guid: 07bfd328678999740bc564025a1de121, type: 3}
+  content: {fileID: 0}
 --- !u!114 &6654121761325831222
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -322,3 +325,50 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   interactWith: []
+--- !u!114 &4202415353013811586
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8593980595237084293}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea5b9393979db0f49972d55b26b7f515, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  max_slots: 0
+  slots:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  isPlayerInventory: 1
+  RelevantScrollView: {fileID: 0}
+  slotContainerPrefab: {fileID: 6573132279585769175, guid: 7991cc8ac80f6694c80b2853556a1ba4, type: 3}
+  inventorySlotButtonPrefab: {fileID: 0}
+  content: {fileID: 0}
