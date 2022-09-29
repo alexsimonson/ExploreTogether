@@ -19,4 +19,4 @@ MonoBehaviour:
   stack: 0
   max_stack_size: 0
   icon: {fileID: 21300000, guid: 868741b1a2ea3ed41a46ed54e5661289, type: 3}
-  type: 4
+  type: 3

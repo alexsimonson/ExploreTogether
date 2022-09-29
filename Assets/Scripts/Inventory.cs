@@ -8,7 +8,6 @@ public class Inventory : MonoBehaviour {
     public GameObject[] slots;
     public bool isPlayerInventory;
     public GameObject RelevantScrollView;
-    public GameObject content;
 
     void Awake(){
         if(max_slots==0){
@@ -19,7 +18,6 @@ public class Inventory : MonoBehaviour {
 
     // Start is called before the first frame update
     void Start(){
-        content = GameObject.Find("Canvas").transform.GetChild(3).GetChild(0).GetChild(0).gameObject;
         RelevantScrollView = GameObject.Find("InventoryScrollView");
         RelevantScrollView.SetActive(false);
         ListInventory();

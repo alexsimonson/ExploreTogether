@@ -7,15 +7,17 @@ public class Equipment : Item {
     
     public enum Type{
         Head,
-        Cape,
         Neck,
-        Body,
-        Legs,
-        Hands,
-        Feet,
+        Torso,
+        Leg,
+        Glove,
+        Shoe,
+        Back,
+        Eye,
+        Coat,
         Ring,
         Weapon,
-        Shield
+        Offhand
     }
 
     public Type type;

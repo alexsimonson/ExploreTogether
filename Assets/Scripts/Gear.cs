@@ -11,7 +11,6 @@ public class Gear : Inventory {
 
     // Start is called before the first frame update
     void Start(){
-        content = GameObject.Find("Canvas").transform.GetChild(5).GetChild(0).GetChild(0).gameObject;
         RelevantScrollView = GameObject.Find("EquipmentScrollView");
         RelevantScrollView.SetActive(false);
         ListInventory();

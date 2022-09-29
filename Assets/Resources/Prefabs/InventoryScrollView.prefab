@@ -399,7 +399,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   slotContainerPrefab: {fileID: 6573132279585769175, guid: 7991cc8ac80f6694c80b2853556a1ba4, type: 3}
-  inventorySlotButtonPrefab: {fileID: 7767290774722935335, guid: 07bfd328678999740bc564025a1de121, type: 3}
+  slotButtonPrefab: {fileID: 7767290774722935335, guid: 07bfd328678999740bc564025a1de121, type: 3}
   isPlayerInventory: 1
   inventorySlots: []
 --- !u!1 &7453398125941365870
@@ -559,7 +559,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1249881118045246730}
   m_Direction: 2
   m_Value: 0
-  m_Size: 0.99926794
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
