@@ -4,15 +4,22 @@ using UnityEngine;
 
 public class Gear : Inventory {
 
+    GameObject content;
     void Awake(){
-        max_slots=9;
+        RelevantScrollView = GameObject.Find("EquipmentScrollView");
+        content = RelevantScrollView.transform.GetChild(0).GetChild(0).gameObject;
+        max_slots=12;
         slots = new GameObject[max_slots];
+        var i=0;
+        foreach(Transform child in content.transform){
+            slots[i] = child.gameObject;
+            i++;
+        }
+        RelevantScrollView.SetActive(false);
     }
 
     // Start is called before the first frame update
     void Start(){
-        RelevantScrollView = GameObject.Find("EquipmentScrollView");
-        RelevantScrollView.SetActive(false);
         ListInventory();
     }
 
@@ -82,8 +89,8 @@ public class Gear : Inventory {
 
     void ListInventory(){
         foreach(GameObject slot in slots){
-            if(slot!=null && slot.GetComponent<SlotContainer>().inventorySlot!=null && slot.GetComponent<SlotContainer>().inventorySlot.GetComponent<InventorySlot>().item!=null){
-                Debug.Log("Slot item: " + slot.GetComponent<SlotContainer>().inventorySlot.GetComponent<InventorySlot>().item.name);
+            if(slot!=null && slot.GetComponent<SlotContainer>().inventorySlot!=null && slot.GetComponent<SlotContainer>().inventorySlot.GetComponent<EquipmentSlot>().item!=null){
+                Debug.Log("Slot item: " + slot.GetComponent<SlotContainer>().inventorySlot.GetComponent<EquipmentSlot>().item.name);
             }
         }
     }

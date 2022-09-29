@@ -156,13 +156,16 @@ public class SlotContainer : MonoBehaviour, IDropHandler {
             dragSlot.transform.SetParent(pointerDragParent, false);
             dragSlot.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 0, 0);
             
-            gearUI.UpdateSlot(index, inventorySlot.GetComponent<InventorySlot>().item, inventorySlot);
+
+            Debug.Log("Unequip Item index: " + index.ToString());
+            Debug.Log("Unequip Item drag_index: " + drag_index.ToString());
+            inventoryUI.UpdateSlot(index, inventorySlot.GetComponent<InventorySlot>().item, inventorySlot);
             if(shouldBeEmpty){
                 Debug.Log("Inventory slot should be empty");
-                inventoryUI.UpdateSlot(drag_index, null, dragSlot);
+                gearUI.UpdateSlot(drag_index, null, dragSlot);
             }else{
                 Debug.Log("Replacing inventory slot with original equipped item");
-                inventoryUI.UpdateSlot(drag_index, (Equipment)originalItem, dragSlot);
+                gearUI.UpdateSlot(drag_index, (Equipment)originalItem, dragSlot);
             }
         }else{
             Debug.Log("Failed to equip");

@@ -309,9 +309,6 @@ MonoBehaviour:
   - {fileID: 0}
   isPlayerInventory: 1
   RelevantScrollView: {fileID: 0}
-  slotContainerPrefab: {fileID: 6573132279585769175, guid: 7991cc8ac80f6694c80b2853556a1ba4, type: 3}
-  inventorySlotButtonPrefab: {fileID: 7767290774722935335, guid: 07bfd328678999740bc564025a1de121, type: 3}
-  content: {fileID: 0}
 --- !u!114 &6654121761325831222
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -351,24 +348,5 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
   isPlayerInventory: 1
   RelevantScrollView: {fileID: 0}
-  slotContainerPrefab: {fileID: 6573132279585769175, guid: 7991cc8ac80f6694c80b2853556a1ba4, type: 3}
-  inventorySlotButtonPrefab: {fileID: 0}
-  content: {fileID: 0}
