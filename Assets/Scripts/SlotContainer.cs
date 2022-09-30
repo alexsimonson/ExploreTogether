@@ -102,41 +102,6 @@ public class SlotContainer : MonoBehaviour, IDropHandler {
         }
     }
 
-    // this function may simply never be necessary with type requirements...
-    void SwapEquipment(PointerEventData eventData){
-        // at this point in time, inventorySlot represents the slot where our mouse let go of the button
-        // this logic is necessary for preventing a bug at this time
-        Equipment originalItem = inventorySlot.GetComponent<EquipmentSlot>().item;   // I need this value when the bool is false
-        int originalStackSize = inventorySlot.GetComponent<EquipmentSlot>().stack_size;   // I need this value when the bool is false
-        bool shouldBeEmpty = originalItem==null ? true : false; 
-
-        Transform pointerDragParent = eventData.pointerDrag.transform.parent;
-        GameObject pointerDragSlotContainer = pointerDragParent.gameObject;
-        GameObject dragSlot = pointerDragParent.GetComponent<SlotContainer>().inventorySlot;
-        int drag_index = pointerDragParent.GetComponent<SlotContainer>().index;
-        GameObject tempSlot = inventorySlot;
-
-        inventorySlot.GetComponent<EquipmentSlot>().item = dragSlot.GetComponent<EquipmentSlot>().item;
-        inventorySlot.GetComponent<EquipmentSlot>().stack_size = dragSlot.GetComponent<EquipmentSlot>().stack_size;
-        inventorySlot.transform.SetParent(gameObject.transform, false);
-        inventorySlot.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 0, 0);
-        
-        dragSlot.GetComponent<EquipmentSlot>().item = shouldBeEmpty ? null : originalItem;
-        dragSlot.GetComponent<EquipmentSlot>().stack_size = shouldBeEmpty ? 0 : originalStackSize;
-        dragSlot.transform.SetParent(pointerDragParent, false);
-        dragSlot.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 0, 0);
-        
-        gearUI.UpdateSlot(index, inventorySlot.GetComponent<EquipmentSlot>().item, inventorySlot);
-        if(shouldBeEmpty){
-            // something with this logic is causing an item slot to be messed up
-            // Debug.Log("Testing 6");
-            gearUI.UpdateSlot(drag_index, null, dragSlot);
-        }else{
-            // Debug.Log("Testing 7");
-            gearUI.UpdateSlot(drag_index, originalItem, dragSlot);
-        }
-    }
-
     void EquipItem(PointerEventData eventData){
         // same code to start as SwapItem, but I will be adjusting things as necessary
         // at this point in time, inventorySlot represents the slot where our mouse let go of the button
@@ -264,6 +229,41 @@ public class SlotContainer : MonoBehaviour, IDropHandler {
         }else{
             // Debug.Log("Failed to equip via unequipitem");
             return;
+        }
+    }
+
+    // this function may simply never be necessary with type requirements...
+    void SwapEquipment(PointerEventData eventData){
+        // at this point in time, inventorySlot represents the slot where our mouse let go of the button
+        // this logic is necessary for preventing a bug at this time
+        Equipment originalItem = inventorySlot.GetComponent<EquipmentSlot>().item;   // I need this value when the bool is false
+        int originalStackSize = inventorySlot.GetComponent<EquipmentSlot>().stack_size;   // I need this value when the bool is false
+        bool shouldBeEmpty = originalItem==null ? true : false; 
+
+        Transform pointerDragParent = eventData.pointerDrag.transform.parent;
+        GameObject pointerDragSlotContainer = pointerDragParent.gameObject;
+        GameObject dragSlot = pointerDragParent.GetComponent<SlotContainer>().inventorySlot;
+        int drag_index = pointerDragParent.GetComponent<SlotContainer>().index;
+        GameObject tempSlot = inventorySlot;
+
+        inventorySlot.GetComponent<EquipmentSlot>().item = dragSlot.GetComponent<EquipmentSlot>().item;
+        inventorySlot.GetComponent<EquipmentSlot>().stack_size = dragSlot.GetComponent<EquipmentSlot>().stack_size;
+        inventorySlot.transform.SetParent(gameObject.transform, false);
+        inventorySlot.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 0, 0);
+        
+        dragSlot.GetComponent<EquipmentSlot>().item = shouldBeEmpty ? null : originalItem;
+        dragSlot.GetComponent<EquipmentSlot>().stack_size = shouldBeEmpty ? 0 : originalStackSize;
+        dragSlot.transform.SetParent(pointerDragParent, false);
+        dragSlot.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 0, 0);
+        
+        gearUI.UpdateSlot(index, inventorySlot.GetComponent<EquipmentSlot>().item, inventorySlot);
+        if(shouldBeEmpty){
+            // something with this logic is causing an item slot to be messed up
+            // Debug.Log("Testing 6");
+            gearUI.UpdateSlot(drag_index, null, dragSlot);
+        }else{
+            // Debug.Log("Testing 7");
+            gearUI.UpdateSlot(drag_index, originalItem, dragSlot);
         }
     }
 }
