@@ -9,14 +9,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 953e002efd5149e43b777ce1ddb9f110, type: 3}
+  m_Script: {fileID: 11500000, guid: a783bca695856584bb87a07007d2936a, type: 3}
   m_Name: Pistol
   m_EditorClassIdentifier: 
   id: 1337
   name: Pistol
-  description: Pistol created as a weapon
+  description: A pistol as a gun
   weight: 0
   stack: 0
   max_stack_size: 0
   icon: {fileID: 21300000, guid: 3c840df6e96c52b4da7ca77fc33c2497, type: 3}
   type: 10
+  style: 1

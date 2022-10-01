@@ -5,11 +5,19 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New Weapon", menuName = "Weapon")]
 public class Weapon : Equipment {
 
+    public enum Style{
+        Melee,
+        Gun,
+        Magic
+    }
+
+    public Style style;
+
     public Weapon(){
         type = Type.Weapon;
     }
 
-    public void Attack(){
-        Debug.Log("Attacking");
+    public virtual void Attack(GameObject owner){
+        Debug.Log("This shouldn't run");
     }
 }

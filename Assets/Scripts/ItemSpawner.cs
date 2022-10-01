@@ -35,4 +35,8 @@ public class ItemSpawner : MonoBehaviour {
         int rnd_index = Random.Range(0, item_bank.Length);
         item_offered = item_bank[rnd_index];
     }
+
+    public void Interaction(){
+        Debug.Log("Interacting with the item spawner");
+    }
 }

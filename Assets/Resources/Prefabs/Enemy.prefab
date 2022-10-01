@@ -115,7 +115,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!114 &8886006816526475618
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -152,6 +152,8 @@ MonoBehaviour:
   weaponSlot1: {fileID: 0}
   equipAC: {fileID: 0}
   attackSlashAC: {fileID: 0}
+  attackSpeed: 2.4
+  attackDamage: 35
 --- !u!195 &6457182857780569207
 NavMeshAgent:
   m_ObjectHideFlags: 0

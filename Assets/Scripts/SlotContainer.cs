@@ -10,8 +10,8 @@ public class SlotContainer : MonoBehaviour, IDropHandler {
     public GearUI gearUI;
     public int index;
     public bool isEquipmentSlot;
-    private static string[] valid_types = {"Equipment", "Weapon"};
-    private List<string> valid_types_list = new List<string>(valid_types);
+    private static string[] valid_equipment_types = {"Equipment", "Weapon", "Gun", "Magic"};
+    private List<string> valid_equipment_types_list = new List<string>(valid_equipment_types);
 
     void Start(){
         inventoryUI = GameObject.Find("Canvas").transform.GetChild(3).gameObject.GetComponent<InventoryUI>();
@@ -25,10 +25,8 @@ public class SlotContainer : MonoBehaviour, IDropHandler {
     }
 
     public void OnDrop(PointerEventData eventData){
-        // Debug.Log("OnDrop FROM SLOT CONTAINER");
 
         if(eventData.pointerDrag==null){
-            // Debug.Log("There is nothing to drag");
             return;
         }
 
@@ -39,32 +37,24 @@ public class SlotContainer : MonoBehaviour, IDropHandler {
         
         if(draggingEquipment){
             if(eventData.pointerDrag.GetComponent<EquipmentSlot>().item==null){
-                // Debug.Log("There is no item in the equipment slot");
                 return;
             }
         }else{
             if(eventData.pointerDrag.GetComponent<InventorySlot>().item==null){
-                // Debug.Log("There is no item in the inventory slot");
                 return;
             }
         }
 
         if(isEquipmentSlot){
-            // Debug.Log("Run this code when I drop inside an equipment slot");
             if(draggingEquipment){
-                // Debug.Log("We shouldn't allow this, because it probably will just fail anyway...");
                 // SwapEquipment(eventData);
             }else{
-                // Debug.Log("Normal equip");
                 EquipItem(eventData);
             }
         }else{
-            // Debug.Log("Run this code because I dropped inside an item slot");
             if(draggingEquipment){
-                // Debug.Log("TEST BEEP");
                 UnEquipItem(eventData);
             }else{
-                // Debug.Log("TEST ZEEP");
                 SwapItem(eventData);
             }
         }
@@ -116,8 +106,7 @@ public class SlotContainer : MonoBehaviour, IDropHandler {
         int drag_index = pointerDragParent.GetComponent<SlotContainer>().index;
         GameObject tempSlot = inventorySlot;
         string dragSlotType = dragSlot.GetComponent<InventorySlot>().item.GetType().ToString();
-        // Debug.Log("Item type in question: " + dragSlotType);
-        if(valid_types_list.Contains(dragSlotType)){
+        if(valid_equipment_types_list.Contains(dragSlotType)){
             // before we just go through with it, we need to ensure this item is of the correct type
             // we will need the type we are looking for, from this dropped on slot
             Equipment testThis = (Equipment)dragSlot.GetComponent<InventorySlot>().item;
@@ -126,7 +115,6 @@ public class SlotContainer : MonoBehaviour, IDropHandler {
             }
             string dragSlotItemType = testThis.type.ToString();
             string dropSlotItemType = inventorySlot.GetComponent<EquipmentSlot>().type.ToString();
-            // Debug.Log("The type of slot we just dragged to: " + inventorySlot.GetComponent<EquipmentSlot>().type.ToString());
             if(dropSlotItemType==dragSlotItemType){
                 // this means that the equipment slot types match and we should go through with equipping the item
                 inventorySlot.GetComponent<EquipmentSlot>().item = (Equipment)dragSlot.GetComponent<InventorySlot>().item;
@@ -141,18 +129,14 @@ public class SlotContainer : MonoBehaviour, IDropHandler {
                 
                 gearUI.UpdateSlot(index, inventorySlot.GetComponent<EquipmentSlot>().item, inventorySlot);
                 if(shouldBeEmpty){
-                    // Debug.Log("Inventory slot should be empty");
                     inventoryUI.UpdateSlot(drag_index, null, dragSlot);
                 }else{
-                    // Debug.Log("Replacing inventory slot with original equipped item");
                     inventoryUI.UpdateSlot(drag_index, (Item)originalItem, dragSlot);
                 }
             }else{
-                // Debug.Log("Item doesn't match the equipment slot type requirement.");
                 return;
             }
         }else{
-            // Debug.Log("Failed to equip via equipitem");
             return;
         }
     }
@@ -171,11 +155,9 @@ public class SlotContainer : MonoBehaviour, IDropHandler {
         int drag_index = pointerDragParent.GetComponent<SlotContainer>().index;
         GameObject tempSlot = inventorySlot;
         string dragSlotType = dragSlot.GetComponent<EquipmentSlot>().item.GetType().ToString();
-        // Debug.Log("Item type in question: " + dragSlotType);
-        if(valid_types_list.Contains(dragSlotType)){
+        if(valid_equipment_types_list.Contains(dragSlotType)){
             // need to check if the originalItem is of the Equipment Type or not
-            if(originalItem!=null && !valid_types_list.Contains(originalItem.GetType().ToString())){            
-                // Debug.Log("Preventing specified cast not valid");
+            if(originalItem!=null && !valid_equipment_types_list.Contains(originalItem.GetType().ToString())){            
                 return;
             }
 
@@ -186,20 +168,13 @@ public class SlotContainer : MonoBehaviour, IDropHandler {
                 Equipment castOriginalItemEquipment = originalItem as Equipment;
                 if(castOriginalItemEquipment!=null){
                     if(dragSlotType=="Weapon"){
-                        // Debug.Log("the original item is technically equipment");
                         Weapon castOriginalItemWeapon = originalItem as Weapon;
                         if(castOriginalItemWeapon!=null){
-                            // Debug.Log("The original item is technically a weapon");
                         }else{
-                            // Debug.Log("This means that the item is not a weapon, therefore we shouldn't swap");
                         }
                     }else{
-                        // Debug.Log("The original item is for sure equipment - type: " + castOriginalItemEquipment.type.ToString());
-                        // Debug.Log("The comparison value in question: " + dragSlot.GetComponent<EquipmentSlot>().type.ToString());
                         if(castOriginalItemEquipment.type==dragSlot.GetComponent<EquipmentSlot>().type){
-                            // Debug.Log("The items match the equipment slot requirements");
                         }else{
-                            // Debug.Log("Returning because they don't match.");
                             return;
                         }
                     }
@@ -216,18 +191,13 @@ public class SlotContainer : MonoBehaviour, IDropHandler {
             dragSlot.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 0, 0);
             
 
-            // Debug.Log("Unequip Item index: " + index.ToString());
-            // Debug.Log("Unequip Item drag_index: " + drag_index.ToString());
             inventoryUI.UpdateSlot(index, inventorySlot.GetComponent<InventorySlot>().item, inventorySlot);
             if(shouldBeEmpty){
-                // Debug.Log("Inventory slot should be empty");
                 gearUI.UpdateSlot(drag_index, null, dragSlot);
             }else{
-                // Debug.Log("Replacing inventory slot with original equipped item");
                 gearUI.UpdateSlot(drag_index, (Equipment)originalItem, dragSlot);
             }
         }else{
-            // Debug.Log("Failed to equip via unequipitem");
             return;
         }
     }
@@ -259,10 +229,8 @@ public class SlotContainer : MonoBehaviour, IDropHandler {
         gearUI.UpdateSlot(index, inventorySlot.GetComponent<EquipmentSlot>().item, inventorySlot);
         if(shouldBeEmpty){
             // something with this logic is causing an item slot to be messed up
-            // Debug.Log("Testing 6");
             gearUI.UpdateSlot(drag_index, null, dragSlot);
         }else{
-            // Debug.Log("Testing 7");
             gearUI.UpdateSlot(drag_index, originalItem, dragSlot);
         }
     }

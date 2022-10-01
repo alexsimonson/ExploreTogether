@@ -83,6 +83,36 @@ AudioListener:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 86083475107608459}
   m_Enabled: 1
+--- !u!1 &927143861972832794
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5460936004424167971}
+  m_Layer: 6
+  m_Name: WeaponSlot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5460936004424167971
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 927143861972832794}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.513, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 8593980595237084292}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8593980595237084293
 GameObject:
   m_ObjectHideFlags: 0
@@ -103,6 +133,7 @@ GameObject:
   - component: {fileID: 6489062375140490175}
   - component: {fileID: 6654121761325831222}
   - component: {fileID: 4202415353013811586}
+  - component: {fileID: 3076970631314084794}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -122,6 +153,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 5690931358884435815}
+  - {fileID: 5460936004424167971}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -309,6 +341,7 @@ MonoBehaviour:
   - {fileID: 0}
   isPlayerInventory: 1
   RelevantScrollView: {fileID: 0}
+  gun_test: {fileID: 11400000, guid: 98bd183e6b201ac4696ef525bc5b99d4, type: 2}
 --- !u!114 &6654121761325831222
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -350,3 +383,19 @@ MonoBehaviour:
   - {fileID: 0}
   isPlayerInventory: 1
   RelevantScrollView: {fileID: 0}
+  gun_test: {fileID: 0}
+--- !u!114 &3076970631314084794
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8593980595237084293}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f5edd01392cf2c43a6ca8e913fa3383, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerGearUI: {fileID: 0}
+  weaponSlot: {fileID: 0}
+  revoke_combat: 0

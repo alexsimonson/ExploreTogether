@@ -9,6 +9,8 @@ public class Inventory : MonoBehaviour {
     public bool isPlayerInventory;
     public GameObject RelevantScrollView;
 
+    public Gun gun_test;
+
     void Awake(){
         if(max_slots==0){
             max_slots=28;
@@ -21,6 +23,7 @@ public class Inventory : MonoBehaviour {
         RelevantScrollView = GameObject.Find("InventoryScrollView");
         RelevantScrollView.SetActive(false);
         ListInventory();
+        AddItem(gun_test);
     }
 
     // Update is called once per frame
@@ -110,8 +113,10 @@ public class Inventory : MonoBehaviour {
         if(isPlayerInventory){
             if(RelevantScrollView.activeSelf){
                 gameObject.GetComponent<PlayerLook>().RevokeLook();
+                gameObject.GetComponent<PlayerCombat>().RevokeCombat();
             }else{
                 gameObject.GetComponent<PlayerLook>().AllowLook();
+                gameObject.GetComponent<PlayerCombat>().AllowCombat();
             }
         }
     }
