@@ -12,6 +12,7 @@ public class Weapon : Equipment {
     }
 
     public Style style;
+    public AudioClip attackSound;
 
     public Weapon(){
         type = Type.Weapon;
