@@ -10,7 +10,7 @@ public class SlotContainer : MonoBehaviour, IDropHandler {
     public GearUI gearUI;
     public int index;
     public bool isEquipmentSlot;
-    private static string[] valid_equipment_types = {"Equipment", "Weapon", "Gun", "Magic"};
+    private static string[] valid_equipment_types = {"Equipment", "Weapon", "Gun", "Magic", "Melee"};
     private List<string> valid_equipment_types_list = new List<string>(valid_equipment_types);
 
     void Start(){

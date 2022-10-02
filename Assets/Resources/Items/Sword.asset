@@ -9,16 +9,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cb7dcc9d34ac16844a0d305b7ae32677, type: 3}
-  m_Name: Blood Wand
+  m_Script: {fileID: 11500000, guid: f9d0ba23c8fdc034b922cf7dcc96363e, type: 3}
+  m_Name: Sword
   m_EditorClassIdentifier: 
-  id: 666
-  name: Blood Wand
-  description: asdf
+  id: 1515
+  name: Sword
+  description: Just a sword
   weight: 0
   stack: 0
   max_stack_size: 0
-  icon: {fileID: 21300000, guid: 5f018c45773b4f04796eeebdf6a96606, type: 3}
+  icon: {fileID: 21300000, guid: bc47bf67ded3f2a40bb2c0a7f95d90a9, type: 3}
   type: 10
-  style: 2
+  style: 0
   attackSound: {fileID: 0}
