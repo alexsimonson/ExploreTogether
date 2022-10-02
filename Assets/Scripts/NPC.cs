@@ -43,6 +43,8 @@ public class NPC : MonoBehaviour{
 
     private bool debugMode = false;
 
+    private int zombie_attack_distance = 2;
+
     void Start(){
         agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
         // // animator = gameObject.transform.GetChild(0).GetComponent<Animator>();
@@ -256,9 +258,19 @@ public class NPC : MonoBehaviour{
     }
 
     private IEnumerator ZombieAttack(){
+        // instead of just dealing damage like an overpowered cunt we should actually do a raycast
+        RaycastHit hit;
+
+        int layerMask = 1 << 6;
         isAttacking = true;
+        if(Physics.Raycast(gameObject.transform.position, gameObject.transform.forward * 1, out hit, 2, layerMask)){
+            Debug.DrawRay(gameObject.transform.position, gameObject.transform.forward * hit.distance, Color.red, 2.0f, false);
+            hit.transform.gameObject.GetComponent<Health>().DealDamage(5);
+        }else{
+            Debug.DrawRay(gameObject.transform.position, gameObject.transform.forward * 1, Color.green, 2.0f, false);
+        }
         // animator.Play("AttackSlash");
-        chaseTarget.GetComponent<Health>().DealDamage(attackDamage);
+        // chaseTarget.GetComponent<Health>().DealDamage(attackDamage);
         // yield return new WaitForSeconds(attackSlashAC.length);
         yield return new WaitForSeconds(attackSpeed);
         isAttacking = false;
@@ -391,7 +403,7 @@ public class NPC : MonoBehaviour{
     bool InAttackRange(string which){
         // check if the gameObject is within attackrange of the chase target
         float distance = Vector3.Distance(gameObject.transform.position, chaseTarget.transform.position);
-        if(distance < 5f){
+        if(distance < zombie_attack_distance){
             if(debugMode) Debug.Log(which + " should be attacking because threat is close enough");
             return true;
         }else{

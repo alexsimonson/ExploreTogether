@@ -12,7 +12,7 @@ public class Melee : Weapon {
 
     public override void Attack(GameObject owner){
         Debug.Log("Getting up close and personal");
-         RaycastHit hit;
+        RaycastHit hit;
 
         int layerMask = 1 << 9;
         if(Physics.Raycast(owner.GetComponent<PlayerCombat>().playerCamera.transform.position, owner.GetComponent<PlayerCombat>().playerCamera.transform.forward * 1, out hit, 4, layerMask)){
