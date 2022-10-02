@@ -44,7 +44,8 @@ public class NPC : MonoBehaviour{
     private bool debugMode = false;
 
     private int zombie_attack_distance = 2;
-
+    public float default_movement_speed = 3.5f;
+    Vector3 knockback_vector;
     void Start(){
         agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
         // // animator = gameObject.transform.GetChild(0).GetComponent<Animator>();
@@ -125,6 +126,9 @@ public class NPC : MonoBehaviour{
                 // equip and unequip weapon
                 
             }
+            if(state=="knockback"){
+                StartCoroutine(IKnockback());
+            }
         }
     }
 
@@ -142,7 +146,7 @@ public class NPC : MonoBehaviour{
         // this should be modified to check NPC Vitals
         if(timer >= 5f && agent.velocity == Vector3.zero){
             Vector3 newPos = RandomNavSphere(transform.position, 100f, -1);
-            agent.destination = newPos;
+            if(agent.enabled) agent.destination = newPos;
             timer = 0;
         }
     }
@@ -250,7 +254,9 @@ public class NPC : MonoBehaviour{
             if(InAttackRange("zombie")){
                 state = "attack";
             }else{
-                agent.destination = chaseTarget.transform.position;
+                if(agent.enabled){
+                    agent.destination = chaseTarget.transform.position;
+                }
             }
         }else{
             state = "wander";
@@ -438,5 +444,16 @@ public class NPC : MonoBehaviour{
         agent.destination = dest;
     }
 
-    
+    public void Knockback(Vector3 direction){
+        knockback_vector = direction;
+        state = "knockback";
+    }
+
+    IEnumerator IKnockback(){
+        gameObject.GetComponent<NavMeshAgent>().enabled = false;
+        gameObject.GetComponent<Rigidbody>().AddForce(knockback_vector, ForceMode.Impulse);
+        yield return new WaitForSeconds(.2f);
+        gameObject.GetComponent<NavMeshAgent>().enabled = true;
+        state = "wander";
+    }
 }

@@ -10,6 +10,7 @@ public class Inventory : MonoBehaviour {
     public GameObject RelevantScrollView;
 
     public Gun gun_test;
+    public Melee sword_test;
 
     void Awake(){
         if(max_slots==0){
@@ -24,6 +25,7 @@ public class Inventory : MonoBehaviour {
         RelevantScrollView.SetActive(false);
         ListInventory();
         AddItem(gun_test);
+        AddItem(sword_test);
     }
 
     // Update is called once per frame

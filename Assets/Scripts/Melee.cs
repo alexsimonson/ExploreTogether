@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 [CreateAssetMenu(fileName = "New Melee", menuName = "Melee")]
 public class Melee : Weapon {
@@ -17,7 +18,8 @@ public class Melee : Weapon {
         int layerMask = 1 << 9;
         if(Physics.Raycast(owner.GetComponent<PlayerCombat>().playerCamera.transform.position, owner.GetComponent<PlayerCombat>().playerCamera.transform.forward * 1, out hit, 4, layerMask)){
             Debug.DrawRay(owner.GetComponent<PlayerCombat>().playerCamera.transform.position, owner.GetComponent<PlayerCombat>().playerCamera.transform.forward * hit.distance, Color.red, 2.0f, false);
-            hit.transform.gameObject.GetComponent<Health>().DealDamage(100);
+            hit.transform.gameObject.GetComponent<NPC>().Knockback(owner.transform.forward);
+            hit.transform.gameObject.GetComponent<Health>().DealDamage(20);
         }else{
             Debug.DrawRay(owner.GetComponent<PlayerCombat>().playerCamera.transform.position, owner.GetComponent<PlayerCombat>().playerCamera.transform.forward * 1, Color.green, 2.0f, false);
         }

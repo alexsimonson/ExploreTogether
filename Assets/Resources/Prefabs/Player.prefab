@@ -439,6 +439,7 @@ MonoBehaviour:
   isPlayerInventory: 1
   RelevantScrollView: {fileID: 0}
   gun_test: {fileID: 11400000, guid: 98bd183e6b201ac4696ef525bc5b99d4, type: 2}
+  sword_test: {fileID: 11400000, guid: 02ad56c938a24b04f9fbc5904de285ec, type: 2}
 --- !u!114 &6654121761325831222
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -481,6 +482,7 @@ MonoBehaviour:
   isPlayerInventory: 1
   RelevantScrollView: {fileID: 0}
   gun_test: {fileID: 0}
+  sword_test: {fileID: 0}
 --- !u!114 &3076970631314084794
 MonoBehaviour:
   m_ObjectHideFlags: 0
