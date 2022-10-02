@@ -32,25 +32,27 @@ public class PlayerGhostAim : MonoBehaviour {
         }
     }
 
-    void Update(){
-        PlayerInput();
+    public void HandlePortalPlacement(){
+        //Debug.Log("Placing portal at " + pos);
+        if(!portalOut) return;
+        CleanupPlacedGhostAim();
+        PlacePortal();
+        StartCoroutine(PlacedGhostAimDespawn());
     }
 
-    void PlayerInput(){
-        //handle taking portal out/putting away
-        //this could use a visual representation
-        if (Input.GetKeyDown("z")){
-            portalOut = !portalOut;
-            if(portalOut) Debug.Log("portal equipped");
-            if(!portalOut) Debug.Log("portal put away");
-        }
-        //place portal if mouse clicked and portal out
-        if ((Input.GetKeyDown(KeyCode.Mouse0)) && (portalOut == true)){
-            //Debug.Log("Placing portal at " + pos);
-            CleanupPlacedGhostAim();
-            PlacePortal();
-            StartCoroutine(PlacedGhostAimDespawn());
-        }
+    public void TogglePortal(){
+        portalOut = !portalOut;
+        DebugStatus();
+    }
+
+    public void SetPortal(bool status){
+        portalOut = status;
+        DebugStatus();
+    }
+
+    void DebugStatus(){
+        if(portalOut) Debug.Log("portal equipped");
+        if(!portalOut) Debug.Log("portal put away");
     }
 
     IEnumerator PlacedGhostAimDespawn(){

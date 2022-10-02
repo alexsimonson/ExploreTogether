@@ -30,25 +30,27 @@ public class PlayerCombat : MonoBehaviour{
         if(weaponSlot.item==null){
             return;
         }
+        Weapon weapon = weaponSlot.item as Weapon;
+        if(weapon==null){
+            return;
+        }
         if(Input.GetMouseButtonDown(0)){
-            Weapon weapon = weaponSlot.item as Weapon;
-            if(weapon==null){
-                return;
-            }
             weapon.Attack(gameObject);
+        }
+        if(Input.GetMouseButtonDown(1)){
+            weapon.Secondary(gameObject);   
+        }else if(Input.GetMouseButtonUp(1)){
+            weapon.Secondary(gameObject);
         }
         if(Input.GetKeyDown("r")){
             Gun gun = weaponSlot.item as Gun;
-            if(gun==null){
-                return;
-            }
+            if(gun==null) return;
             gun.Reload(gameObject);
         }
     }
 
     public void DrawGunAim(){
         if(HoldingGun() && !revoke_combat){
-            Debug.DrawRay(playerCamera.transform.position, playerCamera.transform.TransformDirection(Vector3.forward) * 1000, Color.green, Time.deltaTime);
             crosshair.SetActive(true);
         }else{
             crosshair.SetActive(false);

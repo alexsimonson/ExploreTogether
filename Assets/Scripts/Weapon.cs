@@ -21,4 +21,9 @@ public class Weapon : Equipment {
     public virtual void Attack(GameObject owner){
         Debug.Log("This shouldn't run");
     }
+
+    // this is just the right click option
+    public virtual void Secondary(GameObject owner){
+        Debug.Log("Secondary");
+    }
 }

@@ -12,5 +12,11 @@ public class Magic : Weapon {
 
     public override void Attack(GameObject owner){
         Debug.Log("Casting the spell");
+        owner.GetComponent<PlayerGhostAim>().HandlePortalPlacement();
+    }
+
+    public override void Secondary(GameObject owner){
+        Debug.Log("We should aim");
+        owner.GetComponent<PlayerGhostAim>().TogglePortal();
     }
 }
