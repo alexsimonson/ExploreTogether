@@ -5,12 +5,15 @@ using UnityEngine.AI;
 
 public class NPC : MonoBehaviour{
     public string name;
-    public string type; // string for now, this should probably be an Enum eventually
+    public Type type; // string for now, this should probably be an Enum eventually
+    public enum Type{
+        Zombie,
+        Guard,
+        Citizen
+    }
 
     // right now all NPCs are the same model, so let's use that to our advantage
     public Transform[] skins = new Transform[2];
-
-
     private float timer;
     // Start is called before the first frame updateNavMeshAgent agent;
     UnityEngine.AI.NavMeshAgent agent;
@@ -53,13 +56,13 @@ public class NPC : MonoBehaviour{
 
         Material[] typeMaterial = new Material[1];
         // setup stuff dependant upon type
-        if(type=="zombie"){
+        if(type==Type.Zombie){
             typeMaterial[0] = Resources.Load("BasicMaterials/GreenMaterial", typeof(Material)) as Material;
             state = "wander";
-        }else if(type=="citizen"){
+        }else if(type==Type.Citizen){
             typeMaterial[0] = Resources.Load("BasicMaterials/YellowMaterial", typeof(Material)) as Material;
             state = "wander";
-        }else if(type=="guard"){
+        }else if(type==Type.Guard){
             typeMaterial[0] = Resources.Load("BasicMaterials/BlueMaterial", typeof(Material)) as Material;
             state = "defend";
         }else{
@@ -80,7 +83,7 @@ public class NPC : MonoBehaviour{
             FOVScan();  // always watching
             // DrawFOV();
             if(debugMode) Debug.Log("Current state: " + state);
-            if(type=="zombie"){
+            if(type==Type.Zombie){
                 // we should be looking for nearby prey, otherwise wandering around
                 if(chaseTarget==null || state=="wander"){
                     ZombieWander();
@@ -91,7 +94,7 @@ public class NPC : MonoBehaviour{
                         StartCoroutine(ZombieAttack());
                     }
                 }
-            }else if(type=="citizen"){
+            }else if(type==Type.Citizen){
                 // we should be wandering around, unless we feel threatened, then we should seek help
                 if(CheckThreats()){
                     state = "flee";
@@ -118,7 +121,7 @@ public class NPC : MonoBehaviour{
                         }
                     }
                 }
-            }else if(type=="guard"){
+            }else if(type==Type.Guard){
                 // we should patrol or guard certain areas, unless our help is needed
                 if(state=="defend"){
                     GuardDefend();
@@ -186,7 +189,7 @@ public class NPC : MonoBehaviour{
         List<GameObject> potentialVictims = new List<GameObject>();
         foreach(RaycastHit rcHit in hits){
             if(rcHit.transform!=null){
-                if(rcHit.transform.tag=="NPC" && rcHit.transform.gameObject.GetComponent<NPC>().type=="zombie"){
+                if(rcHit.transform.tag=="NPC" && rcHit.transform.gameObject.GetComponent<NPC>().type==Type.Zombie){
                     // instead of setting the chase target here, let's find the closest one
                     potentialVictims.Add(rcHit.transform.gameObject);
                 }
@@ -201,7 +204,7 @@ public class NPC : MonoBehaviour{
     bool CheckThreats(){
         foreach(RaycastHit rcHit in hits){
             if(rcHit.transform!=null){
-                if(rcHit.transform.tag=="NPC" && rcHit.transform.gameObject.GetComponent<NPC>().type=="zombie"){
+                if(rcHit.transform.tag=="NPC" && rcHit.transform.gameObject.GetComponent<NPC>().type==Type.Zombie){
                     // if there's a threat, we should run
                     return true;
                 }
@@ -331,7 +334,7 @@ public class NPC : MonoBehaviour{
         List<GameObject> potentialVictims = new List<GameObject>();
         foreach(RaycastHit rcHit in hits){
             if(rcHit.transform!=null){
-                if(rcHit.transform.tag=="NPC" && rcHit.transform.gameObject.GetComponent<NPC>().type!="zombie" && state!="chase"){
+                if(rcHit.transform.tag=="NPC" && rcHit.transform.gameObject.GetComponent<NPC>().type!=Type.Zombie && state!="chase"){
                     state = "chase";
                     // instead of setting the chase target here, let's find the closest one
                     potentialVictims.Add(rcHit.transform.gameObject);
@@ -359,7 +362,7 @@ public class NPC : MonoBehaviour{
         List<GameObject> potentialVictims = new List<GameObject>();
         foreach(RaycastHit rcHit in hits){
             if(rcHit.transform!=null){
-                if(rcHit.transform.tag=="NPC" && rcHit.transform.gameObject.GetComponent<NPC>().type!="zombie"){
+                if(rcHit.transform.tag=="NPC" && rcHit.transform.gameObject.GetComponent<NPC>().type!=Type.Zombie){
                     // instead of setting the chase target here, let's find the closest one
                     potentialVictims.Add(rcHit.transform.gameObject);
                     // chaseTarget = rcHit.transform.gameObject;
