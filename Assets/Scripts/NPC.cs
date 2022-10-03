@@ -27,7 +27,15 @@ public class NPC : MonoBehaviour{
 
     private int playerLayer = 1 << 6;
 
-    public string state;
+    public State state;
+    public enum State{
+        Wander,
+        Chase,
+        Attack,
+        Defend,
+        Flee,
+        Knockback
+    }
 
     private GameObject chaseTarget = null;
     RaycastHit[] hits = new RaycastHit[segments * 2 + 1];
@@ -58,13 +66,13 @@ public class NPC : MonoBehaviour{
         // setup stuff dependant upon type
         if(type==Type.Zombie){
             typeMaterial[0] = Resources.Load("BasicMaterials/GreenMaterial", typeof(Material)) as Material;
-            state = "wander";
+            state = State.Wander;
         }else if(type==Type.Citizen){
             typeMaterial[0] = Resources.Load("BasicMaterials/YellowMaterial", typeof(Material)) as Material;
-            state = "wander";
+            state = State.Wander;
         }else if(type==Type.Guard){
             typeMaterial[0] = Resources.Load("BasicMaterials/BlueMaterial", typeof(Material)) as Material;
-            state = "defend";
+            state = State.Defend;
         }else{
             if(debugMode) Debug.LogError("No AI type set");
         }
@@ -82,14 +90,14 @@ public class NPC : MonoBehaviour{
             AnimateMovement();
             FOVScan();  // always watching
             // DrawFOV();
-            if(debugMode) Debug.Log("Current state: " + state);
+            if(debugMode) Debug.Log("Current state: " + state.ToString());
             if(type==Type.Zombie){
                 // we should be looking for nearby prey, otherwise wandering around
-                if(chaseTarget==null || state=="wander"){
+                if(chaseTarget==null || state==State.Wander){
                     ZombieWander();
-                }else if(chaseTarget && state=="chase"){
+                }else if(chaseTarget && state==State.Chase){
                     ZombieChase();
-                }else if(chaseTarget && state=="attack"){
+                }else if(chaseTarget && state==State.Attack){
                     if(!isAttacking){
                         StartCoroutine(ZombieAttack());
                     }
@@ -97,13 +105,13 @@ public class NPC : MonoBehaviour{
             }else if(type==Type.Citizen){
                 // we should be wandering around, unless we feel threatened, then we should seek help
                 if(CheckThreats()){
-                    state = "flee";
+                    state = State.Flee;
                 }else{
-                    state = "wander";
+                    state = State.Wander;
                 }
 
                 // if there are no threats, we should check if we have any tasks before falling back on "default" behavior
-                if(state=="flee"){
+                if(state==State.Flee){
                     // run away from the zombie
                     if(debugMode) // Debug.Log("Citizen should be fleeing");
                     if(!isFleeing){
@@ -116,20 +124,20 @@ public class NPC : MonoBehaviour{
                         AccomplishTask(GetComponent<Brain>().tasks);
                     }else{
                         if(debugMode) Debug.Log("NO tasks to accomplish");
-                        if(state=="wander"){
+                        if(state==State.Wander){
                             Wander();
                         }
                     }
                 }
             }else if(type==Type.Guard){
                 // we should patrol or guard certain areas, unless our help is needed
-                if(state=="defend"){
+                if(state==State.Defend){
                     GuardDefend();
                 }
                 // equip and unequip weapon
                 
             }
-            if(state=="knockback"){
+            if(state==State.Knockback){
                 StartCoroutine(IKnockback());
             }
         }
@@ -255,14 +263,14 @@ public class NPC : MonoBehaviour{
         if(chaseTarget!=null){
             // check if within attack range...
             if(InAttackRange("zombie")){
-                state = "attack";
+                state = State.Attack;
             }else{
                 if(agent.enabled){
                     agent.destination = chaseTarget.transform.position;
                 }
             }
         }else{
-            state = "wander";
+            state = State.Wander;
         }
     }
 
@@ -283,7 +291,7 @@ public class NPC : MonoBehaviour{
         // yield return new WaitForSeconds(attackSlashAC.length);
         yield return new WaitForSeconds(attackSpeed);
         isAttacking = false;
-        state = "chase";
+        state = State.Chase;
     }
 
     private IEnumerator GuardAttack(){
@@ -334,20 +342,20 @@ public class NPC : MonoBehaviour{
         List<GameObject> potentialVictims = new List<GameObject>();
         foreach(RaycastHit rcHit in hits){
             if(rcHit.transform!=null){
-                if(rcHit.transform.tag=="NPC" && rcHit.transform.gameObject.GetComponent<NPC>().type!=Type.Zombie && state!="chase"){
-                    state = "chase";
+                if(rcHit.transform.tag=="NPC" && rcHit.transform.gameObject.GetComponent<NPC>().type!=Type.Zombie && state!=State.Chase){
+                    state = State.Chase;
                     // instead of setting the chase target here, let's find the closest one
                     potentialVictims.Add(rcHit.transform.gameObject);
                     // chaseTarget = rcHit.transform.gameObject;
                 }
-                if(rcHit.transform.gameObject.layer==6 && state!="chase"){
-                    state = "chase";
+                if(rcHit.transform.gameObject.layer==6 && state!=State.Chase){
+                    state = State.Chase;
                     potentialVictims.Add(rcHit.transform.gameObject);
                 }
             }
         }
 
-        if(state=="chase"){
+        if(state==State.Chase){
             // let's sort through the potentialVictims and find the closest one
             chaseTarget = GetClosest(potentialVictims);
         }
@@ -449,7 +457,7 @@ public class NPC : MonoBehaviour{
 
     public void Knockback(Vector3 direction){
         knockback_vector = direction;
-        state = "knockback";
+        state = State.Knockback;
     }
 
     IEnumerator IKnockback(){
@@ -457,6 +465,6 @@ public class NPC : MonoBehaviour{
         gameObject.GetComponent<Rigidbody>().AddForce(knockback_vector, ForceMode.Impulse);
         yield return new WaitForSeconds(.2f);
         gameObject.GetComponent<NavMeshAgent>().enabled = true;
-        state = "wander";
+        state = State.Wander;
     }
 }
