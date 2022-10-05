@@ -9,21 +9,17 @@ public class Interaction : MonoBehaviour {
         Resource,
         Spawner
     }
-
     public Type interaction_type;
-    public Item interaction_reward;
+
     public void InteractWith(GameObject interacting){
         if(interaction_type==Type.Item){
             // we should pick up this item into our inventory
-            if(interaction_reward){
-                interacting.GetComponent<Inventory>().AddItem(interaction_reward);
-            }else{
-                Debug.Log("No item to reward lol");
-            }
+            gameObject.GetComponent<ItemSpawn>().Interaction(interacting);
         }else if(interaction_type==Type.Resource){
             // we should harvest the resource
+            gameObject.GetComponent<Resource>().Interaction(interacting);
         }else if(interaction_type==Type.Spawner){
-            interacting.GetComponent<Inventory>().AddItem(gameObject.GetComponent<ItemSpawner>().GenerateItem());
+            gameObject.GetComponent<ItemSpawner>().Interaction(interacting);
         }
     }
 }

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerInteraction : MonoBehaviour {
 
@@ -22,7 +23,6 @@ public class PlayerInteraction : MonoBehaviour {
 
     void PlayerInput(){
         if(Input.GetKeyDown("f")){
-            Debug.Log("Interaction");
             if(interactWith){
                 interactWith.GetComponent<Interaction>().InteractWith(gameObject);
             }
@@ -57,9 +57,23 @@ public class PlayerInteraction : MonoBehaviour {
 
     private void DisplayInteractionUI(){
         if(interactWith!=null && !interactionText.activeSelf){
+            ChangeInteractionWithText();
             interactionText.SetActive(true);
         }else if(interactWith==null && interactionText.activeSelf){
             interactionText.SetActive(false);
         }
+    }
+
+    public void ChangeInteractionWithText(){
+        Interaction.Type interactWithType = interactWith.GetComponent<Interaction>().interaction_type;
+        string interacting_with_text = null;
+        if(interactWithType == Interaction.Type.Item){
+            interacting_with_text = interactWith.GetComponent<ItemSpawn>().item.name;
+        }else if(interactWithType == Interaction.Type.Resource){
+            interacting_with_text = interactWith.GetComponent<Resource>().name;
+        }else if(interactWithType == Interaction.Type.Spawner){
+            interacting_with_text = "Item Spawner";
+        }
+        interactionText.GetComponent<Text>().text = "Press F to Interact with " + interacting_with_text;
     }
 }

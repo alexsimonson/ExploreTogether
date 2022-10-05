@@ -5,7 +5,7 @@ using UnityEngine;
 public class ItemSpawner : MonoBehaviour {
 
     Item[] item_bank;
-    Item item_offered;
+    public Item item_offered;
     
     void Awake(){
         item_bank = Resources.LoadAll<Item>("Items");
@@ -23,7 +23,8 @@ public class ItemSpawner : MonoBehaviour {
         return item_bank[rnd_index];
     }
 
-    public void Interaction(){
-        Debug.Log("Interacting with the item spawner");
+    public void Interaction(GameObject interacting){
+        item_offered = gameObject.GetComponent<ItemSpawner>().GenerateItem();
+        interacting.GetComponent<Inventory>().AddItem(item_offered);
     }
 }
