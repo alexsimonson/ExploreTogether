@@ -18,22 +18,9 @@ public class ItemSpawner : MonoBehaviour {
         }
     }
 
-    private void OnTriggerEnter(Collider other){
-        if(other.tag=="Player"){
-            GenerateItem();
-            other.gameObject.GetComponent<PlayerInteraction>().CanInteractWith(item_offered);
-        }
-    }
-
-    private void OnTriggerExit(Collider other){
-        if(other.tag=="Player"){
-            other.gameObject.GetComponent<PlayerInteraction>().CanNotInteractWith(item_offered);
-        }
-    }
-
-    private void GenerateItem(){
+    public Item GenerateItem(){
         int rnd_index = Random.Range(0, item_bank.Length);
-        item_offered = item_bank[rnd_index];
+        return item_bank[rnd_index];
     }
 
     public void Interaction(){

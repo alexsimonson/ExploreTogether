@@ -16,6 +16,7 @@ public class PlayerCombat : MonoBehaviour{
         playerCamera = gameObject.transform.GetChild(0).gameObject;
         crosshair = GameObject.Find("Canvas").transform.GetChild(6).gameObject;
         audioSource = gameObject.transform.GetChild(1).gameObject;
+        audioSource.GetComponent<AudioSource>().volume = .2f;
     }
 
     void Update(){

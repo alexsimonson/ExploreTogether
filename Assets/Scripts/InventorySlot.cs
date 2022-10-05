@@ -59,18 +59,6 @@ public class InventorySlot : MonoBehaviour, IPointerDownHandler, IBeginDragHandl
         }
     }
 
-    private void OnTriggerEnter(Collider other){
-        if(other.tag=="Player"){
-            other.gameObject.GetComponent<PlayerInteraction>().CanInteractWith(item);
-        }
-    }
-
-    private void OnTriggerExit(Collider other){
-        if(other.tag=="Player"){
-            other.gameObject.GetComponent<PlayerInteraction>().CanNotInteractWith(item);
-        }
-    }
-
     private void RenderStackSize(){
         if(!world_interactable){
             if(stack_size > 0 && !stack_size_text.activeSelf){

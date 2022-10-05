@@ -257,7 +257,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: ItemSpawner
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 4339611115943938095, guid: 1c344885a80c7d24cb5239599fb888d5, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 1c344885a80c7d24cb5239599fb888d5, type: 3}
 --- !u!224 &91317019 stripped
 RectTransform:
@@ -6405,6 +6406,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 452040126098317415, guid: 8c1e847575265b54b8c73d502dda2a08, type: 3}
+      propertyPath: interaction_reward
+      value: 
+      objectReference: {fileID: 11400000, guid: fd199fa1bda836f498ba3898eb1129a7, type: 2}
     - target: {fileID: 4061282081970076034, guid: 8c1e847575265b54b8c73d502dda2a08, type: 3}
       propertyPath: m_Name
       value: Item
