@@ -158,6 +158,8 @@ MonoBehaviour:
   xJunc: {fileID: 6742300973328605398, guid: f4e46c870dbe5f44695d4d09534820da, type: 3}
   cJunc: {fileID: 3089725247197783406, guid: fb4094d99c18e0f448f499b1064888de, type: 3}
   generated_nodes: []
+  max_width: 20
+  max_height: 20
   max_dungeon_length: 100
   total_count: 0
 --- !u!4 &212473084

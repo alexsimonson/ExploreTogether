@@ -15,10 +15,12 @@ public class Maze : MonoBehaviour {
     private int prefabSize = 5;
 
     private List<Vector3> neighbors_visited = new List<Vector3>();
-    private List<Vector3> generating_stack = new List<Vector3>();
+    private Stack<GeneratedNode> generating_stack = new Stack<GeneratedNode>();
 
     public List<GeneratedNode> generated_nodes = new List<GeneratedNode>();
 
+    public int max_width;
+    public int max_height;
     public int max_dungeon_length = 1000;
     public int total_count = 0;
 
@@ -38,24 +40,9 @@ public class Maze : MonoBehaviour {
     void GenerateRandomMaze(){
         // given starting point 0, 0, find empty neighbors
         Vector3 start_pos = new Vector3(0, 0, 0);
-        GridRecursiveBacktrackGenerator(start_pos);
+        GridRecursiveBacktrackGenerator(start_pos, null, true);
         RenderGrid();        
     }
-
-    // parameters must define start/end conditions of this function
-    // void RecursiveBacktrackGeneratorTest(Vector3 position){
-    //     // given a position we must do the stuff
-    //     // Instantiate(xJunc, position, Quaternion.identity);
-    //     neighbors_visited.Add(position);
-    //     generating_stack.Add(position);
-    //     InstantiateModified(position);
-    //     List<Vector3> neighbors = FindNeighbors(position);
-    //     List<Vector3> empty_neighbors = FindEmptyNeighbors(neighbors);
-    //     if(empty_neighbors.Count <= 0 || neighbors_visited.Count==max_dungeon_length) return;
-    //     // otherwise we will choose a random neighbor and go
-    //     Vector3 random_neighbor = empty_neighbors[Random.Range(0, empty_neighbors.Count)];
-    //     RecursiveBacktrackGeneratorTest(random_neighbor);
-    // }
 
     List<Vector3> FindNeighbors(Vector3 position){
         // given a position, return a list of the neighbors
@@ -80,26 +67,27 @@ public class Maze : MonoBehaviour {
     }
 
     // this takes a position that was simple and data oriented and converts to the real world location
-    void InstantiateModified(Vector3 position, GameObject prefab, int rotation_degrees=0){
-        Vector3 modified_position = new Vector3(position.x * prefabSize, position.y, position.z * prefabSize);
+    void InstantiateModified(GeneratedNode node, GameObject prefab, int rotation_degrees=0){
+        Vector3 modified_position = new Vector3(node.mazePosition.x * prefabSize, node.mazePosition.y, node.mazePosition.z * prefabSize);
         GameObject io = Instantiate(prefab, modified_position, Quaternion.identity);
         Vector3 existing_rot = io.transform.rotation.eulerAngles;
         existing_rot.y = rotation_degrees;
         io.transform.rotation = Quaternion.Euler(existing_rot);
+        io.name = "Testing " + node.index.ToString() + " - " + prefab.name.ToString();
     }
 
     // parameters must define start/end conditions of this function
-    void GridRecursiveBacktrackGenerator(Vector3 position){
-        GeneratedNode last_node = (total_count>0) ? generated_nodes[total_count-1] : null;
+    void GridRecursiveBacktrackGenerator(Vector3 position, GeneratedNode last_node=null, bool first_pass=false){
         // given a position we must do the stuff
         // Instantiate(xJunc, position, Quaternion.identity);   // commented out while I redesign this logic
-        neighbors_visited.Add(position);
-        generating_stack.Add(position);
         // we should also create a new GeneratedNode
-        GeneratedNode current_node = new GeneratedNode(position);
-        // InstantiateModified(position);   // commented out while I redesign this logic
+        neighbors_visited.Add(position);
+        GeneratedNode current_node = ScriptableObject.CreateInstance("GeneratedNode") as GeneratedNode;
+        current_node.Init(position, total_count);
+        generating_stack.Push(current_node);
+        generated_nodes.Add(current_node);
         // this functionality must be called before we return
-        if(last_node!=null){
+        if(!first_pass && last_node!=null){
             // determine the cardinal direction of the lastNode from position...
             // then set this position into the lastPositions 
             
@@ -128,14 +116,32 @@ public class Maze : MonoBehaviour {
                 }
             }
         }
-        generated_nodes.Add(current_node);
-        List<Vector3> empty_neighbors = FindEmptyNeighbors(FindNeighborsGrid(position));
-        if(empty_neighbors.Count <= 0 || total_count==max_dungeon_length) return;
+        List<Vector3> empty_neighbors = FindEmptyNeighbors(FindNeighborsGrid(current_node.mazePosition));
+        if(total_count==max_dungeon_length){
+            Debug.Log("Max dungeon length reached");
+            return;
+        }
+        // when there are no empty neighbors, I should pop the stack and "backtrack" to try the last node
+        bool control = true;
+        while(empty_neighbors.Count <= 0 && control){
+            generating_stack.Pop();
+            if(generating_stack.Count <= 0){
+                control = false;
+                Debug.Log("The end of the line");
+            }else{
+                current_node = generating_stack.Peek();
+                empty_neighbors = FindEmptyNeighbors(FindNeighborsGrid(current_node.mazePosition));
+            }
+        }
         // otherwise we will choose a random neighbor and go
+        if(empty_neighbors.Count <=0){
+            Debug.Log("Returning no neighbors");
+            return;
+        }
         Vector3 random_neighbor = empty_neighbors[Random.Range(0, empty_neighbors.Count)];
 
         total_count++;
-        GridRecursiveBacktrackGenerator(random_neighbor);
+        GridRecursiveBacktrackGenerator(random_neighbor, current_node);
     }
 
     // this will limit the function to only finding coordinates in a grid
@@ -146,10 +152,10 @@ public class Maze : MonoBehaviour {
         var z = position.z;
 
         List<Vector3> neighbors = new List<Vector3>();
-        neighbors.Add(new Vector3(x+1, y, z));
+        if(x+1 < max_width) neighbors.Add(new Vector3(x+1, y, z));
         if(x-1 >= 0) neighbors.Add(new Vector3(x-1, y, z));
-        neighbors.Add(new Vector3(x, y, z+1));
-        if(y-1 >= 0) neighbors.Add(new Vector3(x, y, z-1));
+        if(z+1 < max_height) neighbors.Add(new Vector3(x, y, z+1));
+        if(z-1 >= 0) neighbors.Add(new Vector3(x, y, z-1));
         return neighbors;
     }
 
@@ -163,30 +169,12 @@ public class Maze : MonoBehaviour {
     }
 
     void DetermineAndInstantiateNodePiece(GeneratedNode node){
-        Debug.Log(node);
         // based on certain path parameters of a given node, determine which prefab will render
-
         int neighbor_count = 0;
-        if(node.northNeighbor){
-            Debug.Log("This if is sufficient for north");
-            neighbor_count++;
-            Debug.Log("New count after increasing: " + neighbor_count.ToString());
-        }
-        if(node.southNeighbor){
-            Debug.Log("This if is sufficient for south");
-            neighbor_count++;
-            Debug.Log("New count after increasing: " + neighbor_count.ToString());
-        }
-        if(node.eastNeighbor){
-            Debug.Log("This if is sufficient for east");
-            neighbor_count++;
-            Debug.Log("New count after increasing: " + neighbor_count.ToString());
-        }
-        if(node.westNeighbor){
-            Debug.Log("This if is sufficient for west");
-            neighbor_count++;
-            Debug.Log("New count after increasing: " + neighbor_count.ToString());
-        }
+        if(node.northNeighbor) neighbor_count++;
+        if(node.southNeighbor) neighbor_count++;
+        if(node.eastNeighbor) neighbor_count++;
+        if(node.westNeighbor) neighbor_count++;
         if(neighbor_count==0){
             Debug.Log("Neighbor count must be greater than 0.  Did you run this function before generating the grid?");
             return;
@@ -241,6 +229,6 @@ public class Maze : MonoBehaviour {
                 }
             }
         }
-        InstantiateModified(node.mazePosition, node_prefab, rotation_degrees);
+        InstantiateModified(node, node_prefab, rotation_degrees);
     }
 }
