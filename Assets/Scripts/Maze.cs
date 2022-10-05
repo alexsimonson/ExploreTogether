@@ -24,6 +24,8 @@ public class Maze : MonoBehaviour {
     public int max_dungeon_length = 1000;
     public int total_count = 0;
 
+    bool controlled_render = false;
+    bool controlled_generation = true;
     void Awake(){
         corner = Resources.Load("Prefabs/Dungeon/Corner", typeof(GameObject)) as GameObject;
         hall = Resources.Load("Prefabs/Dungeon/Hall", typeof(GameObject)) as GameObject;
@@ -33,8 +35,16 @@ public class Maze : MonoBehaviour {
     }
 
     // Start is called before the first frame update
-    void Start(){
-        GenerateRandomMaze();
+    void Update(){
+        if(controlled_generation){
+            controlled_generation = false;
+            GenerateRandomMaze();
+        }
+        if(controlled_render){
+            controlled_render = false;
+            StartCoroutine(ControlledRender());
+
+        }
     }
 
     void GenerateRandomMaze(){
@@ -165,6 +175,13 @@ public class Maze : MonoBehaviour {
         foreach(GeneratedNode node in generated_nodes){
             // check out the node's neighbors, then determine the piece
             DetermineAndInstantiateNodePiece(node);
+        }
+    }
+    
+    IEnumerator ControlledRender(float wait_time=.1f){
+        foreach(GeneratedNode node in generated_nodes){
+            DetermineAndInstantiateNodePiece(node);
+            yield return new WaitForSeconds(wait_time);
         }
     }
 
