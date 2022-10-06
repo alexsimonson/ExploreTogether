@@ -26,4 +26,32 @@ public class Weapon : Equipment {
     public virtual void Secondary(GameObject owner){
         Debug.Log("Secondary");
     }
+
+    public void Stab(GameObject owner){
+        Debug.Log("Getting up close and personal");
+        RaycastHit hit;
+
+        int layerMask = 1 << 9;
+        if(Physics.Raycast(owner.GetComponent<PlayerCombat>().playerCamera.transform.position, owner.GetComponent<PlayerCombat>().playerCamera.transform.forward * 1, out hit, 4, layerMask)){
+            Debug.DrawRay(owner.GetComponent<PlayerCombat>().playerCamera.transform.position, owner.GetComponent<PlayerCombat>().playerCamera.transform.forward * hit.distance, Color.red, 2.0f, false);
+            hit.transform.gameObject.GetComponent<NPC>().Knockback(owner.transform.forward);
+            hit.transform.gameObject.GetComponent<Health>().DealDamage(20);
+        }else{
+            Debug.DrawRay(owner.GetComponent<PlayerCombat>().playerCamera.transform.position, owner.GetComponent<PlayerCombat>().playerCamera.transform.forward * 1, Color.green, 2.0f, false);
+        }
+        // owner.GetComponent<PlayerCombat>().audioSource.GetComponent<AudioSource>().PlayOneShot(attackSound);
+    }
+
+    public void Shoot(GameObject owner){
+        RaycastHit hit;
+
+        int layerMask = 1 << 9;
+        if(Physics.Raycast(owner.GetComponent<PlayerCombat>().playerCamera.transform.position, owner.GetComponent<PlayerCombat>().playerCamera.transform.forward * 1000, out hit, Mathf.Infinity, layerMask)){
+            Debug.DrawRay(owner.GetComponent<PlayerCombat>().playerCamera.transform.position, owner.GetComponent<PlayerCombat>().playerCamera.transform.forward * hit.distance, Color.red, 2.0f, false);
+            hit.transform.gameObject.GetComponent<Health>().DealDamage(100);
+        }else{
+            Debug.DrawRay(owner.GetComponent<PlayerCombat>().playerCamera.transform.position, owner.GetComponent<PlayerCombat>().playerCamera.transform.forward * 1000, Color.green, 2.0f, false);
+        }
+        owner.GetComponent<PlayerCombat>().audioSource.GetComponent<AudioSource>().PlayOneShot(attackSound);
+    }
 }

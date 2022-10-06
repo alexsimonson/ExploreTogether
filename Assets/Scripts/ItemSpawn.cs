@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ItemSpawn : MonoBehaviour {
+public class ItemSpawn : MonoBehaviour, IInteraction {
 
     public Item item;
     private MeshRenderer mesh_renderer;

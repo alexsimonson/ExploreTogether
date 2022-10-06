@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 8743792216333835063}
   - component: {fileID: 386716996912657331}
   - component: {fileID: 6194148269108482270}
-  - component: {fileID: 3035293135531722694}
   - component: {fileID: -637482547043407820}
   m_Layer: 7
   m_Name: Resource
@@ -111,20 +110,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 4, y: 1, z: 4}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &3035293135531722694
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1443101962821230115}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fa7c02df95edae94d95f7d17d79f5eb0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  interaction_type: 0
-  interaction_reward: {fileID: 0}
 --- !u!114 &-637482547043407820
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -139,4 +124,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: 
   resources: []
-  mesh: {fileID: 0}
+  single_use: 1
+  active: {fileID: 0}
+  empty: {fileID: 0}

@@ -24,7 +24,7 @@ public class PlayerInteraction : MonoBehaviour {
     void PlayerInput(){
         if(Input.GetKeyDown("f")){
             if(interactWith){
-                interactWith.GetComponent<Interaction>().InteractWith(gameObject);
+                interactWith.GetComponent<IInteraction>().Interaction(gameObject);
             }
         }
     }

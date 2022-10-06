@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Resource : MonoBehaviour {
+public class Resource : MonoBehaviour, IInteraction {
     
     public new string name;
     public Item[] resources;   // the item obtained during a successful harvest

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ItemSpawner : MonoBehaviour {
+public class ItemSpawner : MonoBehaviour, IInteraction {
 
     Item[] item_bank;
     public Item item_offered;
