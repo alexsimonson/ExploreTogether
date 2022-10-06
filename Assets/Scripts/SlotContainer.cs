@@ -234,4 +234,8 @@ public class SlotContainer : MonoBehaviour, IDropHandler {
             gearUI.UpdateSlot(drag_index, originalItem, dragSlot);
         }
     }
+
+    public void DropItem(){
+        inventoryUI.EmptySlot(index);
+    }
 }

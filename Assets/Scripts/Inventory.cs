@@ -70,6 +70,14 @@ public class Inventory : MonoBehaviour {
         }
     }
 
+    public void RemoveItem(int index){
+        Item removedItem = slots[index].GetComponent<SlotContainer>().inventorySlot.GetComponent<InventorySlot>().item;
+        slots[index].GetComponent<SlotContainer>().inventorySlot.GetComponent<InventorySlot>().item = null;
+        GameObject dropped_item = Instantiate(Resources.Load("Prefabs/Item", typeof(GameObject)) as GameObject, gameObject.transform.position, Quaternion.identity);
+        dropped_item.GetComponent<ItemSpawn>().item = removedItem;
+        // let's instantiate this item on the ground
+    }
+
     int FindEmptySlot(){
         for(int slot_index=0;slot_index<slots.Length;slot_index++){
             if(slots[slot_index].GetComponent<SlotContainer>().inventorySlot.GetComponent<InventorySlot>().item==null) return slot_index;

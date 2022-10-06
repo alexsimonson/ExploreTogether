@@ -13,6 +13,7 @@ public class InventorySlot : MonoBehaviour, IPointerDownHandler, IBeginDragHandl
     private Canvas canvas;
     private CanvasGroup cg;
     private GameObject stack_size_text;
+    private GameObject slot_container;
 
     void Awake(){
         canvas = GameObject.Find("Canvas").GetComponent<Canvas>();
@@ -25,6 +26,7 @@ public class InventorySlot : MonoBehaviour, IPointerDownHandler, IBeginDragHandl
         if(!world_interactable){
             stack_size_text = gameObject.transform.GetChild(2).gameObject;
         }
+        slot_container = gameObject.transform.parent.gameObject;
     }
 
     void Update(){
@@ -37,7 +39,12 @@ public class InventorySlot : MonoBehaviour, IPointerDownHandler, IBeginDragHandl
     }
 
     public void OnPointerDown(PointerEventData eventData){
-        Debug.Log("Pointer Down From Inventory Slot");
+        if(eventData.button==PointerEventData.InputButton.Right){
+            // let's drop the item
+            if(item!=null){
+                slot_container.GetComponent<SlotContainer>().DropItem();
+            }
+        }
     }
 
     public void OnBeginDrag(PointerEventData eventData){

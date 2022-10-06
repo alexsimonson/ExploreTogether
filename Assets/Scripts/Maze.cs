@@ -9,7 +9,7 @@ public class Maze : MonoBehaviour {
     public GameObject tJunc;
     public GameObject xJunc;
     public GameObject cJunc;
-
+    public GameObject itemSpawn;
 
     private int size = 10;
     private int prefabSize = 5;
@@ -18,6 +18,8 @@ public class Maze : MonoBehaviour {
     private Stack<GeneratedNode> generating_stack = new Stack<GeneratedNode>();
 
     public List<GeneratedNode> generated_nodes = new List<GeneratedNode>();
+
+    public List<GeneratedNode> xJunctions = new List<GeneratedNode>();
 
     public int max_width;
     public int max_height;
@@ -32,6 +34,7 @@ public class Maze : MonoBehaviour {
         tJunc = Resources.Load("Prefabs/Dungeon/T-Junction", typeof(GameObject)) as GameObject;
         xJunc = Resources.Load("Prefabs/Dungeon/X-Junction", typeof(GameObject)) as GameObject;
         cJunc = Resources.Load("Prefabs/Dungeon/C-Junction", typeof(GameObject)) as GameObject;
+        itemSpawn = Resources.Load("Prefabs/Item", typeof(GameObject)) as GameObject;
     }
 
     // Start is called before the first frame update
@@ -43,7 +46,6 @@ public class Maze : MonoBehaviour {
         if(controlled_render){
             controlled_render = false;
             StartCoroutine(ControlledRender());
-
         }
     }
 
@@ -51,7 +53,10 @@ public class Maze : MonoBehaviour {
         // given starting point 0, 0, find empty neighbors
         Vector3 start_pos = new Vector3(0, 0, 0);
         GridRecursiveBacktrackGenerator(start_pos, null, true);
-        RenderGrid();        
+        if(!controlled_generation){
+            RenderGrid();
+        }
+        FillMazeWithItems();
     }
 
     List<Vector3> FindNeighbors(Vector3 position){
@@ -171,7 +176,6 @@ public class Maze : MonoBehaviour {
 
     void RenderGrid(){
         // given a "linked list" path of nodes, instantiate, and rotate accordingly the prefab into position
-        // rotating may be very fucked and annoying hopefully not though :)
         foreach(GeneratedNode node in generated_nodes){
             // check out the node's neighbors, then determine the piece
             DetermineAndInstantiateNodePiece(node);
@@ -202,6 +206,7 @@ public class Maze : MonoBehaviour {
         // triage based on count
         if(neighbor_count==4){
             node_prefab = xJunc;
+            xJunctions.Add(node);
         }else if(neighbor_count==3){
             node_prefab = tJunc;
             if(!node.eastNeighbor){
@@ -247,5 +252,12 @@ public class Maze : MonoBehaviour {
             }
         }
         InstantiateModified(node, node_prefab, rotation_degrees);
+    }
+
+    void FillMazeWithItems(){
+        foreach(GeneratedNode xJunction in xJunctions){
+            // we should instantiate an item here
+            Instantiate(itemSpawn, new Vector3(xJunction.mazePosition.x * prefabSize, xJunction.mazePosition.y * prefabSize + 1.5f, xJunction.mazePosition.z * prefabSize), Quaternion.identity);
+        }
     }
 }

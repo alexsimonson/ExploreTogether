@@ -71,8 +71,11 @@ public class InventoryUI : MonoBehaviour {
     }
 
     public void EmptySlot(int slot_index){
-        // I need to make this actually just reset to an empty slot, instead of default item...
+        Color newColor = inventory.slots[slot_index].GetComponent<SlotContainer>().inventorySlot.transform.GetChild(1).GetComponent<Image>().color;
+        newColor.a = 0;
         inventory.slots[slot_index].GetComponent<SlotContainer>().inventorySlot.transform.GetChild(0).GetComponent<Text>().text = null;
         inventory.slots[slot_index].GetComponent<SlotContainer>().inventorySlot.transform.GetChild(1).GetComponent<Image>().sprite = null;
+        inventory.slots[slot_index].GetComponent<SlotContainer>().inventorySlot.transform.GetChild(1).GetComponent<Image>().color = newColor;
+        inventory.RemoveItem(slot_index);
     }
 }

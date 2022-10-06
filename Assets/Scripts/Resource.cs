@@ -6,7 +6,7 @@ public class Resource : MonoBehaviour {
     
     public new string name;
     public Item[] resources;   // the item obtained during a successful harvest
-    bool single_use = true;
+    public bool single_use = true;
     int rng_size = 512;
     // osrs type solution for rng
     int min_bounds = 12;
@@ -33,11 +33,12 @@ public class Resource : MonoBehaviour {
                 Debug.Log("Must add items as reward in order to interact with resources");
                 return;
             }
-            if(single_use){
-                depleted = true;
-                StartCoroutine(Respawn(5f));
-            }
             interactingWith.GetComponent<Inventory>().AddItem(GiveResource());
+            if(single_use){
+                Depleted();
+            }else{
+                ChanceDepletion();
+            }
         }else{
             Debug.Log("No resource for you");
         }
@@ -53,5 +54,19 @@ public class Resource : MonoBehaviour {
         yield return new WaitForSeconds(respawn_time);
         depleted = false;
         mesh_renderer.material = active;
+    }
+
+    void Depleted(){
+        depleted = true;
+        StartCoroutine(Respawn(5f));
+    }
+
+    void ChanceDepletion(){
+        int rnd_index = Random.Range(0, rng_size);
+        int min_chance = 100;
+        int max_chance = 200;
+        if(rnd_index >= min_chance && rnd_index <= max_chance){
+            Depleted();
+        }
     }
 }
