@@ -69,4 +69,8 @@ public class Resource : MonoBehaviour, IInteraction {
             Depleted();
         }
     }
+
+    public string InteractionName(){
+        return name;
+    }
 }

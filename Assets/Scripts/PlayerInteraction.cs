@@ -25,6 +25,7 @@ public class PlayerInteraction : MonoBehaviour {
         if(Input.GetKeyDown("f")){
             if(interactWith){
                 interactWith.GetComponent<IInteraction>().Interaction(gameObject);
+                ChangeInteractionWithText();
             }
         }
     }
@@ -65,15 +66,7 @@ public class PlayerInteraction : MonoBehaviour {
     }
 
     public void ChangeInteractionWithText(){
-        Interaction.Type interactWithType = interactWith.GetComponent<Interaction>().interaction_type;
-        string interacting_with_text = null;
-        if(interactWithType == Interaction.Type.Item){
-            interacting_with_text = interactWith.GetComponent<ItemSpawn>().item.name;
-        }else if(interactWithType == Interaction.Type.Resource){
-            interacting_with_text = interactWith.GetComponent<Resource>().name;
-        }else if(interactWithType == Interaction.Type.Spawner){
-            interacting_with_text = "Item Spawner";
-        }
+        string interacting_with_text = interactWith.GetComponent<IInteraction>().InteractionName();
         interactionText.GetComponent<Text>().text = "Press F to Interact with " + interacting_with_text;
     }
 }

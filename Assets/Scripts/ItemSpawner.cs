@@ -9,13 +9,7 @@ public class ItemSpawner : MonoBehaviour, IInteraction {
     
     void Awake(){
         item_bank = Resources.LoadAll<Item>("Items");
-        Debug.Log(item_bank.Length);
-    }
-
-    void Start(){
-        foreach(Item item in item_bank){
-            Debug.Log("Item name: " + item.name);
-        }
+        item_offered = GenerateItem();
     }
 
     public Item GenerateItem(){
@@ -24,7 +18,11 @@ public class ItemSpawner : MonoBehaviour, IInteraction {
     }
 
     public void Interaction(GameObject interacting){
-        item_offered = gameObject.GetComponent<ItemSpawner>().GenerateItem();
         interacting.GetComponent<Inventory>().AddItem(item_offered);
+        item_offered = gameObject.GetComponent<ItemSpawner>().GenerateItem();
+    }
+
+    public string InteractionName(){
+        return item_offered.name;
     }
 }

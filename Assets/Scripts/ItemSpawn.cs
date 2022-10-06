@@ -20,4 +20,8 @@ public class ItemSpawn : MonoBehaviour, IInteraction {
             Debug.Log("No item to reward lol");
         }
     }
+
+    public string InteractionName(){
+        return item.name;
+    }
 }
