@@ -9,6 +9,7 @@ public class Inventory : MonoBehaviour {
     public bool isPlayerInventory;
     public GameObject RelevantScrollView;
 
+    public Item dungeon_pass;
     public Gun gun_test;
     public Melee sword_test;
 
@@ -26,6 +27,7 @@ public class Inventory : MonoBehaviour {
         ListInventory();
         AddItem(gun_test);
         AddItem(sword_test);
+        AddItem(dungeon_pass);
     }
 
     // Update is called once per frame

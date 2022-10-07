@@ -16,4 +16,5 @@ public abstract class GameMode : MonoBehaviour, IGameMode {
     public abstract void SetupNextRound();
     public abstract void SpawnEnemies();
     public abstract void EnemyKilled();
+    public abstract void ResetGameMode();
 }

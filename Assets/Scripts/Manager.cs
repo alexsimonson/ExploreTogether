@@ -22,6 +22,7 @@ public class Manager : MonoBehaviour {
 
     public Item[] item_bank;
 
+    public Vector3 playerSpawnPoint = new Vector3(0, 1.5f, 0);
     void Awake(){
         enemy_prefab = Resources.Load("Prefabs/Enemy", typeof(GameObject)) as GameObject;
         hudPrefab = Resources.Load("Prefabs/HUD", typeof(GameObject)) as GameObject;
@@ -33,6 +34,10 @@ public class Manager : MonoBehaviour {
 
     // Start is called before the first frame update
     void Start(){
+        Setup();
+    }
+
+    public void Setup(){
         maze = Instantiate(maze_generator_prefab);
         maze.GetComponent<Maze>().manager = gameObject.GetComponent<Manager>();
         hud = Instantiate(hudPrefab);
@@ -41,10 +46,8 @@ public class Manager : MonoBehaviour {
         game_mode = Instantiate(game_mode_prefab, new Vector3(0, 0, 0), Quaternion.identity);
         game_rules = game_mode.GetComponent<IGameMode>();
         
-        player = Instantiate(playerPrefab, new Vector3(0, 1, 0), Quaternion.identity);
+        player = Instantiate(playerPrefab, playerSpawnPoint, Quaternion.identity);
         player.name = "Player";
-
-        
     }
 
     void HandleRound(){
@@ -67,5 +70,14 @@ public class Manager : MonoBehaviour {
             generated = item_bank[rnd_index];
         }
         return generated;
+    }
+
+    public void DestroyNonEssentialGameObjects(){
+        GameObject[] get_all = FindObjectsOfType<GameObject>() as GameObject[];
+        foreach(GameObject obj in get_all){
+            if(obj.tag!="essential"){
+                Destroy(obj);
+            }
+        }
     }
 }

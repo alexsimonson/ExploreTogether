@@ -21,9 +21,13 @@ public class WaveSurvival : GameMode, IGameMode {
     public GameObject[] respawns;
     public GameObject playerRespawns;
     public GameObject enemyRespawns;
+
+    public Manager manager;
+
     // Start is called before the first frame update
     public override void Initialize(){
-        canvas = GameObject.Find("Manager").GetComponent<Manager>().hud;
+        manager = GameObject.Find("Manager").GetComponent<Manager>(); 
+        canvas = manager.hud;
         // enemy_prefab = Resources.Load("Prefabs/Enemy", typeof(GameObject)) as GameObject;
         respawns = GameObject.FindGameObjectsWithTag("Respawn");
         FilterRespawns();
@@ -93,15 +97,14 @@ public class WaveSurvival : GameMode, IGameMode {
         enemies_eliminated_this_round += 1;
     }
 
-    public void ResetGameMode(){
+    public override void ResetGameMode(){
+        // we should delete every single game object that isn't essential
+        manager.DestroyNonEssentialGameObjects();
+        manager.Setup();
         current_round = 0;
         enemies_spawned_this_round_max = enemies_spawned_this_round_max_default;
-        GameObject[] npcs = GameObject.FindGameObjectsWithTag("NPC");
-        foreach(GameObject npc in npcs){
-            Destroy(npc);
-        }
-        var player = GameObject.Find("Player");
-        player.transform.position = playerRespawns.transform.position;
+        // manager.player.transform.position = playerRespawns.transform.position;
+        manager.player.transform.position = manager.playerSpawnPoint;
         EndRound();
     }
 

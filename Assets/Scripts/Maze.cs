@@ -301,10 +301,11 @@ public class Maze : MonoBehaviour {
 
         // let's place the objective at the final generated location
         Vector3 objective_location = generated_nodes[generated_nodes.Count - 1].mazePosition;
+        // commenting out below, saving for testing
+        // Vector3 objective_location = manager.playerSpawnPoint;
         
         GameObject objective = Resources.Load("Prefabs/Objective", typeof(GameObject)) as GameObject;
         Instantiate(objective, new Vector3(objective_location.x * prefabSize, objective_location.y * prefabSize + 1.5f, objective_location.z * prefabSize), Quaternion.identity);
-
 
         // let's instantiate 5 monster spawners throughout the maze
         for(int i=0;i<1;i++){

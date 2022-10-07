@@ -7,4 +7,5 @@ public interface IGameMode{
     void SetupNextRound();
     void SpawnEnemies();
     void EnemyKilled();
+    void ResetGameMode();
 }

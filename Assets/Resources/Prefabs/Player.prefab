@@ -438,6 +438,7 @@ MonoBehaviour:
   - {fileID: 0}
   isPlayerInventory: 1
   RelevantScrollView: {fileID: 0}
+  dungeon_pass: {fileID: 11400000, guid: 2f8059e44d675d840b1830a9f3c41b78, type: 2}
   gun_test: {fileID: 11400000, guid: 98bd183e6b201ac4696ef525bc5b99d4, type: 2}
   sword_test: {fileID: 11400000, guid: 02ad56c938a24b04f9fbc5904de285ec, type: 2}
 --- !u!114 &6654121761325831222
@@ -452,7 +453,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 123f31be6f8676147b16e3b08c1a9376, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactWith: []
+  interactWith: {fileID: 0}
+  itemInteraction: []
 --- !u!114 &4202415353013811586
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -481,6 +483,7 @@ MonoBehaviour:
   - {fileID: 0}
   isPlayerInventory: 1
   RelevantScrollView: {fileID: 0}
+  dungeon_pass: {fileID: 0}
   gun_test: {fileID: 0}
   sword_test: {fileID: 0}
 --- !u!114 &3076970631314084794
