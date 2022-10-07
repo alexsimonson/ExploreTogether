@@ -279,14 +279,36 @@ public class Maze : MonoBehaviour {
     }
 
     void FillMazeWithItems(){
-        foreach(GeneratedNode xJunction in xJunctions){
-            // we should instantiate an item here
-            Instantiate(itemSpawn, new Vector3(xJunction.mazePosition.x * prefabSize, xJunction.mazePosition.y * prefabSize + 1.5f, xJunction.mazePosition.z * prefabSize), Quaternion.identity);
+
+        // x junction is not reliable in smaller mazes, until we overhaul our random generation algorithm to more randomly place junctions
+        // I could experiment with randomly overriding an x-junc into the map??
+        // foreach(GeneratedNode xJunction in xJunctions){
+        //     // we should instantiate an item here
+        //     Instantiate(itemSpawn, new Vector3(xJunction.mazePosition.x * prefabSize, xJunction.mazePosition.y * prefabSize + 1.5f, xJunction.mazePosition.z * prefabSize), Quaternion.identity);
+        // }
+
+        // we must instantiate a dungeon key somewhere
+        Item dungeonPassItem = Resources.Load("Items/Dungeon Pass", typeof(Item)) as Item;
+        int random_index = Random.Range(15, generated_nodes.Count - 15);
+        GameObject dungeonPass = Instantiate(itemSpawn, new Vector3(generated_nodes[random_index].mazePosition.x * prefabSize, generated_nodes[random_index].mazePosition.y * prefabSize + 1.5f, generated_nodes[random_index].mazePosition.z * prefabSize), Quaternion.identity);
+        dungeonPass.GetComponent<ItemSpawn>().item = dungeonPassItem;
+        dungeonPass.name = "DUNGEON PASS MOTHERFUCKER";
+        for(int i=0;i<20;i++){
+            random_index = Random.Range(5, generated_nodes.Count - 5);
+            Instantiate(itemSpawn, new Vector3(generated_nodes[random_index].mazePosition.x * prefabSize, generated_nodes[random_index].mazePosition.y * prefabSize + 1.5f, generated_nodes[random_index].mazePosition.z * prefabSize), Quaternion.identity);
+            itemSpawn.GetComponent<ItemSpawn>().item = manager.GenerateItem();
         }
+
+        // let's place the objective at the final generated location
+        Vector3 objective_location = generated_nodes[generated_nodes.Count - 1].mazePosition;
+        
+        GameObject objective = Resources.Load("Prefabs/Objective", typeof(GameObject)) as GameObject;
+        Instantiate(objective, new Vector3(objective_location.x * prefabSize, objective_location.y * prefabSize + 1.5f, objective_location.z * prefabSize), Quaternion.identity);
+
 
         // let's instantiate 5 monster spawners throughout the maze
         for(int i=0;i<1;i++){
-            int random_index = Random.Range(25, generated_nodes.Count - 25);
+            random_index = Random.Range(25, generated_nodes.Count - 25);
             Instantiate(respawnPrefab, new Vector3(generated_nodes[random_index].mazePosition.x * prefabSize, generated_nodes[random_index].mazePosition.y * prefabSize + 1.5f, generated_nodes[random_index].mazePosition.z * prefabSize), Quaternion.identity);
         }
     }

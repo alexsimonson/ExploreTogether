@@ -20,12 +20,15 @@ public class Manager : MonoBehaviour {
 
     public GameObject maze;
 
+    public Item[] item_bank;
+
     void Awake(){
         enemy_prefab = Resources.Load("Prefabs/Enemy", typeof(GameObject)) as GameObject;
         hudPrefab = Resources.Load("Prefabs/HUD", typeof(GameObject)) as GameObject;
         playerPrefab = Resources.Load("Prefabs/Player", typeof(GameObject)) as GameObject;
         game_mode_prefab = Resources.Load("Prefabs/WaveSurvivalGM", typeof(GameObject)) as GameObject;
         maze_generator_prefab = Resources.Load("Prefabs/MazeGenerator", typeof(GameObject)) as GameObject;
+        item_bank = Resources.LoadAll<Item>("Items");
     }
 
     // Start is called before the first frame update
@@ -54,5 +57,15 @@ public class Manager : MonoBehaviour {
         // start the game mode
         game_rules.Initialize();
         game_rules.SpawnEnemies();
+    }
+
+    public Item GenerateItem(){
+        Item generated = null;
+        while(generated == null || generated.id==999){
+            // we should generate a new item to try and return
+            int rnd_index = Random.Range(0, item_bank.Length);
+            generated = item_bank[rnd_index];
+        }
+        return generated;
     }
 }
