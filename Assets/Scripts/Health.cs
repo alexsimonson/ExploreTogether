@@ -7,10 +7,10 @@ public class Health : MonoBehaviour {
 	public int maxHealth = 100;
 	public int currentHealth = 100;
     private int layer;
-    private GameObject game_mode;
+	private Manager manager;
 
     public virtual void Start(){
-        game_mode = GameObject.Find("GameMode");
+		manager = GameObject.Find("Manager").GetComponent<Manager>();
         layer = gameObject.layer;    
     }
 
@@ -33,7 +33,7 @@ public class Health : MonoBehaviour {
 
     void HandleScore(){
         if(layer==9){
-            game_mode.GetComponent<WaveSurvival>().EnemyKilled();
+			manager.game_rules.EnemyKilled();
         }
     }
 }

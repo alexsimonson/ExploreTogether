@@ -53,7 +53,7 @@ public class WaveSurvival : GameMode, IGameMode {
 
     public override void SetupNextRound(){
         current_round += 1;
-        // canvas.transform.GetChild(0).gameObject.GetComponent<Text>().text = "Round " + current_round.ToString();
+        canvas.transform.GetChild(0).gameObject.GetComponent<Text>().text = "Round " + current_round.ToString();
         IncreaseEnemies();
         RewardRoundBonus();
         ResetRoundDefaults();
@@ -75,7 +75,7 @@ public class WaveSurvival : GameMode, IGameMode {
     }
 
     void SpawnEnemy(){
-        Instantiate(enemy_prefab, enemyRespawns.transform.position, enemyRespawns.transform.rotation);
+        Instantiate(enemy_prefab, new Vector3(enemyRespawns.transform.position.x, enemyRespawns.transform.position.y + 1.5f, enemyRespawns.transform.position.z), enemyRespawns.transform.rotation);
         enemies_currently_spawned += 1;
         enemies_spawned_this_round += 1;
     }
@@ -88,7 +88,7 @@ public class WaveSurvival : GameMode, IGameMode {
         transition_period = false;
     }
 
-    public void EnemyKilled(){
+    public override void EnemyKilled(){
         enemies_currently_spawned -= 1;
         enemies_eliminated_this_round += 1;
     }

@@ -6,4 +6,5 @@ public interface IGameMode{
     IEnumerator BeginTransitionPeriod();
     void SetupNextRound();
     void SpawnEnemies();
+    void EnemyKilled();
 }

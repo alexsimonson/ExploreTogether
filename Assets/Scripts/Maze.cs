@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Maze : MonoBehaviour {
 
@@ -33,6 +34,9 @@ public class Maze : MonoBehaviour {
 
     public Manager manager;
 
+    public List<NavMeshSurface> surfaces = new List<NavMeshSurface>();
+    public NavigationBuilder nav_builder;
+
 
 
     void Awake(){
@@ -42,6 +46,10 @@ public class Maze : MonoBehaviour {
         xJunc = Resources.Load("Prefabs/Dungeon/X-Junction", typeof(GameObject)) as GameObject;
         cJunc = Resources.Load("Prefabs/Dungeon/C-Junction", typeof(GameObject)) as GameObject;
         itemSpawn = Resources.Load("Prefabs/Item", typeof(GameObject)) as GameObject;
+    }
+
+    void Start(){
+        nav_builder = gameObject.GetComponent<NavigationBuilder>();
     }
 
     // Start is called before the first frame update
@@ -67,6 +75,7 @@ public class Maze : MonoBehaviour {
         maze_generated = true;
         // when the maze is generated we should alert the manager if there is one
         if(manager==null) return;
+        nav_builder.BuildNavigation(surfaces);
         manager.MazeGenerated();
 
     }
@@ -94,13 +103,14 @@ public class Maze : MonoBehaviour {
     }
 
     // this takes a position that was simple and data oriented and converts to the real world location
-    void InstantiateModified(GeneratedNode node, GameObject prefab, int rotation_degrees=0){
+    GameObject InstantiateModified(GeneratedNode node, GameObject prefab, int rotation_degrees=0){
         Vector3 modified_position = new Vector3(node.mazePosition.x * prefabSize, node.mazePosition.y, node.mazePosition.z * prefabSize);
         GameObject io = Instantiate(prefab, modified_position, Quaternion.identity);
         Vector3 existing_rot = io.transform.rotation.eulerAngles;
         existing_rot.y = rotation_degrees;
         io.transform.rotation = Quaternion.Euler(existing_rot);
         io.name = "Testing " + node.index.ToString() + " - " + prefab.name.ToString();
+        return io;
     }
 
     // parameters must define start/end conditions of this function
@@ -263,7 +273,9 @@ public class Maze : MonoBehaviour {
                 }
             }
         }
-        InstantiateModified(node, node_prefab, rotation_degrees);
+        GameObject spawnedMazePiece = InstantiateModified(node, node_prefab, rotation_degrees);
+        // surfaces.Add(spawnedMazePiece.transform.GetChild(0).GetComponent<NavMeshSurface>());
+        surfaces.Add(spawnedMazePiece.GetComponent<NavMeshSurface>());
     }
 
     void FillMazeWithItems(){

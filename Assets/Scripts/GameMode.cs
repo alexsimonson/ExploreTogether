@@ -15,4 +15,5 @@ public abstract class GameMode : MonoBehaviour, IGameMode {
     public abstract IEnumerator BeginTransitionPeriod();
     public abstract void SetupNextRound();
     public abstract void SpawnEnemies();
+    public abstract void EnemyKilled();
 }

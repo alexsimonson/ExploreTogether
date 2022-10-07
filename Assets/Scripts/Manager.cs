@@ -48,15 +48,6 @@ public class Manager : MonoBehaviour {
         game_rules.SetupNextRound();
         game_rules.Initialize();
         StartCoroutine(game_rules.BeginTransitionPeriod());
-        // game_rules.SpawnEnemies();
-    }
-
-    void Update(){
-        // if(game_rules!=null){
-        //     if(!game_rules.TransitionPeriod()){
-        //         game_rules.SpawnEnemies();
-        //     }
-        // }
     }
 
     public void MazeGenerated(){
