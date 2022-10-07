@@ -100,6 +100,21 @@ public class Inventory : MonoBehaviour {
         return -1;
     }
 
+    public int CheckInventoryForItem(Item find_item){
+        for(int slot_index=0;slot_index<slots.Length;slot_index++){
+            if(slots[slot_index]!=null && slots[slot_index].GetComponent<SlotContainer>().inventorySlot!=null){
+                if(slots[slot_index].GetComponent<SlotContainer>().inventorySlot.GetComponent<InventorySlot>().item!=null){
+                    if(slots[slot_index].GetComponent<SlotContainer>().inventorySlot.GetComponent<InventorySlot>().item.id==find_item.id){
+                        Debug.Log("Slot stack size: " + slots[slot_index].GetComponent<SlotContainer>().inventorySlot.GetComponent<InventorySlot>().stack_size.ToString());
+                        Debug.Log(find_item.name + " max stack size: " + find_item.max_stack_size.ToString());
+                        return slot_index;
+                    }
+                }
+            }
+        }
+        return -1;
+    }
+
     void ListInventory(){
         foreach(GameObject slot in slots){
             if(slot!=null && slot.GetComponent<SlotContainer>().inventorySlot!=null && slot.GetComponent<SlotContainer>().inventorySlot.GetComponent<InventorySlot>().item!=null){
