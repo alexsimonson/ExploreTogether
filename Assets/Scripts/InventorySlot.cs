@@ -15,13 +15,10 @@ public class InventorySlot : MonoBehaviour, IPointerDownHandler, IBeginDragHandl
     private GameObject stack_size_text;
     private GameObject slot_container;
 
-    void Awake(){
-        canvas = GameObject.Find("Canvas").GetComponent<Canvas>();
+    void Start(){
+        canvas = GameObject.Find("HUD").GetComponent<Canvas>();
         rt = GetComponent<RectTransform>();
         cg = GetComponent<CanvasGroup>();
-    }
-
-    void Start(){
         stack_size = 0;
         if(!world_interactable){
             stack_size_text = gameObject.transform.GetChild(2).gameObject;

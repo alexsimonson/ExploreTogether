@@ -10,8 +10,8 @@ public class PlayerInteraction : MonoBehaviour {
     private GameObject interactionText;
     public List<Item> itemInteraction;  // temporary to avoid functionality loss
 
-    void Awake(){
-        interactionText = GameObject.Find("Canvas").transform.GetChild(4).gameObject;
+    void Start(){
+        interactionText = GameObject.Find("HUD").transform.GetChild(4).gameObject;
         interactionText.SetActive(false);
     }
     // Update is called once per frame

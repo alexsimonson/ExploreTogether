@@ -11,10 +11,10 @@ public class PlayerCombat : MonoBehaviour{
     public GameObject audioSource;
 
     void Start(){
-        playerGearUI = GameObject.Find("Canvas").transform.GetChild(5).gameObject.GetComponent<GearUI>();
+        playerGearUI = GameObject.Find("HUD").transform.GetChild(5).gameObject.GetComponent<GearUI>();
         weaponSlot = playerGearUI.inventorySlots[9].GetComponent<SlotContainer>().inventorySlot.GetComponent<EquipmentSlot>();
         playerCamera = gameObject.transform.GetChild(0).gameObject;
-        crosshair = GameObject.Find("Canvas").transform.GetChild(6).gameObject;
+        crosshair = GameObject.Find("HUD").transform.GetChild(6).gameObject;
         audioSource = gameObject.transform.GetChild(1).gameObject;
         audioSource.GetComponent<AudioSource>().volume = .2f;
     }

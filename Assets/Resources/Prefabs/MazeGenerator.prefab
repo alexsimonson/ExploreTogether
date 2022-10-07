@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &6197044407153103827
+--- !u!1 &4207370693126075639
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,8 +8,8 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 6197044407153103829}
-  - component: {fileID: 6197044407153103826}
+  - component: {fileID: 4207370693126075633}
+  - component: {fileID: 4207370693126075632}
   m_Layer: 0
   m_Name: MazeGenerator
   m_TagString: Untagged
@@ -17,13 +17,13 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &6197044407153103829
+--- !u!4 &4207370693126075633
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6197044407153103827}
+  m_GameObject: {fileID: 4207370693126075639}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -31,13 +31,13 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6197044407153103826
+--- !u!114 &4207370693126075632
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6197044407153103827}
+  m_GameObject: {fileID: 4207370693126075639}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: df127d14c1294c64cb4eafcb181c2640, type: 3}
@@ -48,7 +48,10 @@ MonoBehaviour:
   tJunc: {fileID: 2616338808247977977, guid: 5d8bbed389838b34e967ffc5b459b272, type: 3}
   xJunc: {fileID: 6742300973328605398, guid: f4e46c870dbe5f44695d4d09534820da, type: 3}
   cJunc: {fileID: 3089725247197783406, guid: fb4094d99c18e0f448f499b1064888de, type: 3}
+  itemSpawn: {fileID: 4061282081970076034, guid: 8c1e847575265b54b8c73d502dda2a08, type: 3}
+  respawnPrefab: {fileID: 1739849461575164279, guid: 9bf3017f46cc4a14e9e9ac79a4fb6d44, type: 3}
   generated_nodes: []
+  xJunctions: []
   max_width: 50
   max_height: 50
   max_dungeon_length: 3000

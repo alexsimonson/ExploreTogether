@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class WaveSurvival : MonoBehaviour {
+public class WaveSurvival : GameMode, IGameMode {
 
     int current_round = 0;
     int score = 0;
@@ -13,30 +13,24 @@ public class WaveSurvival : MonoBehaviour {
     int enemies_currently_spawned = 0;
     int enemies_spawned_this_round = 0;
     int enemies_eliminated_this_round = 0;
-    bool transition_period = false;
+    public bool transition_period = false;
     public GameObject enemy_prefab;
 
     private GameObject canvas;
 
-    GameObject[] respawns;
-    GameObject playerRespawns;
-    GameObject enemyRespawns;
+    public GameObject[] respawns;
+    public GameObject playerRespawns;
+    public GameObject enemyRespawns;
     // Start is called before the first frame update
-    void Start(){
-        canvas = GameObject.Find("Canvas");
+    public override void Initialize(){
+        canvas = GameObject.Find("Manager").GetComponent<Manager>().hud;
+        // enemy_prefab = Resources.Load("Prefabs/Enemy", typeof(GameObject)) as GameObject;
         respawns = GameObject.FindGameObjectsWithTag("Respawn");
         FilterRespawns();
         EndRound();
     }
 
-    // Update is called once per frame
-    void Update(){
-        if(!transition_period){
-            SpawnEnemies();
-        }
-    }
-
-    void SpawnEnemies(){
+    public override void SpawnEnemies(){
         while(enemies_currently_spawned < enemies_spawned_max && enemies_spawned_this_round < enemies_spawned_this_round_max){
             SpawnEnemy();
         }
@@ -57,9 +51,9 @@ public class WaveSurvival : MonoBehaviour {
         SetupNextRound();
     }
 
-    void SetupNextRound(){
+    public override void SetupNextRound(){
         current_round += 1;
-        canvas.transform.GetChild(0).gameObject.GetComponent<Text>().text = "Round " + current_round.ToString();
+        // canvas.transform.GetChild(0).gameObject.GetComponent<Text>().text = "Round " + current_round.ToString();
         IncreaseEnemies();
         RewardRoundBonus();
         ResetRoundDefaults();
@@ -86,10 +80,10 @@ public class WaveSurvival : MonoBehaviour {
         enemies_spawned_this_round += 1;
     }
 
-    IEnumerator BeginTransitionPeriod(){
+    public override IEnumerator BeginTransitionPeriod(){
         transition_period = true;
         Debug.Log("Transition period started");
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(5);
         Debug.Log("Transition period ending.");
         transition_period = false;
     }
@@ -116,8 +110,13 @@ public class WaveSurvival : MonoBehaviour {
             if(respawn.GetComponent<RespawnPoint>().isPlayerSpawn){
                 playerRespawns = respawn;
             }else{
+                Debug.Log("Setting enemy respawn");
                 enemyRespawns = respawn;
             }
         }
+    }
+
+    public override bool TransitionPeriod(){
+        return transition_period;
     }
 }

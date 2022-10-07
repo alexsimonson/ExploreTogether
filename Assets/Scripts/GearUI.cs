@@ -7,7 +7,7 @@ using UnityEngine.EventSystems;
 public class GearUI : InventoryUI {
 
     // Start is called before the first frame update
-    void Awake(){
+    void Start(){
         content = gameObject.transform.GetChild(0).GetChild(0).gameObject;
         if(isPlayerInventory){
             inventory = GameObject.Find("Player").GetComponent<Gear>();

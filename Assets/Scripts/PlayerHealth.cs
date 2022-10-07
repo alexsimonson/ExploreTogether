@@ -6,7 +6,7 @@ public class PlayerHealth : Health{
     private GameObject canvas;
     public override void Start(){
         base.Start();
-        canvas = GameObject.Find("Canvas");
+        canvas = GameObject.Find("HUD");
         SetHealthUI();
     }
     public override void DealDamage(int damage){

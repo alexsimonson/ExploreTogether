@@ -10,6 +10,7 @@ public class Maze : MonoBehaviour {
     public GameObject xJunc;
     public GameObject cJunc;
     public GameObject itemSpawn;
+    public GameObject respawnPrefab;
 
     private int size = 10;
     private int prefabSize = 5;
@@ -28,6 +29,12 @@ public class Maze : MonoBehaviour {
 
     bool controlled_render = false;
     bool controlled_generation = true;
+    public bool maze_generated = false;
+
+    public Manager manager;
+
+
+
     void Awake(){
         corner = Resources.Load("Prefabs/Dungeon/Corner", typeof(GameObject)) as GameObject;
         hall = Resources.Load("Prefabs/Dungeon/Hall", typeof(GameObject)) as GameObject;
@@ -57,6 +64,11 @@ public class Maze : MonoBehaviour {
             RenderGrid();
         }
         FillMazeWithItems();
+        maze_generated = true;
+        // when the maze is generated we should alert the manager if there is one
+        if(manager==null) return;
+        manager.MazeGenerated();
+
     }
 
     List<Vector3> FindNeighbors(Vector3 position){
@@ -258,6 +270,12 @@ public class Maze : MonoBehaviour {
         foreach(GeneratedNode xJunction in xJunctions){
             // we should instantiate an item here
             Instantiate(itemSpawn, new Vector3(xJunction.mazePosition.x * prefabSize, xJunction.mazePosition.y * prefabSize + 1.5f, xJunction.mazePosition.z * prefabSize), Quaternion.identity);
+        }
+
+        // let's instantiate 5 monster spawners throughout the maze
+        for(int i=0;i<1;i++){
+            int random_index = Random.Range(25, generated_nodes.Count - 25);
+            Instantiate(respawnPrefab, new Vector3(generated_nodes[random_index].mazePosition.x * prefabSize, generated_nodes[random_index].mazePosition.y * prefabSize + 1.5f, generated_nodes[random_index].mazePosition.z * prefabSize), Quaternion.identity);
         }
     }
 }

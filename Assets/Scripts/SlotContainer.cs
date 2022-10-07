@@ -14,8 +14,8 @@ public class SlotContainer : MonoBehaviour, IDropHandler {
     private List<string> valid_equipment_types_list = new List<string>(valid_equipment_types);
 
     void Start(){
-        inventoryUI = GameObject.Find("Canvas").transform.GetChild(3).gameObject.GetComponent<InventoryUI>();
-        gearUI = GameObject.Find("Canvas").transform.GetChild(5).gameObject.GetComponent<GearUI>();
+        inventoryUI = GameObject.Find("HUD").transform.GetChild(3).gameObject.GetComponent<InventoryUI>();
+        gearUI = GameObject.Find("HUD").transform.GetChild(5).gameObject.GetComponent<GearUI>();
         if(inventorySlot.GetComponent<EquipmentSlot>()!=null){
             // this is an equipment slot
             isEquipmentSlot = true;

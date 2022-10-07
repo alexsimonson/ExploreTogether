@@ -12,8 +12,8 @@ public class InventoryUI : MonoBehaviour {
     public bool isPlayerInventory;
 
     public List<GameObject> inventorySlots = new List<GameObject>();
-    // Start is called before the first frame update
-    void Awake(){
+
+    void Start(){
         content = gameObject.transform.GetChild(0).GetChild(0).gameObject;
         if(isPlayerInventory){
             inventory = GameObject.Find("Player").GetComponent<Inventory>();
