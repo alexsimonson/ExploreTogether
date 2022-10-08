@@ -16,7 +16,7 @@ public class InventoryUI : MonoBehaviour {
     void Start(){
         content = gameObject.transform.GetChild(0).GetChild(0).gameObject;
         if(isPlayerInventory){
-            inventory = GameObject.Find("Player").GetComponent<Inventory>();
+            inventory = GameObject.Find("Manager").GetComponent<Manager>().player.GetComponent<Inventory>();
         }
         DrawInventoryUI();
     }
