@@ -25,11 +25,9 @@ public class Inventory : MonoBehaviour {
         RelevantScrollView = GameObject.Find("Manager").GetComponent<Manager>().hud.transform.GetChild(3).gameObject;
         RelevantScrollView.SetActive(false);
         ListInventory();
-        Debug.Log("Is this where the null happens");
-        AddItem(gun_test);
         AddItem(sword_test);
+        // AddItem(gun_test);
         AddItem(dungeon_pass);
-        Debug.Log("Endinng surrounding the null");
     }
 
     // Update is called once per frame

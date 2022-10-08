@@ -61,11 +61,13 @@ public class PlayerInteraction : MonoBehaviour {
     }
 
     private void DisplayInteractionUI(){
-        if(interactWith!=null && !interactionText.activeSelf){
-            ChangeInteractionWithText();
-            interactionText.SetActive(true);
-        }else if(interactWith==null && interactionText.activeSelf){
-            interactionText.SetActive(false);
+        if(interactionText!=null){
+            if(interactWith!=null && !interactionText.activeSelf){
+                ChangeInteractionWithText();
+                interactionText.SetActive(true);
+            }else if(interactWith==null && interactionText.activeSelf){
+                interactionText.SetActive(false);
+            }
         }
     }
 

@@ -17,4 +17,7 @@ public abstract class GameMode : MonoBehaviour, IGameMode {
     public abstract void SpawnEnemies();
     public abstract void EnemyKilled();
     public abstract void ResetGameMode();
+    public abstract GameObject[] GetPlayerInventoryBackup();
+    public abstract GameObject[] GetPlayerGearBackup();
+    public abstract void ProgressGameMode();
 }

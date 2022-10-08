@@ -13,10 +13,13 @@ public class InventoryUI : MonoBehaviour {
 
     public List<GameObject> inventorySlots = new List<GameObject>();
 
+    public Manager manager;
+
     void Start(){
+        manager = GameObject.Find("Manager").GetComponent<Manager>();
         content = gameObject.transform.GetChild(0).GetChild(0).gameObject;
         if(isPlayerInventory){
-            inventory = GameObject.Find("Manager").GetComponent<Manager>().player.GetComponent<Inventory>();
+            inventory = manager.player.GetComponent<Inventory>();
         }
         DrawInventoryUI();
     }

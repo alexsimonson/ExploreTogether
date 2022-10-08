@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5471725452503027200}
   m_Layer: 0
   m_Name: WaveSurvivalGM
-  m_TagString: Untagged
+  m_TagString: essential
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -46,3 +46,7 @@ MonoBehaviour:
   mode: 0
   transition_period: 0
   enemy_prefab: {fileID: 7711685710632532350, guid: bae0a0659e0df9f4b8add2f62f0fb7f0, type: 3}
+  respawns: []
+  playerRespawns: {fileID: 0}
+  enemyRespawns: {fileID: 0}
+  manager: {fileID: 0}

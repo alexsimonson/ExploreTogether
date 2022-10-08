@@ -6,21 +6,21 @@ public class Gear : Inventory {
 
     GameObject content;
     void Awake(){
-        RelevantScrollView = GameObject.Find("EquipmentScrollView");
-        content = RelevantScrollView.transform.GetChild(0).GetChild(0).gameObject;
         max_slots=12;
         slots = new GameObject[max_slots];
-        var i=0;
+    }
+
+    // Start is called before the first frame update
+    void Start(){
+        RelevantScrollView = GameObject.Find("Manager").GetComponent<Manager>().hud.transform.GetChild(5).gameObject;
+        content = RelevantScrollView.transform.GetChild(0).GetChild(0).gameObject;
+        RelevantScrollView.SetActive(false);
+        int i=0;
         foreach(Transform child in content.transform){
             slots[i] = child.gameObject;
             slots[i].GetComponent<SlotContainer>().index = i;
             i++;
         }
-        RelevantScrollView.SetActive(false);
-    }
-
-    // Start is called before the first frame update
-    void Start(){
         ListInventory();
     }
 

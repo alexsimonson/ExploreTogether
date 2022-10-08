@@ -16,18 +16,18 @@ public class WaveSurvival : GameMode, IGameMode {
     public bool transition_period = false;
     public GameObject enemy_prefab;
 
-    private GameObject canvas;
-
     public GameObject[] respawns;
     public GameObject playerRespawns;
     public GameObject enemyRespawns;
 
     public Manager manager;
 
+    public GameObject[] playerInventoryBackup;
+    public GameObject[] playerGearBackup;
+
     // Start is called before the first frame update
     public override void Initialize(){
         manager = GameObject.Find("Manager").GetComponent<Manager>(); 
-        canvas = manager.hud;
         // enemy_prefab = Resources.Load("Prefabs/Enemy", typeof(GameObject)) as GameObject;
         respawns = GameObject.FindGameObjectsWithTag("Respawn");
         FilterRespawns();
@@ -57,7 +57,7 @@ public class WaveSurvival : GameMode, IGameMode {
 
     public override void SetupNextRound(){
         current_round += 1;
-        canvas.transform.GetChild(0).gameObject.GetComponent<Text>().text = "Round " + current_round.ToString();
+        manager.hud.transform.GetChild(0).gameObject.GetComponent<Text>().text = "Round " + current_round.ToString();
         IncreaseEnemies();
         RewardRoundBonus();
         ResetRoundDefaults();
@@ -70,6 +70,13 @@ public class WaveSurvival : GameMode, IGameMode {
 
     void RewardRoundBonus(){
         score += 1000;
+    }
+
+    public override GameObject[] GetPlayerInventoryBackup(){
+        return playerInventoryBackup;
+    }
+    public override GameObject[] GetPlayerGearBackup(){
+        return playerGearBackup;
     }
 
     void ResetRoundDefaults(){
@@ -106,6 +113,16 @@ public class WaveSurvival : GameMode, IGameMode {
         // manager.player.transform.position = playerRespawns.transform.position;
         manager.player.transform.position = manager.playerSpawnPoint;
         EndRound();
+    }
+
+    public override void ProgressGameMode(){
+        // only difference is we save the player's equipment and inventory heading into the next dungeon.  we also shouldn't reset the game stats to 0... so not entirely one change :)
+        playerInventoryBackup = manager.player.GetComponent<Inventory>().slots;
+        playerGearBackup = manager.player.GetComponent<Gear>().slots;
+        manager.DestroyNonEssentialGameObjects();
+        manager.Setup(true);
+        EndRound();
+        // ResetGameMode();
     }
 
     private void FilterRespawns(){

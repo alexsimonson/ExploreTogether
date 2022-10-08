@@ -34,20 +34,30 @@ public class Manager : MonoBehaviour {
 
     // Start is called before the first frame update
     void Start(){
+        hud = Instantiate(hudPrefab);
+        hud.name = "HUD";
         Setup();
     }
 
-    public void Setup(){
+    public void Setup(bool backup=false){
         maze = Instantiate(maze_generator_prefab);
         maze.GetComponent<Maze>().manager = gameObject.GetComponent<Manager>();
-        hud = Instantiate(hudPrefab);
-        hud.name = "HUD";
+        player = Instantiate(playerPrefab, playerSpawnPoint, Quaternion.identity);
+        player.name = "Player";
+        if(backup){
+            // redraw the inventory/gear hud with this data
+            // foreach(GameObject slot in game_rules.GetPlayerInventoryBackup()){
+            //     player.GetComponent<Inventory>().AddItem(slot.GetComponent<SlotContainer>().inventorySlot.GetComponent<InventorySlot>().item);
+            // }
+
+            // also set these after player isntantiate later
+            // player.GetComponent<Inventory>().slots = game_rules.GetPlayerInventoryBackup();
+            // player.GetComponent<Gear>().slots = game_rules.GetPlayerGearBackup();
+        }
 
         game_mode = Instantiate(game_mode_prefab, new Vector3(0, 0, 0), Quaternion.identity);
         game_rules = game_mode.GetComponent<IGameMode>();
         
-        player = Instantiate(playerPrefab, playerSpawnPoint, Quaternion.identity);
-        player.name = "Player";
     }
 
     void HandleRound(){
