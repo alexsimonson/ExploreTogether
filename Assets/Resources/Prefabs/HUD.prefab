@@ -292,8 +292,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   manager: {fileID: 0}
-  nextButton: {fileID: 0}
-  quitButton: {fileID: 0}
+  nextButton: {fileID: 2817359004543339808}
+  quitButton: {fileID: 1149227604924809543}
 --- !u!1 &3043548718581176294
 GameObject:
   m_ObjectHideFlags: 0

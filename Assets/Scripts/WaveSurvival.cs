@@ -28,6 +28,8 @@ public class WaveSurvival : GameMode, IGameMode {
     // Start is called before the first frame update
     public override void Initialize(){
         manager = GameObject.Find("Manager").GetComponent<Manager>(); 
+        manager.player.GetComponent<Inventory>().Initialize();
+        manager.player.GetComponent<Gear>().Initialize();
         // enemy_prefab = Resources.Load("Prefabs/Enemy", typeof(GameObject)) as GameObject;
         respawns = GameObject.FindGameObjectsWithTag("Respawn");
         FilterRespawns();
@@ -117,8 +119,10 @@ public class WaveSurvival : GameMode, IGameMode {
 
     public override void ProgressGameMode(){
         // only difference is we save the player's equipment and inventory heading into the next dungeon.  we also shouldn't reset the game stats to 0... so not entirely one change :)
-        playerInventoryBackup = manager.player.GetComponent<Inventory>().slots;
-        playerGearBackup = manager.player.GetComponent<Gear>().slots;
+
+        // these values should be saved for next round
+        // playerInventoryBackup = manager.player.GetComponent<Inventory>().slots;
+        // playerGearBackup = manager.player.GetComponent<Gear>().slots;
         manager.DestroyNonEssentialGameObjects();
         manager.Setup(true);
         EndRound();

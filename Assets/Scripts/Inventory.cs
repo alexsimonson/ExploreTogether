@@ -2,16 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Inventory : MonoBehaviour {
+public class Inventory : MonoBehaviour, IInventory {
 
     public int max_slots;  // number of items an inventory can hold before full
     public GameObject[] slots;
-    public bool isPlayerInventory;
     public GameObject RelevantScrollView;
+    public Manager manager;
 
-    public Item dungeon_pass;
-    public Gun gun_test;
     public Melee sword_test;
+    public Gun gun_test;
+    public Item dungeon_pass;
 
     void Awake(){
         if(max_slots==0){
@@ -20,21 +20,23 @@ public class Inventory : MonoBehaviour {
         slots = new GameObject[max_slots];
     }
 
-    // Start is called before the first frame update
     void Start(){
-        RelevantScrollView = GameObject.Find("Manager").GetComponent<Manager>().hud.transform.GetChild(3).gameObject;
-        RelevantScrollView.SetActive(false);
+        Debug.Log("Inventory Start has run...");
+        manager = GameObject.Find("Manager").GetComponent<Manager>();
+        sword_test = Resources.Load("Items/Sword", typeof(Melee)) as Melee;
+        gun_test = Resources.Load("Items/Pistol", typeof(Gun)) as Gun;
+        dungeon_pass = Resources.Load("Items/Dungeon Pass", typeof(Item)) as Item;
         ListInventory();
-        AddItem(sword_test);
-        // AddItem(gun_test);
-        AddItem(dungeon_pass);
     }
 
-    // Update is called once per frame
     void Update(){
-        if(isPlayerInventory){
-            PlayerInput();
-        }
+        PlayerInput();
+    }
+
+    public void Initialize(){
+        RelevantScrollView = manager.hud.transform.GetChild(3).gameObject;
+        RelevantScrollView.SetActive(false);
+        AddItem(dungeon_pass);
     }
 
     public void AddItem(Item new_item){
@@ -62,11 +64,7 @@ public class Inventory : MonoBehaviour {
             slots[empty_slot_index].GetComponent<SlotContainer>().inventorySlot.GetComponent<InventorySlot>().item = new_item;
             slots[empty_slot_index].GetComponent<SlotContainer>().inventorySlot.GetComponent<InventorySlot>().stack_size = 1;
             // this data needs passed to the UI, so it can update
-            if(isPlayerInventory){
-                RelevantScrollView.GetComponent<InventoryUI>().UpdateSlot(empty_slot_index, new_item);
-            }else{
-                Debug.Log("This is not the player inventory, what are we trying to do???");
-            }
+            RelevantScrollView.GetComponent<InventoryUI>().UpdateSlot(empty_slot_index, new_item);
         }else{
             Debug.Log("Inventory is full, cannot add item");
         }
@@ -82,6 +80,8 @@ public class Inventory : MonoBehaviour {
 
     int FindEmptySlot(){
         for(int slot_index=0;slot_index<slots.Length;slot_index++){
+            Debug.Log("slots @ index " + slot_index.ToString() + " below");
+            Debug.Log(slots[slot_index]);
             if(slots[slot_index].GetComponent<SlotContainer>().inventorySlot.GetComponent<InventorySlot>().item==null) return slot_index;
         }
         return -1;
@@ -137,19 +137,23 @@ public class Inventory : MonoBehaviour {
     }
 
     void HandlePlayerRights(){
-        if(isPlayerInventory){
-            if(RelevantScrollView.activeSelf){
-                gameObject.GetComponent<PlayerLook>().RevokeLook();
-                gameObject.GetComponent<PlayerCombat>().RevokeCombat();
-            }else{
-                gameObject.GetComponent<PlayerLook>().AllowLook();
-                gameObject.GetComponent<PlayerCombat>().AllowCombat();
-            }
+        if(RelevantScrollView.activeSelf){
+            gameObject.GetComponent<PlayerLook>().RevokeLook();
+            gameObject.GetComponent<PlayerCombat>().RevokeCombat();
+        }else{
+            gameObject.GetComponent<PlayerLook>().AllowLook();
+            gameObject.GetComponent<PlayerCombat>().AllowCombat();
         }
     }
 
     public void ResetUI(){
         RelevantScrollView.SetActive(false);
         HandlePlayerRights();
+    }
+
+    public void AddStartingItems(){
+        AddItem(sword_test);
+        AddItem(gun_test);
+        AddItem(dungeon_pass);
     }
 }

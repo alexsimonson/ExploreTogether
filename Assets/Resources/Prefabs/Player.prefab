@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3638703519276709781}
   m_Layer: 0
   m_Name: Camera
-  m_TagString: Untagged
+  m_TagString: essential
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -95,7 +95,7 @@ GameObject:
   - component: {fileID: 6773516003485873566}
   m_Layer: 6
   m_Name: Audio Source
-  m_TagString: Untagged
+  m_TagString: essential
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -436,11 +436,11 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  isPlayerInventory: 1
   RelevantScrollView: {fileID: 0}
-  dungeon_pass: {fileID: 11400000, guid: 2f8059e44d675d840b1830a9f3c41b78, type: 2}
-  gun_test: {fileID: 11400000, guid: 98bd183e6b201ac4696ef525bc5b99d4, type: 2}
+  manager: {fileID: 0}
   sword_test: {fileID: 11400000, guid: 02ad56c938a24b04f9fbc5904de285ec, type: 2}
+  gun_test: {fileID: 11400000, guid: 98bd183e6b201ac4696ef525bc5b99d4, type: 2}
+  dungeon_pass: {fileID: 11400000, guid: 2f8059e44d675d840b1830a9f3c41b78, type: 2}
 --- !u!114 &6654121761325831222
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -481,11 +481,11 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  isPlayerInventory: 1
   RelevantScrollView: {fileID: 0}
-  dungeon_pass: {fileID: 0}
-  gun_test: {fileID: 0}
+  manager: {fileID: 0}
   sword_test: {fileID: 0}
+  gun_test: {fileID: 0}
+  dungeon_pass: {fileID: 0}
 --- !u!114 &3076970631314084794
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -9,7 +9,6 @@ public class InventoryUI : MonoBehaviour {
     public GameObject content;
     public GameObject slotContainerPrefab;
     public GameObject slotButtonPrefab;
-    public bool isPlayerInventory;
 
     public List<GameObject> inventorySlots = new List<GameObject>();
 
@@ -18,13 +17,11 @@ public class InventoryUI : MonoBehaviour {
     void Start(){
         manager = GameObject.Find("Manager").GetComponent<Manager>();
         content = gameObject.transform.GetChild(0).GetChild(0).gameObject;
-        if(isPlayerInventory){
-            inventory = manager.player.GetComponent<Inventory>();
-        }
+        inventory = manager.player.GetComponent<Inventory>();
         DrawInventoryUI();
     }
 
-    void DrawInventoryUI(){
+    public void DrawInventoryUI(){
         // we need to dynamically generate inventory slots based on the existing inventory
         if(inventory==null){
             Debug.Log("No inventory set");

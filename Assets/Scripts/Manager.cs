@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class Manager : MonoBehaviour {
 
@@ -22,6 +23,8 @@ public class Manager : MonoBehaviour {
 
     public Item[] item_bank;
 
+    public bool pause_functionality = false;
+
     public Vector3 playerSpawnPoint = new Vector3(0, 1.5f, 0);
     void Awake(){
         enemy_prefab = Resources.Load("Prefabs/Enemy", typeof(GameObject)) as GameObject;
@@ -34,16 +37,20 @@ public class Manager : MonoBehaviour {
 
     // Start is called before the first frame update
     void Start(){
+        player = Instantiate(playerPrefab, playerSpawnPoint, Quaternion.identity);
+        player.name = "Player";
         hud = Instantiate(hudPrefab);
         hud.name = "HUD";
         Setup();
     }
 
     public void Setup(bool backup=false){
+        if(backup){
+            // hud.transform.GetChild(3).gameObject.GetComponent<InventoryUI>().DrawInventoryUI();
+        }
         maze = Instantiate(maze_generator_prefab);
         maze.GetComponent<Maze>().manager = gameObject.GetComponent<Manager>();
-        player = Instantiate(playerPrefab, playerSpawnPoint, Quaternion.identity);
-        player.name = "Player";
+        // player.GetComponent<Inventory>().AddStartingItems();
         if(backup){
             // redraw the inventory/gear hud with this data
             // foreach(GameObject slot in game_rules.GetPlayerInventoryBackup()){
@@ -57,6 +64,9 @@ public class Manager : MonoBehaviour {
 
         game_mode = Instantiate(game_mode_prefab, new Vector3(0, 0, 0), Quaternion.identity);
         game_rules = game_mode.GetComponent<IGameMode>();
+        // these functions require both player and hud instantiated before they can work, and their functionality is required for the game to work properly
+        // player.GetComponent<Inventory>().Initialize();
+        // player.GetComponent<Gear>().Initialize();
         
     }
 
@@ -85,7 +95,7 @@ public class Manager : MonoBehaviour {
     public void DestroyNonEssentialGameObjects(){
         GameObject[] get_all = FindObjectsOfType<GameObject>() as GameObject[];
         foreach(GameObject obj in get_all){
-            if(obj.tag!="essential"){
+            if(obj.tag!="essential" && obj.tag!="Player"){
                 Destroy(obj);
             }
         }

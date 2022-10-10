@@ -7,11 +7,11 @@ using UnityEngine.EventSystems;
 public class GearUI : InventoryUI {
 
     // Start is called before the first frame update
+    Manager manager;
     void Start(){
         content = gameObject.transform.GetChild(0).GetChild(0).gameObject;
-        if(isPlayerInventory){
-            inventory = GameObject.Find("Player").GetComponent<Gear>();
-        }
+        manager = GameObject.Find("Manager").GetComponent<Manager>();
+        inventory = manager.player.GetComponent<Gear>() as Inventory;
         DrawInventoryUI();
     }
 
@@ -31,7 +31,6 @@ public class GearUI : InventoryUI {
     public void UpdateSlot(int slot_index, Item new_item, GameObject test=null){
         Color newColor = inventory.slots[slot_index].GetComponent<SlotContainer>().inventorySlot.transform.GetChild(1).GetComponent<Image>().color;
         if(test==null){
-            Debug.Log("Test 1");
             inventory.slots[slot_index].GetComponent<SlotContainer>().inventorySlot.transform.GetChild(0).GetComponent<Text>().text = new_item.name;
             inventory.slots[slot_index].GetComponent<SlotContainer>().inventorySlot.transform.GetChild(1).GetComponent<Image>().sprite = new_item.icon;
             newColor.a = 1;
@@ -39,7 +38,6 @@ public class GearUI : InventoryUI {
             inventory.slots[slot_index].GetComponent<SlotContainer>().inventorySlot.transform.GetChild(2).GetComponent<Text>().text = inventory.slots[slot_index].GetComponent<SlotContainer>().inventorySlot.GetComponent<EquipmentSlot>().stack_size.ToString();
         }else{
             if(new_item==null){
-                Debug.Log("Test 2");
                 test.transform.GetChild(0).GetComponent<Text>().text = null;
                 test.transform.GetChild(1).GetComponent<Image>().sprite = null;
                 newColor.a = 0;
@@ -47,7 +45,6 @@ public class GearUI : InventoryUI {
                 inventory.slots[slot_index].GetComponent<SlotContainer>().inventorySlot.transform.GetChild(1).GetComponent<Image>().color = newColor;
                 inventory.slots[slot_index].GetComponent<SlotContainer>().inventorySlot.transform.GetChild(2).GetComponent<Text>().text = null;
             }else{
-                Debug.Log("Test 3");
                 test.transform.GetChild(0).GetComponent<Text>().text = new_item.name;
                 test.transform.GetChild(1).GetComponent<Image>().sprite = new_item.icon;
                 newColor.a = 1;

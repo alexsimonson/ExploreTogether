@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Gear : Inventory {
+public class Gear : Inventory, IInventory {
 
     GameObject content;
     void Awake(){
@@ -12,7 +12,18 @@ public class Gear : Inventory {
 
     // Start is called before the first frame update
     void Start(){
-        RelevantScrollView = GameObject.Find("Manager").GetComponent<Manager>().hud.transform.GetChild(5).gameObject;
+        manager = GameObject.Find("Manager").GetComponent<Manager>();
+        ListInventory();
+    }
+
+
+    // Update is called once per frame
+    void Update(){
+        PlayerInput();
+    }
+    
+    public void Initialize(){
+        RelevantScrollView = manager.hud.transform.GetChild(5).gameObject;
         content = RelevantScrollView.transform.GetChild(0).GetChild(0).gameObject;
         RelevantScrollView.SetActive(false);
         int i=0;
@@ -20,14 +31,6 @@ public class Gear : Inventory {
             slots[i] = child.gameObject;
             slots[i].GetComponent<SlotContainer>().index = i;
             i++;
-        }
-        ListInventory();
-    }
-
-    // Update is called once per frame
-    void Update(){
-        if(isPlayerInventory){
-            PlayerInput();
         }
     }
 
@@ -56,11 +59,7 @@ public class Gear : Inventory {
             slots[empty_slot_index].GetComponent<SlotContainer>().inventorySlot.GetComponent<InventorySlot>().item = new_item;
             slots[empty_slot_index].GetComponent<SlotContainer>().inventorySlot.GetComponent<InventorySlot>().stack_size = 1;
             // this data needs passed to the UI, so it can update
-            if(isPlayerInventory){
-                RelevantScrollView.GetComponent<InventoryUI>().UpdateSlot(empty_slot_index, new_item);
-            }else{
-                Debug.Log("This is not the player inventory, what are we trying to do???");
-            }
+            RelevantScrollView.GetComponent<InventoryUI>().UpdateSlot(empty_slot_index, new_item);
         }else{
             Debug.Log("Inventory is full, cannot add item");
         }
@@ -108,12 +107,10 @@ public class Gear : Inventory {
     }
 
     void HandlePlayerRights(){
-        if(isPlayerInventory){
-            if(RelevantScrollView.activeSelf){
-                gameObject.GetComponent<PlayerLook>().RevokeLook();
-            }else{
-                gameObject.GetComponent<PlayerLook>().AllowLook();
-            }
+        if(RelevantScrollView.activeSelf){
+            gameObject.GetComponent<PlayerLook>().RevokeLook();
+        }else{
+            gameObject.GetComponent<PlayerLook>().AllowLook();
         }
     }
 
