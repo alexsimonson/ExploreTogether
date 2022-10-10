@@ -11,7 +11,7 @@ public class Maze : MonoBehaviour {
     public GameObject xJunc;
     public GameObject cJunc;
     public GameObject itemSpawn;
-    public GameObject respawnPrefab;
+    public GameObject enemyPrefab;
 
     private int prefabSize = 5;
 
@@ -45,6 +45,7 @@ public class Maze : MonoBehaviour {
         xJunc = Resources.Load("Prefabs/Dungeon/X-Junction", typeof(GameObject)) as GameObject;
         cJunc = Resources.Load("Prefabs/Dungeon/C-Junction", typeof(GameObject)) as GameObject;
         itemSpawn = Resources.Load("Prefabs/Item", typeof(GameObject)) as GameObject;
+        enemyPrefab = Resources.Load("Prefabs/Enemy", typeof(GameObject)) as GameObject;
     }
 
     void Start(){
@@ -273,6 +274,7 @@ public class Maze : MonoBehaviour {
             }
         }
         GameObject spawnedMazePiece = InstantiateModified(node, node_prefab, rotation_degrees);
+        spawnedMazePiece.transform.SetParent(gameObject.transform);
         // surfaces.Add(spawnedMazePiece.transform.GetChild(0).GetComponent<NavMeshSurface>());
         surfaces.Add(spawnedMazePiece.GetComponent<NavMeshSurface>());
     }
@@ -290,26 +292,49 @@ public class Maze : MonoBehaviour {
         Item dungeonPassItem = Resources.Load("Items/Dungeon Pass", typeof(Item)) as Item;
         int random_index = Random.Range(15, generated_nodes.Count - 15);
         GameObject dungeonPass = Instantiate(itemSpawn, new Vector3(generated_nodes[random_index].mazePosition.x * prefabSize, generated_nodes[random_index].mazePosition.y * prefabSize + 1.5f, generated_nodes[random_index].mazePosition.z * prefabSize), Quaternion.identity);
+        dungeonPass.transform.SetParent(gameObject.transform);
         dungeonPass.GetComponent<ItemSpawn>().item = dungeonPassItem;
-        dungeonPass.name = "DUNGEON PASS MOTHERFUCKER";
-        for(int i=0;i<20;i++){
-            random_index = Random.Range(5, generated_nodes.Count - 5);
-            Instantiate(itemSpawn, new Vector3(generated_nodes[random_index].mazePosition.x * prefabSize, generated_nodes[random_index].mazePosition.y * prefabSize + 1.5f, generated_nodes[random_index].mazePosition.z * prefabSize), Quaternion.identity);
-            itemSpawn.GetComponent<ItemSpawn>().item = manager.GenerateItem();
-        }
-
+        dungeonPass.name = "Dungeon Pass";
         // let's place the objective at the final generated location
         Vector3 objective_location = generated_nodes[generated_nodes.Count - 1].mazePosition;
-        // commenting out below, saving for testing
-        // Vector3 objective_location = manager.playerSpawnPoint;
-        
-        GameObject objective = Resources.Load("Prefabs/Objective", typeof(GameObject)) as GameObject;
-        Instantiate(objective, new Vector3(objective_location.x * prefabSize + 1, objective_location.y * prefabSize - 5, objective_location.z * prefabSize + 1), Quaternion.identity);
+        GameObject objectivePrefab = Resources.Load("Prefabs/Objective", typeof(GameObject)) as GameObject;
+        GameObject objective = Instantiate(objectivePrefab, new Vector3(objective_location.x * prefabSize, objective_location.y * prefabSize + 1.5f, objective_location.z * prefabSize), Quaternion.identity);
+        objective.transform.SetParent(gameObject.transform);
+        objective.name = "Objective";
+        // item spawning
+        for(int i=0;i<20;i++){
+            random_index = Random.Range(5, generated_nodes.Count - 5);
+            // we need to adjust the items position by a minimal amount to allow the AI to pass during navigation.
+            // providing random offset for x and z positions
+            int xOffset = Random.Range(0, 1)==0 ? -1 : 1;
+            int zOffset = Random.Range(0, 1)==0 ? -1 : 1;
 
-        // let's instantiate 5 monster spawners throughout the maze
-        for(int i=0;i<1;i++){
-            random_index = Random.Range(25, generated_nodes.Count - 25);
-            Instantiate(respawnPrefab, new Vector3(generated_nodes[random_index].mazePosition.x * prefabSize, generated_nodes[random_index].mazePosition.y * prefabSize + 1.5f, generated_nodes[random_index].mazePosition.z * prefabSize), Quaternion.identity);
+            Vector3 adjustItemSpawnPoint = new Vector3(generated_nodes[random_index].mazePosition.x * prefabSize + xOffset, generated_nodes[random_index].mazePosition.y * prefabSize + 1.5f, generated_nodes[random_index].mazePosition.z * prefabSize + zOffset);
+            GameObject itemSpawned = Instantiate(itemSpawn, adjustItemSpawnPoint, Quaternion.identity);
+            // GameObject itemSpawned = Instantiate(itemSpawn, new Vector3(generated_nodes[random_index].mazePosition.x * prefabSize, generated_nodes[random_index].mazePosition.y * prefabSize + 1.5f, generated_nodes[random_index].mazePosition.z * prefabSize), Quaternion.identity);
+            itemSpawned.transform.SetParent(gameObject.transform);
+            itemSpawned.name = "Item: " + itemSpawn.GetComponent<ItemSpawn>().item.name.ToString();
+            itemSpawn.GetComponent<ItemSpawn>().item = manager.GenerateItem();
+            if(i%2==0){
+                SpawnEnemy(random_index);
+            }
         }
+        // random monster spawning
+        for(int i=0;i<30;i++){
+            SpawnEnemy();
+        }
+    }
+
+    public void SpawnEnemy(int index=-1){
+        int random_index = index;
+        if(random_index==-1){
+            random_index = Random.Range(25, generated_nodes.Count - 25);
+        }
+        // ensure the mazePosition is n-depth away from the player (we need a function for this)
+        GameObject enemy = null;
+        enemy = Instantiate(enemyPrefab, new Vector3(generated_nodes[random_index].mazePosition.x * prefabSize, generated_nodes[random_index].mazePosition.y * prefabSize + 1.5f, generated_nodes[random_index].mazePosition.z * prefabSize), Quaternion.identity);
+        
+        enemy.transform.SetParent(gameObject.transform);
+        enemy.name = "Enemy";
     }
 }

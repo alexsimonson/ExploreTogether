@@ -16,10 +16,6 @@ public class WaveSurvival : GameMode, IGameMode {
     public bool transition_period = false;
     public GameObject enemy_prefab;
 
-    public GameObject[] respawns;
-    public GameObject playerRespawns;
-    public GameObject enemyRespawns;
-
     public Manager manager;
 
     public GameObject[] playerInventoryBackup;
@@ -31,14 +27,14 @@ public class WaveSurvival : GameMode, IGameMode {
         manager.player.GetComponent<Inventory>().Initialize();
         manager.player.GetComponent<Gear>().Initialize();
         // enemy_prefab = Resources.Load("Prefabs/Enemy", typeof(GameObject)) as GameObject;
-        respawns = GameObject.FindGameObjectsWithTag("Respawn");
-        FilterRespawns();
         EndRound();
     }
 
     public override void SpawnEnemies(){
         while(enemies_currently_spawned < enemies_spawned_max && enemies_spawned_this_round < enemies_spawned_this_round_max){
-            SpawnEnemy();
+            manager.maze.GetComponent<Maze>().SpawnEnemy();
+            enemies_currently_spawned += 1;
+            enemies_spawned_this_round += 1;
         }
         if(enemies_currently_spawned==enemies_spawned_max){
             // Debug.Log("Awaiting enemy death before spawning more");
@@ -87,12 +83,6 @@ public class WaveSurvival : GameMode, IGameMode {
         enemies_spawned_this_round = 0;
     }
 
-    void SpawnEnemy(){
-        Instantiate(enemy_prefab, new Vector3(enemyRespawns.transform.position.x, enemyRespawns.transform.position.y + 1.5f, enemyRespawns.transform.position.z), enemyRespawns.transform.rotation);
-        enemies_currently_spawned += 1;
-        enemies_spawned_this_round += 1;
-    }
-
     public override IEnumerator BeginTransitionPeriod(){
         transition_period = true;
         Debug.Log("Transition period started");
@@ -112,7 +102,6 @@ public class WaveSurvival : GameMode, IGameMode {
         manager.Setup();
         current_round = 0;
         enemies_spawned_this_round_max = enemies_spawned_this_round_max_default;
-        // manager.player.transform.position = playerRespawns.transform.position;
         manager.player.transform.position = manager.playerSpawnPoint;
         EndRound();
     }
@@ -127,17 +116,6 @@ public class WaveSurvival : GameMode, IGameMode {
         manager.Setup();
         EndRound();
         // ResetGameMode();
-    }
-
-    private void FilterRespawns(){
-        foreach(GameObject respawn in respawns){
-            if(respawn.GetComponent<RespawnPoint>().isPlayerSpawn){
-                playerRespawns = respawn;
-            }else{
-                Debug.Log("Setting enemy respawn");
-                enemyRespawns = respawn;
-            }
-        }
     }
 
     public override bool TransitionPeriod(){
