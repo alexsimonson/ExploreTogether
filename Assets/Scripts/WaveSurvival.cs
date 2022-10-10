@@ -107,15 +107,11 @@ public class WaveSurvival : GameMode, IGameMode {
     }
 
     public override void ProgressGameMode(){
-        // only difference is we save the player's equipment and inventory heading into the next dungeon.  we also shouldn't reset the game stats to 0... so not entirely one change :)
-
-        // these values should be saved for next round
-        // playerInventoryBackup = manager.player.GetComponent<Inventory>().slots;
-        // playerGearBackup = manager.player.GetComponent<Gear>().slots;
+        // pop the TRANSITION PANEL
+        manager.hud.transform.GetChild(8).gameObject.SetActive(true);
         manager.DestroyNonEssentialGameObjects();
         manager.Setup();
         EndRound();
-        // ResetGameMode();
     }
 
     public override bool TransitionPeriod(){

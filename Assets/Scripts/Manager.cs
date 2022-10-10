@@ -65,6 +65,7 @@ public class Manager : MonoBehaviour {
         // start the game mode
         game_rules.Initialize();
         game_rules.SpawnEnemies();
+        hud.transform.GetChild(8).gameObject.SetActive(false);
     }
 
     public Item GenerateItem(){
