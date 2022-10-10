@@ -12,10 +12,12 @@ public class SlotContainer : MonoBehaviour, IDropHandler {
     public bool isEquipmentSlot;
     private static string[] valid_equipment_types = {"Equipment", "Weapon", "Gun", "Magic", "Melee"};
     private List<string> valid_equipment_types_list = new List<string>(valid_equipment_types);
+    Manager manager;
 
     void Start(){
-        inventoryUI = GameObject.Find("HUD").transform.GetChild(3).gameObject.GetComponent<InventoryUI>();
-        gearUI = GameObject.Find("HUD").transform.GetChild(5).gameObject.GetComponent<GearUI>();
+        manager = GameObject.Find("Manager").GetComponent<Manager>();
+        inventoryUI = manager.hud.transform.GetChild(3).gameObject.GetComponent<InventoryUI>();
+        gearUI = manager.hud.transform.GetChild(5).gameObject.GetComponent<GearUI>();
         if(inventorySlot.GetComponent<EquipmentSlot>()!=null){
             // this is an equipment slot
             isEquipmentSlot = true;
@@ -237,5 +239,6 @@ public class SlotContainer : MonoBehaviour, IDropHandler {
 
     public void DropItem(){
         inventoryUI.EmptySlot(index);
+        manager.player.GetComponent<Inventory>().DropItem(index);
     }
 }

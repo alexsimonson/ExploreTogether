@@ -9,11 +9,12 @@ public class PlayerInteraction : MonoBehaviour {
     public GameObject interactWith;
     private GameObject interactionText;
     public List<Item> itemInteraction;  // temporary to avoid functionality loss
+    Manager manager;
 
     void Start(){
         // maybe this should be inside of the manager?
-
-        interactionText = GameObject.Find("Manager").GetComponent<Manager>().hud.transform.GetChild(4).gameObject;
+        manager = GameObject.Find("Manager").GetComponent<Manager>();
+        interactionText = manager.hud.transform.GetChild(4).gameObject;
         interactionText.SetActive(false);
     }
     // Update is called once per frame
@@ -70,6 +71,8 @@ public class PlayerInteraction : MonoBehaviour {
     }
 
     public void ChangeInteractionWithText(){
+        Debug.Log("interact with below");
+        Debug.Log(interactWith);
         string interacting_with_text = interactWith.GetComponent<IInteraction>().InteractionName();
         interactionText.GetComponent<Text>().text = "Press F to Interact with " + interacting_with_text;
     }

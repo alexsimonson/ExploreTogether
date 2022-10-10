@@ -76,6 +76,5 @@ public class InventoryUI : MonoBehaviour {
         inventory.slots[slot_index].GetComponent<SlotContainer>().inventorySlot.transform.GetChild(0).GetComponent<Text>().text = null;
         inventory.slots[slot_index].GetComponent<SlotContainer>().inventorySlot.transform.GetChild(1).GetComponent<Image>().sprite = null;
         inventory.slots[slot_index].GetComponent<SlotContainer>().inventorySlot.transform.GetChild(1).GetComponent<Image>().color = newColor;
-        inventory.RemoveItem(slot_index);
     }
 }
