@@ -26,6 +26,9 @@ public class Manager : MonoBehaviour {
     public bool pause_functionality = false;
 
     public Vector3 playerSpawnPoint = new Vector3(0, 1.5f, 0);
+
+    public Item dungeon_pass;
+    
     void Awake(){
         enemy_prefab = Resources.Load("Prefabs/Enemy", typeof(GameObject)) as GameObject;
         hudPrefab = Resources.Load("Prefabs/HUD", typeof(GameObject)) as GameObject;
@@ -33,6 +36,7 @@ public class Manager : MonoBehaviour {
         game_mode_prefab = Resources.Load("Prefabs/WaveSurvivalGM", typeof(GameObject)) as GameObject;
         maze_generator_prefab = Resources.Load("Prefabs/MazeGenerator", typeof(GameObject)) as GameObject;
         item_bank = Resources.LoadAll<Item>("Items");
+        dungeon_pass = Resources.Load("Items/Dungeon Pass", typeof(Item)) as Item;
     }
 
     // Start is called before the first frame update
@@ -44,30 +48,11 @@ public class Manager : MonoBehaviour {
         Setup();
     }
 
-    public void Setup(bool backup=false){
-        if(backup){
-            // hud.transform.GetChild(3).gameObject.GetComponent<InventoryUI>().DrawInventoryUI();
-        }
+    public void Setup(){
         maze = Instantiate(maze_generator_prefab);
         maze.GetComponent<Maze>().manager = gameObject.GetComponent<Manager>();
-        // player.GetComponent<Inventory>().AddStartingItems();
-        if(backup){
-            // redraw the inventory/gear hud with this data
-            // foreach(GameObject slot in game_rules.GetPlayerInventoryBackup()){
-            //     player.GetComponent<Inventory>().AddItem(slot.GetComponent<SlotContainer>().inventorySlot.GetComponent<InventorySlot>().item);
-            // }
-
-            // also set these after player isntantiate later
-            // player.GetComponent<Inventory>().slots = game_rules.GetPlayerInventoryBackup();
-            // player.GetComponent<Gear>().slots = game_rules.GetPlayerGearBackup();
-        }
-
         game_mode = Instantiate(game_mode_prefab, new Vector3(0, 0, 0), Quaternion.identity);
         game_rules = game_mode.GetComponent<IGameMode>();
-        // these functions require both player and hud instantiated before they can work, and their functionality is required for the game to work properly
-        // player.GetComponent<Inventory>().Initialize();
-        // player.GetComponent<Gear>().Initialize();
-        
     }
 
     void HandleRound(){

@@ -35,7 +35,6 @@ public class Inventory : MonoBehaviour, IInventory {
     public virtual void Initialize(){
         RelevantScrollView = manager.hud.transform.GetChild(3).gameObject;
         RelevantScrollView.SetActive(false);
-        AddItem(dungeon_pass);
     }
 
     public virtual void AddItem(Item new_item){
@@ -134,10 +133,20 @@ public class Inventory : MonoBehaviour, IInventory {
 
     public void PlayerInput(){
         if ((Input.GetKeyDown("e"))){
-            RelevantScrollView.SetActive(!RelevantScrollView.activeSelf);
-            Cursor.visible = RelevantScrollView.activeSelf;
-            HandlePlayerRights();
+            ToggleDisplayUI();
         }
+    }
+
+    public void ToggleDisplayUI(){
+        RelevantScrollView.SetActive(!RelevantScrollView.activeSelf);
+        Cursor.visible = RelevantScrollView.activeSelf;
+        HandlePlayerRights();
+    }
+
+    public void SetDisplayUI(bool value){
+        RelevantScrollView.SetActive(value);
+        Cursor.visible = value;
+        HandlePlayerRights();
     }
 
     public void HandlePlayerRights(){

@@ -299,9 +299,9 @@ public class Maze : MonoBehaviour {
         }
 
         // let's place the objective at the final generated location
-        // Vector3 objective_location = generated_nodes[generated_nodes.Count - 1].mazePosition;
+        Vector3 objective_location = generated_nodes[generated_nodes.Count - 1].mazePosition;
         // commenting out below, saving for testing
-        Vector3 objective_location = manager.playerSpawnPoint;
+        // Vector3 objective_location = manager.playerSpawnPoint;
         
         GameObject objective = Resources.Load("Prefabs/Objective", typeof(GameObject)) as GameObject;
         Instantiate(objective, new Vector3(objective_location.x * prefabSize + 1, objective_location.y * prefabSize - 5, objective_location.z * prefabSize + 1), Quaternion.identity);

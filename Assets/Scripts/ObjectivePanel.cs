@@ -20,6 +20,8 @@ public class ObjectivePanel : MonoBehaviour {
     void OnNextButtonPressed(){
         // this should head over to the game mode script and restart that shit
         Debug.Log("Generate another dungeon");
+        manager.player.GetComponent<Inventory>().SetDisplayUI(false);
+        manager.player.GetComponent<Gear>().SetDisplayUI(false);
         manager.game_rules.ProgressGameMode();
         gameObject.SetActive(false);
     }

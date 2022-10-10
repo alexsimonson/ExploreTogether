@@ -124,7 +124,7 @@ public class WaveSurvival : GameMode, IGameMode {
         // playerInventoryBackup = manager.player.GetComponent<Inventory>().slots;
         // playerGearBackup = manager.player.GetComponent<Gear>().slots;
         manager.DestroyNonEssentialGameObjects();
-        manager.Setup(true);
+        manager.Setup();
         EndRound();
         // ResetGameMode();
     }
