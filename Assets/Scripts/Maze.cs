@@ -13,7 +13,6 @@ public class Maze : MonoBehaviour {
     public GameObject itemSpawn;
     public GameObject respawnPrefab;
 
-    private int size = 10;
     private int prefabSize = 5;
 
     private List<Vector3> neighbors_visited = new List<Vector3>();

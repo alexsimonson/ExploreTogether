@@ -21,7 +21,6 @@ public class Inventory : MonoBehaviour, IInventory {
     }
 
     void Start(){
-        Debug.Log("Inventory Start has run...");
         manager = GameObject.Find("Manager").GetComponent<Manager>();
         sword_test = Resources.Load("Items/Sword", typeof(Melee)) as Melee;
         gun_test = Resources.Load("Items/Pistol", typeof(Gun)) as Gun;
@@ -33,31 +32,24 @@ public class Inventory : MonoBehaviour, IInventory {
         PlayerInput();
     }
 
-    public void Initialize(){
+    public virtual void Initialize(){
         RelevantScrollView = manager.hud.transform.GetChild(3).gameObject;
         RelevantScrollView.SetActive(false);
         AddItem(dungeon_pass);
     }
 
-    public void AddItem(Item new_item){
+    public virtual void AddItem(Item new_item){
         if(new_item.stack){
             // we should FindItemInSlot
             int slot_index = FindItemInSlot(new_item);
-            Debug.Log("Found slot index: " + slot_index);
-            if(slot_index < 0){
-                // there was no slot found containing this item, we should add to the next available slot
-                AddItemCheck(new_item);
-            }else{
+            if(slot_index >= 0){
                 Debug.Log("We are increasing");
                 slots[slot_index].GetComponent<SlotContainer>().inventorySlot.GetComponent<InventorySlot>().stack_size++;
                 RelevantScrollView.GetComponent<InventoryUI>().UpdateSlot(slot_index, new_item);
+                return;
             }
-        }else{
-            AddItemCheck(new_item);
         }
-    }
-
-    void AddItemCheck(Item new_item){
+        // default back to non-stacking behavior
         int empty_slot_index = FindEmptySlot();
         if(empty_slot_index >= 0){
             // we should add to this slot
@@ -65,9 +57,10 @@ public class Inventory : MonoBehaviour, IInventory {
             slots[empty_slot_index].GetComponent<SlotContainer>().inventorySlot.GetComponent<InventorySlot>().stack_size = 1;
             // this data needs passed to the UI, so it can update
             RelevantScrollView.GetComponent<InventoryUI>().UpdateSlot(empty_slot_index, new_item);
-        }else{
-            Debug.Log("Inventory is full, cannot add item");
+            return;
         }
+        Debug.Log("Inventory is full, cannot add item");
+        return;
     }
 
     public void RemoveItem(int index){
@@ -117,7 +110,7 @@ public class Inventory : MonoBehaviour, IInventory {
         return -1;
     }
 
-    void ListInventory(){
+    public virtual void ListInventory(){
         foreach(GameObject slot in slots){
             if(slot!=null && slot.GetComponent<SlotContainer>().inventorySlot!=null && slot.GetComponent<SlotContainer>().inventorySlot.GetComponent<InventorySlot>().item!=null){
                 Debug.Log("Slot item: " + slot.GetComponent<SlotContainer>().inventorySlot.GetComponent<InventorySlot>().item.name);
@@ -125,18 +118,15 @@ public class Inventory : MonoBehaviour, IInventory {
         }
     }
 
-    void PlayerInput(){
+    public void PlayerInput(){
         if ((Input.GetKeyDown("e"))){
             RelevantScrollView.SetActive(!RelevantScrollView.activeSelf);
             Cursor.visible = RelevantScrollView.activeSelf;
             HandlePlayerRights();
         }
-        if((Input.GetKeyDown("g"))){
-            RelevantScrollView.GetComponent<InventoryUI>().EmptySlot(0);
-        }
     }
 
-    void HandlePlayerRights(){
+    public void HandlePlayerRights(){
         if(RelevantScrollView.activeSelf){
             gameObject.GetComponent<PlayerLook>().RevokeLook();
             gameObject.GetComponent<PlayerCombat>().RevokeCombat();

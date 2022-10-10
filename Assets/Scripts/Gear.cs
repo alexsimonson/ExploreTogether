@@ -22,7 +22,7 @@ public class Gear : Inventory, IInventory {
         PlayerInput();
     }
     
-    public void Initialize(){
+    public override void Initialize(){
         RelevantScrollView = manager.hud.transform.GetChild(5).gameObject;
         content = RelevantScrollView.transform.GetChild(0).GetChild(0).gameObject;
         RelevantScrollView.SetActive(false);
@@ -34,7 +34,7 @@ public class Gear : Inventory, IInventory {
         }
     }
 
-    public void AddItem(Item new_item){
+    public override void AddItem(Item new_item){
         if(new_item.stack){
             // we should FindItemInSlot
             int slot_index = FindItemInSlot(new_item);
@@ -87,35 +87,11 @@ public class Gear : Inventory, IInventory {
         return -1;
     }
 
-    void ListInventory(){
+    public override void ListInventory(){
         foreach(GameObject slot in slots){
             if(slot!=null && slot.GetComponent<SlotContainer>().inventorySlot!=null && slot.GetComponent<SlotContainer>().inventorySlot.GetComponent<EquipmentSlot>().item!=null){
                 Debug.Log("Slot item: " + slot.GetComponent<SlotContainer>().inventorySlot.GetComponent<EquipmentSlot>().item.name);
             }
         }
-    }
-
-    void PlayerInput(){
-        if ((Input.GetKeyDown("e"))){
-            RelevantScrollView.SetActive(!RelevantScrollView.activeSelf);
-            Cursor.visible = RelevantScrollView.activeSelf;
-            HandlePlayerRights();
-        }
-        if((Input.GetKeyDown("g"))){
-            RelevantScrollView.GetComponent<InventoryUI>().EmptySlot(0);
-        }
-    }
-
-    void HandlePlayerRights(){
-        if(RelevantScrollView.activeSelf){
-            gameObject.GetComponent<PlayerLook>().RevokeLook();
-        }else{
-            gameObject.GetComponent<PlayerLook>().AllowLook();
-        }
-    }
-
-    public void ResetUI(){
-        RelevantScrollView.SetActive(false);
-        HandlePlayerRights();
     }
 }

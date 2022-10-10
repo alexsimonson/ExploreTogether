@@ -6,8 +6,6 @@ using UnityEngine.EventSystems;
 
 public class GearUI : InventoryUI {
 
-    // Start is called before the first frame update
-    Manager manager;
     void Start(){
         content = gameObject.transform.GetChild(0).GetChild(0).gameObject;
         manager = GameObject.Find("Manager").GetComponent<Manager>();
@@ -15,20 +13,20 @@ public class GearUI : InventoryUI {
         DrawInventoryUI();
     }
 
-    void DrawInventoryUI(){
-        // we need to dynamically generate inventory slots based on the existing inventory
+    public override void DrawInventoryUI(){
+        // we need to dynamically generate gear slots based on the existing gear
         if(inventory==null){
-            Debug.Log("No inventory set");
+            Debug.Log("No gear set");
             return;
         }
         if(inventory.slots==null){
-            Debug.Log("No inventory slots");
+            Debug.Log("No gear slots");
             return;
         }
         // since the gear slots won't be determined or drawn dynamically, this is less important
     }
 
-    public void UpdateSlot(int slot_index, Item new_item, GameObject test=null){
+    public override void UpdateSlot(int slot_index, Item new_item, GameObject test=null){
         Color newColor = inventory.slots[slot_index].GetComponent<SlotContainer>().inventorySlot.transform.GetChild(1).GetComponent<Image>().color;
         if(test==null){
             inventory.slots[slot_index].GetComponent<SlotContainer>().inventorySlot.transform.GetChild(0).GetComponent<Text>().text = new_item.name;
@@ -56,7 +54,7 @@ public class GearUI : InventoryUI {
         }
     }
 
-    public void EmptySlot(int slot_index){
+    public override void EmptySlot(int slot_index){
         // I need to make this actually just reset to an empty slot, instead of default item...
         inventory.slots[slot_index].GetComponent<SlotContainer>().inventorySlot.transform.GetChild(0).GetComponent<Text>().text = null;
         inventory.slots[slot_index].GetComponent<SlotContainer>().inventorySlot.transform.GetChild(1).GetComponent<Image>().sprite = null;

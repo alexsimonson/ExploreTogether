@@ -58,7 +58,7 @@ public class Resource : MonoBehaviour, IInteraction {
 
     void Depleted(){
         depleted = true;
-        StartCoroutine(Respawn(5f));
+        StartCoroutine(Respawn(respawn_time));
     }
 
     void ChanceDepletion(){

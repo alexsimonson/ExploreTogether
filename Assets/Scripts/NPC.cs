@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.AI;
 
 public class NPC : MonoBehaviour{
-    public string name;
+    public new string name;
     public Type type; // string for now, this should probably be an Enum eventually
     public enum Type{
         Zombie,
@@ -400,9 +400,7 @@ public class NPC : MonoBehaviour{
     }
     
     GameObject RelocateChaseTarget(List<GameObject> potentialVictims){
-        float minDist = Mathf.Infinity;
         Vector3 currentPos = transform.position;
-        GameObject closest = null;
         bool targetStillAvailable = false;
         foreach (GameObject victim in potentialVictims){
             if(GameObject.ReferenceEquals(chaseTarget, victim)){

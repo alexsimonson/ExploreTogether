@@ -11,8 +11,6 @@ public class PlayerInteraction : MonoBehaviour {
     public List<Item> itemInteraction;  // temporary to avoid functionality loss
 
     void Start(){
-        Debug.Log("I definitely probably am not running this a second time, player interaction will lost this component upon reset, right?");
-
         // maybe this should be inside of the manager?
 
         interactionText = GameObject.Find("Manager").GetComponent<Manager>().hud.transform.GetChild(4).gameObject;
