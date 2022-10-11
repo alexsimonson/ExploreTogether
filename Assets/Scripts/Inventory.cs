@@ -76,13 +76,13 @@ public class Inventory : MonoBehaviour, IInventory {
         RemoveItem(index, true);
     }
 
-    // should I separate out dropping the item from removing the item?
-    public void RemoveItemRewrite(int index){
-        Item removedItem = slots[index].GetComponent<SlotContainer>().inventorySlot.GetComponent<InventorySlot>().item;
-        slots[index].GetComponent<SlotContainer>().inventorySlot.GetComponent<InventorySlot>().item = null;
-        GameObject dropped_item = Instantiate(Resources.Load("Prefabs/Item", typeof(GameObject)) as GameObject, gameObject.transform.position, Quaternion.identity);
-        dropped_item.GetComponent<ItemSpawn>().item = removedItem;
-        // let's instantiate this item on the ground
+    // remove all items from inventory
+    public virtual void Clear(){
+        for(int i=0;i<max_slots;i++){
+            if(slots[i].GetComponent<SlotContainer>().inventorySlot.GetComponent<InventorySlot>()){
+                slots[i].GetComponent<SlotContainer>().inventorySlot.GetComponent<InventorySlot>().item = null;
+            }
+        }
     }
 
     int FindEmptySlot(){

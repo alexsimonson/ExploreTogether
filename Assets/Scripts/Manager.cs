@@ -66,6 +66,8 @@ public class Manager : MonoBehaviour {
         game_rules.Initialize();
         game_rules.SpawnEnemies();
         hud.transform.GetChild(8).gameObject.SetActive(false);
+        player.GetComponent<PlayerMovement>().AllowMovement();
+        player.GetComponent<Inventory>().ResetUI();
     }
 
     public Item GenerateItem(){

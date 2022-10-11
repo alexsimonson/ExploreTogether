@@ -82,11 +82,12 @@ public class PlayerMovement : MonoBehaviour
 
     public void RevokeMovement(){
         revoke_movement = true;
-        rb.constraints = RigidbodyConstraints.FreezeAll;
+        rb.constraints = RigidbodyConstraints.FreezeAll;    // is this necessary?
     }
 
     public void AllowMovement(){
         revoke_movement = false;
         rb.constraints = RigidbodyConstraints.None;
+        rb.freezeRotation = true;
     }
 }

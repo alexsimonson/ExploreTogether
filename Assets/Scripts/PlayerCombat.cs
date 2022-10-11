@@ -9,12 +9,14 @@ public class PlayerCombat : MonoBehaviour{
     public GameObject playerCamera;
     public GameObject crosshair;
     public GameObject audioSource;
+    Manager manager;
 
     void Start(){
-        playerGearUI = GameObject.Find("Manager").GetComponent<Manager>().hud.transform.GetChild(5).gameObject.GetComponent<GearUI>();
+        manager = GameObject.Find("Manager").GetComponent<Manager>();
+        playerGearUI = manager.hud.transform.GetChild(5).gameObject.GetComponent<GearUI>();
         weaponSlot = playerGearUI.inventorySlots[9].GetComponent<SlotContainer>().inventorySlot.GetComponent<EquipmentSlot>();
-        playerCamera = gameObject.transform.GetChild(0).gameObject;
-        crosshair = GameObject.Find("Manager").GetComponent<Manager>().hud.transform.GetChild(6).gameObject;
+        playerCamera = manager.player.transform.GetChild(0).gameObject;
+        crosshair = manager.hud.transform.GetChild(6).gameObject;
         audioSource = gameObject.transform.GetChild(1).gameObject;
         audioSource.GetComponent<AudioSource>().volume = .2f;
     }

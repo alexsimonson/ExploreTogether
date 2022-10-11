@@ -35,12 +35,13 @@ public class PlayerInteraction : MonoBehaviour {
 
     private void InteractRaycast(){
         RaycastHit hit;
-
-        if(Physics.Raycast(gameObject.GetComponent<PlayerCombat>().playerCamera.transform.position, gameObject.GetComponent<PlayerCombat>().playerCamera.transform.forward * 1, out hit, 2) && hit.transform.gameObject.layer==7){
-            GiveInteractWith(hit.transform.gameObject);
-        }else{
-            ClearInteractWith();
+        if(gameObject.GetComponent<PlayerCombat>().playerCamera!=null){
+            if(Physics.Raycast(gameObject.GetComponent<PlayerCombat>().playerCamera.transform.position, gameObject.GetComponent<PlayerCombat>().playerCamera.transform.forward * 1, out hit, 2) && hit.transform.gameObject.layer==7){
+                GiveInteractWith(hit.transform.gameObject);
+                return;
+            }
         }
+        ClearInteractWith();
     }
 
     public void CanInteractWith(Item interactable){

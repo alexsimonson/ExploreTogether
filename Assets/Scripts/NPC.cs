@@ -46,7 +46,7 @@ public class NPC : MonoBehaviour{
     public GameObject weaponSlot1;
     public AnimationClip equipAC;
     public AnimationClip attackSlashAC;
-    public float attackSpeed = 2.4f;
+    public float attackSpeed = .6f;
     public int attackDamage = 35;
 
     private bool isAttacking = false;
@@ -282,7 +282,7 @@ public class NPC : MonoBehaviour{
         isAttacking = true;
         if(Physics.Raycast(gameObject.transform.position, gameObject.transform.forward * 1, out hit, 2, layerMask)){
             Debug.DrawRay(gameObject.transform.position, gameObject.transform.forward * hit.distance, Color.red, 2.0f, false);
-            hit.transform.gameObject.GetComponent<Health>().DealDamage(5);
+            hit.transform.gameObject.GetComponent<Health>().DealDamage(attackDamage);
         }else{
             Debug.DrawRay(gameObject.transform.position, gameObject.transform.forward * 1, Color.green, 2.0f, false);
         }

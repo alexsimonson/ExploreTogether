@@ -27,7 +27,5 @@ public class PlayerHealth : Health{
 	public void ResetHealth(){
 		currentHealth = maxHealth;
         SetHealthUI();
-        gameObject.GetComponent<PlayerLook>().AllowLook();
-        gameObject.GetComponent<PlayerMovement>().AllowMovement();
 	}
 }

@@ -12,6 +12,7 @@ public class Maze : MonoBehaviour {
     public GameObject cJunc;
     public GameObject itemSpawn;
     public GameObject enemyPrefab;
+    public GameObject torchPrefab;
 
     private int prefabSize = 5;
 
@@ -46,6 +47,7 @@ public class Maze : MonoBehaviour {
         cJunc = Resources.Load("Prefabs/Dungeon/C-Junction", typeof(GameObject)) as GameObject;
         itemSpawn = Resources.Load("Prefabs/Item", typeof(GameObject)) as GameObject;
         enemyPrefab = Resources.Load("Prefabs/Enemy", typeof(GameObject)) as GameObject;
+        torchPrefab = Resources.Load("Prefabs/Torch Particle", typeof(GameObject)) as GameObject;
     }
 
     void Start(){
@@ -287,7 +289,6 @@ public class Maze : MonoBehaviour {
         //     // we should instantiate an item here
         //     Instantiate(itemSpawn, new Vector3(xJunction.mazePosition.x * prefabSize, xJunction.mazePosition.y * prefabSize + 1.5f, xJunction.mazePosition.z * prefabSize), Quaternion.identity);
         // }
-
         // we must instantiate a dungeon key somewhere
         Item dungeonPassItem = Resources.Load("Items/Dungeon Pass", typeof(Item)) as Item;
         int random_index = Random.Range(15, generated_nodes.Count - 15);
@@ -301,6 +302,7 @@ public class Maze : MonoBehaviour {
         GameObject objective = Instantiate(objectivePrefab, new Vector3(objective_location.x * prefabSize, objective_location.y * prefabSize + 1.5f, objective_location.z * prefabSize), Quaternion.identity);
         objective.transform.SetParent(gameObject.transform);
         objective.name = "Objective";
+        
         // item spawning
         for(int i=0;i<20;i++){
             random_index = Random.Range(5, generated_nodes.Count - 5);
