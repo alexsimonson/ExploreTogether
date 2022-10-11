@@ -21,8 +21,6 @@ public class WaveSurvival : GameMode, IGameMode {
     public GameObject[] playerInventoryBackup;
     public GameObject[] playerGearBackup;
 
-    bool is_first_run = true;
-
     // Start is called before the first frame update
     public override void Initialize(){
         manager = GameObject.Find("Manager").GetComponent<Manager>(); 
@@ -103,7 +101,6 @@ public class WaveSurvival : GameMode, IGameMode {
         manager.DestroyNonEssentialGameObjects();
         manager.Setup();
         current_round = 0;
-        is_first_run = true;
         enemies_spawned_this_round_max = enemies_spawned_this_round_max_default;
         manager.player.transform.position = manager.playerSpawnPoint;
         EndRound();
@@ -111,12 +108,11 @@ public class WaveSurvival : GameMode, IGameMode {
 
     public override void ProgressGameMode(){
         // pop the transition panel
-        manager.hud.transform.GetChild(8).gameObject.SetActive(true);
+        // manager.hud.transform.GetChild(8).gameObject.SetActive(true);
         manager.DestroyNonEssentialGameObjects();
         manager.Setup();
-        is_first_run = false;
-        manager.player.GetComponent<PlayerLook>().AllowLook();
-        manager.player.GetComponent<PlayerMovement>().AllowMovement();
+        // manager.player.GetComponent<PlayerLook>().AllowLook();
+        // manager.player.GetComponent<PlayerMovement>().AllowMovement();
         EndRound();
     }
 

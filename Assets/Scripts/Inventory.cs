@@ -43,7 +43,6 @@ public class Inventory : MonoBehaviour, IInventory {
             // we should FindItemInSlot
             int slot_index = FindItemInSlot(new_item);
             if(slot_index >= 0){
-                Debug.Log("We are increasing");
                 slots[slot_index].GetComponent<SlotContainer>().inventorySlot.GetComponent<InventorySlot>().stack_size++;
                 RelevantScrollView.GetComponent<InventoryUI>().UpdateSlot(slot_index, new_item);
                 return;
@@ -59,7 +58,6 @@ public class Inventory : MonoBehaviour, IInventory {
             RelevantScrollView.GetComponent<InventoryUI>().UpdateSlot(empty_slot_index, new_item);
             return;
         }
-        Debug.Log("Inventory is full, cannot add item");
         return;
     }
 
@@ -87,9 +85,13 @@ public class Inventory : MonoBehaviour, IInventory {
 
     int FindEmptySlot(){
         for(int slot_index=0;slot_index<slots.Length;slot_index++){
-            Debug.Log("slots @ index " + slot_index.ToString() + " below");
-            Debug.Log(slots[slot_index]);
-            if(slots[slot_index].GetComponent<SlotContainer>().inventorySlot.GetComponent<InventorySlot>().item==null) return slot_index;
+            if(slots[slot_index]!=null){
+                if(slots[slot_index].GetComponent<SlotContainer>()!=null){
+                    if(slots[slot_index].GetComponent<SlotContainer>().inventorySlot.GetComponent<InventorySlot>()!=null){
+                        if(slots[slot_index].GetComponent<SlotContainer>().inventorySlot.GetComponent<InventorySlot>().item==null) return slot_index;
+                    }
+                }
+            }
         }
         return -1;
     }
@@ -99,8 +101,6 @@ public class Inventory : MonoBehaviour, IInventory {
             if(slots[slot_index]!=null && slots[slot_index].GetComponent<SlotContainer>().inventorySlot!=null){
                 if(slots[slot_index].GetComponent<SlotContainer>().inventorySlot.GetComponent<InventorySlot>().item!=null){
                     if(slots[slot_index].GetComponent<SlotContainer>().inventorySlot.GetComponent<InventorySlot>().item.id==find_item.id && slots[slot_index].GetComponent<SlotContainer>().inventorySlot.GetComponent<InventorySlot>().stack_size < find_item.max_stack_size){
-                        Debug.Log("Slot stack size: " + slots[slot_index].GetComponent<SlotContainer>().inventorySlot.GetComponent<InventorySlot>().stack_size.ToString());
-                        Debug.Log(find_item.name + " max stack size: " + find_item.max_stack_size.ToString());
                         return slot_index;
                     }
                 }
@@ -114,8 +114,6 @@ public class Inventory : MonoBehaviour, IInventory {
             if(slots[slot_index]!=null && slots[slot_index].GetComponent<SlotContainer>().inventorySlot!=null){
                 if(slots[slot_index].GetComponent<SlotContainer>().inventorySlot.GetComponent<InventorySlot>().item!=null){
                     if(slots[slot_index].GetComponent<SlotContainer>().inventorySlot.GetComponent<InventorySlot>().item.id==find_item.id){
-                        Debug.Log("Slot stack size: " + slots[slot_index].GetComponent<SlotContainer>().inventorySlot.GetComponent<InventorySlot>().stack_size.ToString());
-                        Debug.Log(find_item.name + " max stack size: " + find_item.max_stack_size.ToString());
                         return slot_index;
                     }
                 }

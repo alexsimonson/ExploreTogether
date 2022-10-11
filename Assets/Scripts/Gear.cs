@@ -24,8 +24,8 @@ public class Gear : Inventory, IInventory {
     
     public override void Initialize(){
         RelevantScrollView = manager.hud.transform.GetChild(5).gameObject;
-        content = RelevantScrollView.transform.GetChild(0).GetChild(0).gameObject;
-        RelevantScrollView.SetActive(false);
+        content = manager.hud.transform.GetChild(5).gameObject.transform.GetChild(0).GetChild(0).gameObject;
+        manager.hud.transform.GetChild(5).gameObject.SetActive(false);
         int i=0;
         foreach(Transform child in content.transform){
             slots[i] = child.gameObject;
@@ -59,7 +59,7 @@ public class Gear : Inventory, IInventory {
             slots[empty_slot_index].GetComponent<SlotContainer>().inventorySlot.GetComponent<InventorySlot>().item = new_item;
             slots[empty_slot_index].GetComponent<SlotContainer>().inventorySlot.GetComponent<InventorySlot>().stack_size = 1;
             // this data needs passed to the UI, so it can update
-            RelevantScrollView.GetComponent<InventoryUI>().UpdateSlot(empty_slot_index, new_item);
+            manager.hud.transform.GetChild(5).gameObject.GetComponent<InventoryUI>().UpdateSlot(empty_slot_index, new_item);
         }else{
             Debug.Log("Inventory is full, cannot add item");
         }

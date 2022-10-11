@@ -97,8 +97,8 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 0}
-  m_LightingSettings: {fileID: 0}
+  m_LightingDataAsset: {fileID: 112000000, guid: ee4f32cdd9064e2418e03a6c9be74f37, type: 2}
+  m_LightingSettings: {fileID: 4890085278179872738, guid: b92d3dd02da9d304fa13ca4be900dc47, type: 2}
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -178,6 +178,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Manager
       objectReference: {fileID: 0}
+    - target: {fileID: 1843024592737962031, guid: 251d62e81af731d42ac0cbea8b36a465, type: 3}
+      propertyPath: maze_generator_prefab
+      value: 
+      objectReference: {fileID: 4207370693126075639, guid: bea004fe2a646a84596c497d2fe6ebe1, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 251d62e81af731d42ac0cbea8b36a465, type: 3}
 --- !u!1001 &1440437340812555132

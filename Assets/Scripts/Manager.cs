@@ -41,10 +41,13 @@ public class Manager : MonoBehaviour {
 
     // Start is called before the first frame update
     void Start(){
-        player = Instantiate(playerPrefab, playerSpawnPoint, Quaternion.identity);
-        player.name = "Player";
         hud = Instantiate(hudPrefab);
         hud.name = "HUD";
+        hud.transform.GetChild(8).gameObject.SetActive(true);
+        player = Instantiate(playerPrefab, playerSpawnPoint, Quaternion.identity);
+        player.name = "Player";
+        // maze = Instantiate(maze_generator_prefab);
+        // maze.GetComponent<Maze>().manager = gameObject.GetComponent<Manager>();
         Setup();
     }
 
@@ -63,9 +66,10 @@ public class Manager : MonoBehaviour {
 
     public void MazeGenerated(){
         // start the game mode
+        hud.transform.GetChild(8).gameObject.SetActive(false);
+        player.transform.position = playerSpawnPoint;
         game_rules.Initialize();
         game_rules.SpawnEnemies();
-        hud.transform.GetChild(8).gameObject.SetActive(false);
         player.GetComponent<PlayerMovement>().AllowMovement();
         player.GetComponent<Inventory>().ResetUI();
     }

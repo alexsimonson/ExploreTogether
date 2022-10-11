@@ -317,13 +317,10 @@ public class Maze : MonoBehaviour {
             itemSpawned.transform.SetParent(gameObject.transform);
             itemSpawned.name = "Item: " + itemSpawn.GetComponent<ItemSpawn>().item.name.ToString();
             itemSpawn.GetComponent<ItemSpawn>().item = manager.GenerateItem();
-            if(i%2==0){
+            // spawn enemy every 3rd item
+            if(i%4==2){
                 SpawnEnemy(random_index);
             }
-        }
-        // random monster spawning
-        for(int i=0;i<30;i++){
-            SpawnEnemy();
         }
     }
 
