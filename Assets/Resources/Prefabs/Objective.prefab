@@ -109,5 +109,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   goal: {fileID: 11400000, guid: 2f8059e44d675d840b1830a9f3c41b78, type: 2}
-  manager: {fileID: 0}
-  objective_panel: {fileID: 0}
+  onGameStateChanged: {fileID: 11400000, guid: 99e6f07bed15a9945bcfc40b81c09042, type: 2}

@@ -294,6 +294,7 @@ MonoBehaviour:
   manager: {fileID: 0}
   nextButton: {fileID: 2817359004543339808}
   quitButton: {fileID: 1149227604924809543}
+  onGameStateChanged: {fileID: 11400000, guid: 99e6f07bed15a9945bcfc40b81c09042, type: 2}
 --- !u!1 &3043548718581176294
 GameObject:
   m_ObjectHideFlags: 0
@@ -1228,6 +1229,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 777cce26fc07dfc4cbea8cd98574d931, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  onGameStateChanged: {fileID: 11400000, guid: 99e6f07bed15a9945bcfc40b81c09042, type: 2}
 --- !u!1 &7963409245394511625
 GameObject:
   m_ObjectHideFlags: 0
@@ -1464,7 +1466,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -97, y: 17}
+  m_AnchoredPosition: {x: -96.78778, y: 16.881653}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7963409245637319079

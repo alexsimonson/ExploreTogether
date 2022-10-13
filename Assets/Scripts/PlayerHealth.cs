@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 public class PlayerHealth : Health{
-    private GameObject canvas;
-
+    
     [Header("Events")]
     public GameEvent onPlayerHealthChanged;
+    public GameEvent onGameStateChanged;
 
     public override void Start(){
         base.Start();
-        canvas = GameObject.Find("HUD");
         onPlayerHealthChanged.Raise(this, currentHealth);
     }
     public override void DealDamage(int damage){
@@ -19,9 +18,9 @@ public class PlayerHealth : Health{
     }
     public override void Death(bool shouldDestroy=true){
         base.Death(false);
+        onGameStateChanged.Raise(this, Manager.GameState.Dead);
         gameObject.GetComponent<PlayerLook>().RevokeLook();
         gameObject.GetComponent<PlayerMovement>().RevokeMovement();
-        canvas.transform.GetChild(2).gameObject.SetActive(true);
         Cursor.visible = true;
     }
 

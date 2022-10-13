@@ -6,7 +6,10 @@ using UnityEngine.SceneManagement;
 public class DeathPanel : MonoBehaviour{
     private Button restartButton;
     Manager manager;
-    // Start is called before the first frame update
+
+    [Header("Events")]
+    public GameEvent onGameStateChanged;
+    
     void Start(){
         manager = GameObject.Find("Manager").GetComponent<Manager>();
         restartButton = gameObject.transform.Find("RestartButton").gameObject.GetComponent<Button>();
@@ -15,7 +18,8 @@ public class DeathPanel : MonoBehaviour{
 
     void OnRestartButtonPressed(){
         // pop the transition panel
-        manager.hud.transform.GetChild(8).gameObject.SetActive(true);
+        onGameStateChanged.Raise(this, Manager.GameState.Transition);
+        // manager.hud.transform.GetChild(8).gameObject.SetActive(true);
         SceneManager.LoadScene("Scenes/Maze");
         // manager.player.GetComponent<PlayerHealth>().ResetHealth();
         // manager.game_rules.ResetGameMode();
@@ -23,6 +27,6 @@ public class DeathPanel : MonoBehaviour{
         // manager.player.GetComponent<Gear>().Clear();
         // manager.player.GetComponent<Inventory>().ResetUI();
         Cursor.visible = false;
-        gameObject.SetActive(false);
+        // gameObject.SetActive(false);
     }
 }

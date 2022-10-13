@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1843024592737962024}
   - component: {fileID: 1843024592737962031}
+  - component: {fileID: 1655404285760139441}
   m_Layer: 0
   m_Name: Manager
   m_TagString: essential
@@ -55,3 +56,33 @@ MonoBehaviour:
   item_bank: []
   pause_functionality: 0
   playerSpawnPoint: {x: 0, y: 1.5, z: 0}
+  dungeon_pass: {fileID: 0}
+  current_game_state: 0
+--- !u!114 &1655404285760139441
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1843024592737962030}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dbac9a5f7d779254ab4671c813b4b1a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameEvent: {fileID: 11400000, guid: 99e6f07bed15a9945bcfc40b81c09042, type: 2}
+  response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1843024592737962031}
+        m_TargetAssemblyTypeName: Manager, Assembly-CSharp
+        m_MethodName: UpdateGameState
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2

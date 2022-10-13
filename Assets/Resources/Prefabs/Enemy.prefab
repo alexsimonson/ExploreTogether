@@ -153,7 +153,7 @@ MonoBehaviour:
   equipAC: {fileID: 0}
   attackSlashAC: {fileID: 0}
   attackSpeed: 2.4
-  attackDamage: 35
+  attackDamage: 100
   default_movement_speed: 3.5
 --- !u!195 &6457182857780569207
 NavMeshAgent:

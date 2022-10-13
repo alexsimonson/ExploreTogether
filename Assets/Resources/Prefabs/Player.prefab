@@ -395,6 +395,7 @@ MonoBehaviour:
   maxHealth: 100
   currentHealth: 100
   onPlayerHealthChanged: {fileID: 11400000, guid: a592f3db4cf46e34882c8cff2af6b280, type: 2}
+  onGameStateChanged: {fileID: 11400000, guid: 99e6f07bed15a9945bcfc40b81c09042, type: 2}
 --- !u!114 &6489062375140490175
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -47,7 +47,7 @@ public class NPC : MonoBehaviour{
     public AnimationClip equipAC;
     public AnimationClip attackSlashAC;
     public float attackSpeed = .6f;
-    public int attackDamage = 35;
+    public int attackDamage = 100;
 
     private bool isAttacking = false;
     private bool isFleeing = false;

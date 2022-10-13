@@ -8,7 +8,10 @@ public class ObjectivePanel : MonoBehaviour {
     public Manager manager;
     public Button nextButton;
     public Button quitButton;
-    // Start is called before the first frame update
+
+    [Header("Events")]
+    public GameEvent onGameStateChanged;
+    
     void Start(){
         manager = GameObject.Find("Manager").GetComponent<Manager>();
         nextButton = gameObject.transform.GetChild(1).gameObject.GetComponent<Button>();
@@ -20,11 +23,12 @@ public class ObjectivePanel : MonoBehaviour {
     void OnNextButtonPressed(){
         // this should head over to the game mode script and restart that shit
         Debug.Log("Generate another dungeon");
-        manager.hud.transform.GetChild(8).gameObject.SetActive(true);
+        onGameStateChanged.Raise(this, Manager.GameState.Transition);
+        // manager.hud.transform.GetChild(8).gameObject.SetActive(true);
         manager.player.GetComponent<Inventory>().SetDisplayUI(false);
         manager.player.GetComponent<Gear>().SetDisplayUI(false);
         manager.game_rules.ProgressGameMode();
-        gameObject.SetActive(false);
+        // gameObject.SetActive(false);
     }
 
     void OnQuitButtonPressed(){

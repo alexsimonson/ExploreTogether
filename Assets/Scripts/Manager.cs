@@ -28,6 +28,17 @@ public class Manager : MonoBehaviour {
     public Vector3 playerSpawnPoint = new Vector3(0, 1.5f, 0);
 
     public Item dungeon_pass;
+
+    // eventually convert this to SO enum
+    public enum GameState{
+        Menu,
+        Transition,
+        Alive,
+        Dead,
+        Win
+    }
+
+    public GameState current_game_state;
     
     void Awake(){
         enemy_prefab = Resources.Load("Prefabs/Enemy", typeof(GameObject)) as GameObject;
@@ -41,6 +52,7 @@ public class Manager : MonoBehaviour {
 
     // Start is called before the first frame update
     void Start(){
+        SetGameState(Manager.GameState.Transition);
         hud = Instantiate(hudPrefab);
         hud.name = "HUD";
         hud.transform.GetChild(8).gameObject.SetActive(true);
@@ -90,6 +102,48 @@ public class Manager : MonoBehaviour {
             if(obj.tag!="essential" && obj.tag!="Player"){
                 Destroy(obj);
             }
+        }
+    }
+
+    public void UpdateGameState(Component sender, object data){
+        if(data is GameState){
+            GameState _state = (GameState) data;
+            SetGameState(_state);
+            HandlePanels(_state);
+        }
+    }
+
+    private void SetGameState(GameState _state){
+        current_game_state = _state;
+    }
+
+    // this logic probably makes more sense in the individual panels themselves
+    private void HandlePanels(GameState _state){
+        if(_state==GameState.Dead){
+            // show the death panel
+            hud.transform.GetChild(2).gameObject.SetActive(true);
+            // hide other competing panels
+            hud.transform.GetChild(7).gameObject.SetActive(false);
+            hud.transform.GetChild(8).gameObject.SetActive(false);
+        }else if(_state==GameState.Alive){
+            // this will be called after a transition period, set all of these to false
+            hud.transform.GetChild(2).gameObject.SetActive(false);
+            hud.transform.GetChild(7).gameObject.SetActive(false);
+            hud.transform.GetChild(8).gameObject.SetActive(false);
+        }else if(_state==GameState.Win){
+            // show the objective panel
+            hud.transform.GetChild(7).gameObject.SetActive(true);
+            // hide other competing panels
+            hud.transform.GetChild(2).gameObject.SetActive(false);
+            hud.transform.GetChild(8).gameObject.SetActive(false);
+        }else if(_state==GameState.Transition){
+            // show the transition panel
+            hud.transform.GetChild(8).gameObject.SetActive(true);
+            // hide other competing panels
+            hud.transform.GetChild(2).gameObject.SetActive(false);
+            hud.transform.GetChild(7).gameObject.SetActive(false);
+        }else if(_state==GameState.Menu){
+            Debug.Log("Still need to setup a main menu");   // eventually this will just load the main menu scene
         }
     }
 }

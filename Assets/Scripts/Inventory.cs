@@ -34,7 +34,7 @@ public class Inventory : MonoBehaviour, IInventory {
 
     public virtual void Initialize(){
         RelevantScrollView = manager.hud.transform.GetChild(3).gameObject;
-        // AddStartingItems();  // this is the appropriate place to add items...
+        AddStartingItems();  // this is the appropriate place to add items...
         RelevantScrollView.SetActive(false);
     }
 

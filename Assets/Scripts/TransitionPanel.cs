@@ -5,15 +5,13 @@ using UnityEngine.UI;
 
 public class TransitionPanel : MonoBehaviour {
 
-    GameObject transition_panel;
     Text transition_panel_text;
     // int i=0;
     // bool updating = false;
     
     void Start(){
-        transition_panel = GameObject.Find("Manager").GetComponent<Manager>().hud.transform.GetChild(8).gameObject;
-        transition_panel_text = transition_panel.transform.GetChild(0).gameObject.GetComponent<Text>();
-        gameObject.SetActive(false);
+        transition_panel_text = gameObject.transform.GetChild(0).gameObject.GetComponent<Text>();
+        // gameObject.SetActive(false);
     }
 
     
