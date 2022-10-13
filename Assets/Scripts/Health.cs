@@ -19,21 +19,27 @@ public class Health : MonoBehaviour {
 		checkifDead();
 	}
 
-	void checkifDead(){
+	public virtual void Death(bool shouldDestroy=true){
+        HandleScore();
+		if(shouldDestroy) Destroy(gameObject);
+	}
+
+	public virtual void ResetHealth(){
+		currentHealth = maxHealth;
+	}
+
+	private void checkifDead(){
 		if (currentHealth <= 0){
 			currentHealth = 0;
 			Death();
 		}
 	}
 
-	public virtual void Death(bool shouldDestroy=true){
-        HandleScore();
-		if(shouldDestroy) Destroy(gameObject);
-	}
-
-    void HandleScore(){
+	// this needs overhauled with an event
+    private void HandleScore(){
         if(layer==9){
 			manager.game_rules.EnemyKilled();
         }
     }
+
 }

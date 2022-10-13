@@ -4,14 +4,18 @@ using UnityEngine;
 using UnityEngine.UI;
 public class PlayerHealth : Health{
     private GameObject canvas;
+
+    [Header("Events")]
+    public GameEvent onPlayerHealthChanged;
+
     public override void Start(){
         base.Start();
         canvas = GameObject.Find("HUD");
-        SetHealthUI();
+        onPlayerHealthChanged.Raise(this, currentHealth);
     }
     public override void DealDamage(int damage){
         base.DealDamage(damage);
-        SetHealthUI();
+        onPlayerHealthChanged.Raise(this, currentHealth);
     }
     public override void Death(bool shouldDestroy=true){
         base.Death(false);
@@ -20,12 +24,9 @@ public class PlayerHealth : Health{
         canvas.transform.GetChild(2).gameObject.SetActive(true);
         Cursor.visible = true;
     }
-    private void SetHealthUI(){
-        canvas.transform.GetChild(1).gameObject.GetComponent<Text>().text = currentHealth.ToString() + " Health";
-    }
 
-	public void ResetHealth(){
-		currentHealth = maxHealth;
-        SetHealthUI();
+	public override void ResetHealth(){
+		base.ResetHealth();
+        onPlayerHealthChanged.Raise(this, currentHealth);
 	}
 }

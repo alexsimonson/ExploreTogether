@@ -512,7 +512,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2201216471373327047
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1439,6 +1439,8 @@ GameObject:
   - component: {fileID: 7963409245637319073}
   - component: {fileID: 7963409245637319079}
   - component: {fileID: 7963409245637319078}
+  - component: {fileID: 1102826688547489746}
+  - component: {fileID: 2458304509670328656}
   m_Layer: 5
   m_Name: HealthText
   m_TagString: essential
@@ -1507,6 +1509,47 @@ MonoBehaviour:
     m_VerticalOverflow: 1
     m_LineSpacing: 1
   m_Text: Health
+--- !u!114 &1102826688547489746
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7963409245637319072}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c61661318b58ec42b3a3ee033721c1b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  healthText: {fileID: 7963409245637319078}
+--- !u!114 &2458304509670328656
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7963409245637319072}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dbac9a5f7d779254ab4671c813b4b1a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameEvent: {fileID: 11400000, guid: a592f3db4cf46e34882c8cff2af6b280, type: 2}
+  response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1102826688547489746}
+        m_TargetAssemblyTypeName: HealthUI, Assembly-CSharp
+        m_MethodName: UpdateHealth
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &7963409246214099392
 GameObject:
   m_ObjectHideFlags: 0
@@ -2270,11 +2313,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1249881118045246730, guid: 526f9528917e3684da15971eb2e3bad8, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1249881118045246730, guid: 526f9528917e3684da15971eb2e3bad8, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1960776727407792496, guid: 526f9528917e3684da15971eb2e3bad8, type: 3}
       propertyPath: m_TagString
@@ -2286,11 +2329,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3254764126896032386, guid: 526f9528917e3684da15971eb2e3bad8, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3254764126896032386, guid: 526f9528917e3684da15971eb2e3bad8, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3254764126896032386, guid: 526f9528917e3684da15971eb2e3bad8, type: 3}
       propertyPath: m_AnchorMin.x
@@ -2322,7 +2365,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7466593740480348539, guid: 526f9528917e3684da15971eb2e3bad8, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7466593740480348539, guid: 526f9528917e3684da15971eb2e3bad8, type: 3}
       propertyPath: m_TagString
@@ -2342,7 +2385,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8161806748022601143, guid: 526f9528917e3684da15971eb2e3bad8, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8161806748022601143, guid: 526f9528917e3684da15971eb2e3bad8, type: 3}
       propertyPath: m_TagString
