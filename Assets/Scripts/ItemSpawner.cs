@@ -14,7 +14,7 @@ public class ItemSpawner : MonoBehaviour, IInteraction {
     }
 
     public void Interaction(GameObject interacting){
-        interacting.GetComponent<Inventory>().AddItem(item_offered);
+        manager.player_inventory.AddItem(item_offered);
         item_offered = manager.GenerateItem();
     }
 

@@ -14,8 +14,15 @@ public class SlotContainer : MonoBehaviour, IDropHandler {
     private List<string> valid_equipment_types_list = new List<string>(valid_equipment_types);
     Manager manager;
 
+    // dragging via the UI should be able to raise events about the inventory
+    [Header("Events")]
+    public GameEvent onInventoryChanged;
+    public GameEvent onEquipmentChanged;
+
     void Start(){
         manager = GameObject.Find("Manager").GetComponent<Manager>();
+        onInventoryChanged = Resources.Load("Events/InventoryChanged", typeof(GameEvent)) as GameEvent;
+        onEquipmentChanged = Resources.Load("Events/EquipmentChanged", typeof(GameEvent)) as GameEvent;
         inventoryUI = manager.hud.transform.GetChild(3).gameObject.GetComponent<InventoryUI>();
         gearUI = manager.hud.transform.GetChild(5).gameObject.GetComponent<GearUI>();
         if(inventorySlot.GetComponent<EquipmentSlot>()!=null){
@@ -86,12 +93,23 @@ public class SlotContainer : MonoBehaviour, IDropHandler {
         dragSlot.transform.SetParent(pointerDragParent, false);
         dragSlot.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 0, 0);
         
-        inventoryUI.UpdateSlot(index, inventorySlot.GetComponent<InventorySlot>().item, inventorySlot);
+        // we should instead raise two events, one for each slot effected
+        ItemSlot other_item_slot = ScriptableObject.CreateInstance("ItemSlot") as ItemSlot;
+        other_item_slot.index = index;
+        other_item_slot.item = inventorySlot.GetComponent<InventorySlot>().item;
+        other_item_slot.stack_size = inventorySlot.GetComponent<InventorySlot>().stack_size;
+        onInventoryChanged.Raise(this, other_item_slot);
+
+        ItemSlot drag_item_slot = ScriptableObject.CreateInstance("ItemSlot") as ItemSlot;
+        drag_item_slot.index = drag_index;
         if(shouldBeEmpty){
-            inventoryUI.UpdateSlot(drag_index, null, dragSlot);
+            drag_item_slot.item = null;
+            drag_item_slot.stack_size = 0;
         }else{
-            inventoryUI.UpdateSlot(drag_index, originalItem, dragSlot);
+            drag_item_slot.item = originalItem;
+            drag_item_slot.stack_size = originalStackSize;
         }
+        onInventoryChanged.Raise(this, drag_item_slot);
     }
 
     void EquipItem(PointerEventData eventData){
@@ -115,8 +133,8 @@ public class SlotContainer : MonoBehaviour, IDropHandler {
             if(dragSlotType=="Weapon"){
                 testThis = (Weapon)dragSlot.GetComponent<InventorySlot>().item;
             }
-            string dragSlotItemType = testThis.type.ToString();
             string dropSlotItemType = inventorySlot.GetComponent<EquipmentSlot>().type.ToString();
+            string dragSlotItemType = testThis.type.ToString();
             if(dropSlotItemType==dragSlotItemType){
                 // this means that the equipment slot types match and we should go through with equipping the item
                 inventorySlot.GetComponent<EquipmentSlot>().item = (Equipment)dragSlot.GetComponent<InventorySlot>().item;
@@ -129,12 +147,23 @@ public class SlotContainer : MonoBehaviour, IDropHandler {
                 dragSlot.transform.SetParent(pointerDragParent, false);
                 dragSlot.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 0, 0);
                 
-                gearUI.UpdateSlot(index, inventorySlot.GetComponent<EquipmentSlot>().item, inventorySlot);
+                ItemSlot equipment_item_slot = ScriptableObject.CreateInstance("ItemSlot") as ItemSlot;
+                equipment_item_slot.index = index;
+                equipment_item_slot.item = inventorySlot.GetComponent<EquipmentSlot>().item;
+                equipment_item_slot.stack_size = inventorySlot.GetComponent<EquipmentSlot>().stack_size;
+                
+                onEquipmentChanged.Raise(this, equipment_item_slot);
+                
+                ItemSlot drag_item_slot = ScriptableObject.CreateInstance("ItemSlot") as ItemSlot;
+                drag_item_slot.index = drag_index;
                 if(shouldBeEmpty){
-                    inventoryUI.UpdateSlot(drag_index, null, dragSlot);
+                    drag_item_slot.item = null;
+                    drag_item_slot.stack_size = 0;
                 }else{
-                    inventoryUI.UpdateSlot(drag_index, (Item)originalItem, dragSlot);
+                    drag_item_slot.item = originalItem;
+                    drag_item_slot.stack_size = originalStackSize;
                 }
+                onInventoryChanged.Raise(this, drag_item_slot);
             }else{
                 return;
             }
@@ -192,13 +221,22 @@ public class SlotContainer : MonoBehaviour, IDropHandler {
             dragSlot.transform.SetParent(pointerDragParent, false);
             dragSlot.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 0, 0);
             
+            ItemSlot inventory_item_slot = ScriptableObject.CreateInstance("ItemSlot") as ItemSlot;
+            inventory_item_slot.index = index;
+            inventory_item_slot.item = inventorySlot.GetComponent<InventorySlot>().item;
+            inventory_item_slot.stack_size = inventorySlot.GetComponent<InventorySlot>().stack_size;
+            onInventoryChanged.Raise(this, inventory_item_slot);
 
-            inventoryUI.UpdateSlot(index, inventorySlot.GetComponent<InventorySlot>().item, inventorySlot);
+            ItemSlot equipment_item_slot = ScriptableObject.CreateInstance("ItemSlot") as ItemSlot;
+            equipment_item_slot.index = drag_index;
             if(shouldBeEmpty){
-                gearUI.UpdateSlot(drag_index, null, dragSlot);
+                equipment_item_slot.item = null;
+                equipment_item_slot.stack_size = 0;
             }else{
-                gearUI.UpdateSlot(drag_index, (Equipment)originalItem, dragSlot);
+                equipment_item_slot.item = originalItem;
+                equipment_item_slot.stack_size = originalStackSize;
             }
+            onEquipmentChanged.Raise(this, equipment_item_slot);
         }else{
             return;
         }
@@ -227,18 +265,26 @@ public class SlotContainer : MonoBehaviour, IDropHandler {
         dragSlot.GetComponent<EquipmentSlot>().stack_size = shouldBeEmpty ? 0 : originalStackSize;
         dragSlot.transform.SetParent(pointerDragParent, false);
         dragSlot.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 0, 0);
-        
-        gearUI.UpdateSlot(index, inventorySlot.GetComponent<EquipmentSlot>().item, inventorySlot);
+
+        ItemSlot other_item_slot = ScriptableObject.CreateInstance("ItemSlot") as ItemSlot;
+        other_item_slot.index = index;
+        other_item_slot.item = inventorySlot.GetComponent<InventorySlot>().item;
+        other_item_slot.stack_size = inventorySlot.GetComponent<InventorySlot>().stack_size;
+        onEquipmentChanged.Raise(this, other_item_slot);
+
+        ItemSlot drag_item_slot = ScriptableObject.CreateInstance("ItemSlot") as ItemSlot;
+        drag_item_slot.index = drag_index;
         if(shouldBeEmpty){
-            // something with this logic is causing an item slot to be messed up
-            gearUI.UpdateSlot(drag_index, null, dragSlot);
+            drag_item_slot.item = null;
+            drag_item_slot.stack_size = 0;
         }else{
-            gearUI.UpdateSlot(drag_index, originalItem, dragSlot);
+            drag_item_slot.item = originalItem;
+            drag_item_slot.stack_size = originalStackSize;
         }
+        onEquipmentChanged.Raise(this, drag_item_slot);
     }
 
     public void DropItem(){
-        inventoryUI.EmptySlot(index);
-        manager.player.GetComponent<Inventory>().DropItem(index);
+        manager.player_inventory.DropItem(index);
     }
 }

@@ -11,8 +11,4 @@ public class Item : ScriptableObject {
     public bool stack;
     public int max_stack_size;
     public Sprite icon;
-
-    public void Interaction(){
-        GameObject.FindWithTag("Player").GetComponent<Inventory>().AddItem(this);
-    }
 }

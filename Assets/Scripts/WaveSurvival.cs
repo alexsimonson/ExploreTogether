@@ -21,12 +21,23 @@ public class WaveSurvival : GameMode, IGameMode {
     public GameObject[] playerInventoryBackup;
     public GameObject[] playerGearBackup;
 
+    public Melee sword_test;
+    public Gun gun_test;
+    public Item dungeon_pass;
+
+    public void Start(){
+        manager = GameObject.Find("Manager").GetComponent<Manager>(); 
+        sword_test = Resources.Load("Items/Sword", typeof(Melee)) as Melee;
+        gun_test = Resources.Load("Items/Pistol", typeof(Gun)) as Gun;
+        dungeon_pass = Resources.Load("Items/Dungeon Pass", typeof(Item)) as Item;
+    }
+
     // Start is called before the first frame update
     public override void Initialize(){
-        manager = GameObject.Find("Manager").GetComponent<Manager>(); 
-        manager.player.GetComponent<Inventory>().Initialize();
-        manager.player.GetComponent<Gear>().Initialize();
-        // enemy_prefab = Resources.Load("Prefabs/Enemy", typeof(GameObject)) as GameObject;
+        manager.player_inventory = ScriptableObject.CreateInstance("Inventory") as Inventory;
+        // manager.player_inventory.AddItem(sword_test);
+        // manager.player_inventory.AddItem(gun_test);
+        // manager.player_inventory.AddItem(dungeon_pass);
         EndRound();
     }
 

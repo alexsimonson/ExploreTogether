@@ -5,76 +5,77 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
 public class InventoryUI : MonoBehaviour {
-    public Inventory inventory;
+    public GameObject hudView;
     public GameObject content;
     public GameObject slotContainerPrefab;
     public GameObject slotButtonPrefab;
-
-    public List<GameObject> inventorySlots = new List<GameObject>();
-
+    public GameObject[] inventorySlots;    // this is a conversion of the original slots variable from Inventory.cs
     public Manager manager;
 
     void Start(){
+        slotContainerPrefab = Resources.Load("Prefabs/SlotContainer", typeof(GameObject)) as GameObject;
+        slotButtonPrefab = Resources.Load("Prefabs/InventorySlotButton", typeof(GameObject)) as GameObject;
+        
         manager = GameObject.Find("Manager").GetComponent<Manager>();
-        content = gameObject.transform.GetChild(0).GetChild(0).gameObject;
-        inventory = manager.player.GetComponent<Inventory>();
-        DrawInventoryUI();
+        hudView = gameObject.transform.GetChild(0).gameObject;
+        content = hudView.transform.GetChild(0).GetChild(0).gameObject;
+        DrawInventoryUI(manager.player_inventory);
     }
 
-    public virtual void DrawInventoryUI(){
+    public virtual void DrawInventoryUI(Inventory inventory){
         // we need to dynamically generate inventory slots based on the existing inventory
-        if(inventory==null){
-            Debug.Log("No inventory set");
-            return;
-        }
-        if(inventory.slots==null){
-            Debug.Log("No inventory slots");
-            return;
-        }
-        for(var slot_index=0;slot_index<inventory.slots.Length;slot_index++){
-            if(inventory.slots[slot_index]==null){
-                inventory.slots[slot_index] = Instantiate(slotContainerPrefab, content.transform.position, content.transform.rotation);
-                inventory.slots[slot_index].GetComponent<SlotContainer>().index = slot_index;
+        // if slots has not yet been instantiated, we should do that too
+        inventorySlots = new GameObject[inventory.max_slots];
+        for(int slot_index=0;slot_index<inventory.slots.Length;slot_index++){
+            if(inventorySlots[slot_index]==null){
+                GameObject slot_container = Instantiate(slotContainerPrefab, content.transform.position, content.transform.rotation);
+                slot_container.transform.SetParent(content.transform, false);
+                inventorySlots[slot_index] = slot_container;
+                inventorySlots[slot_index].GetComponent<SlotContainer>().index = slot_index;
             }
             // we need to create an inventory slot representation on the gui
-            inventory.slots[slot_index].transform.SetParent(content.transform, false);
-            inventory.slots[slot_index].GetComponent<SlotContainer>().inventorySlot = Instantiate(slotButtonPrefab, inventory.slots[slot_index].GetComponent<SlotContainer>().transform.position, inventory.slots[slot_index].GetComponent<SlotContainer>().transform.rotation);
-            inventory.slots[slot_index].GetComponent<SlotContainer>().inventorySlot.transform.SetParent(inventory.slots[slot_index].transform, false);
-            inventory.slots[slot_index].GetComponent<SlotContainer>().inventorySlot.transform.localPosition = new Vector3(0, 0, 0);
+            // inventorySlots[slot_index].transform.SetParent(content.transform, false);
+            inventorySlots[slot_index].GetComponent<SlotContainer>().inventorySlot = Instantiate(slotButtonPrefab, inventorySlots[slot_index].GetComponent<SlotContainer>().transform.position, inventorySlots[slot_index].GetComponent<SlotContainer>().transform.rotation);
+            inventorySlots[slot_index].GetComponent<SlotContainer>().inventorySlot.transform.SetParent(inventorySlots[slot_index].transform, false);
+            inventorySlots[slot_index].GetComponent<SlotContainer>().inventorySlot.transform.localPosition = new Vector3(0, 0, 0);
         }
     }
 
-    public virtual void UpdateSlot(int slot_index, Item new_item, GameObject test=null){
-        Color newColor = inventory.slots[slot_index].GetComponent<SlotContainer>().inventorySlot.transform.GetChild(1).GetComponent<Image>().color;
-        if(test==null){
-            inventory.slots[slot_index].GetComponent<SlotContainer>().inventorySlot.transform.GetChild(0).GetComponent<Text>().text = new_item.name;
-            inventory.slots[slot_index].GetComponent<SlotContainer>().inventorySlot.transform.GetChild(1).GetComponent<Image>().sprite = new_item.icon;
-            newColor.a = 1;
-            inventory.slots[slot_index].GetComponent<SlotContainer>().inventorySlot.transform.GetChild(1).GetComponent<Image>().color = newColor;
-            inventory.slots[slot_index].GetComponent<SlotContainer>().inventorySlot.transform.GetChild(2).GetComponent<Text>().text = inventory.slots[slot_index].GetComponent<SlotContainer>().inventorySlot.GetComponent<InventorySlot>().stack_size.ToString();
+    public virtual void UpdateSlot(Component sender, object data){
+        if(data.GetType().ToString()!="ItemSlot"){
+            Debug.LogError("Invalid update data type");
+            return;
+        }
+        ItemSlot slot = (ItemSlot)data;
+        Color newColor = inventorySlots[slot.index].GetComponent<SlotContainer>().inventorySlot.transform.GetChild(1).GetComponent<Image>().color;
+        // ideally only this code should run in every instance
+        if(slot.item==null){
+            newColor.a = 0;
+            inventorySlots[slot.index].GetComponent<SlotContainer>().inventorySlot.transform.GetChild(0).GetComponent<Text>().text = null;
+            inventorySlots[slot.index].GetComponent<SlotContainer>().inventorySlot.transform.GetChild(1).GetComponent<Image>().sprite = null;
+            inventorySlots[slot.index].GetComponent<SlotContainer>().inventorySlot.transform.GetChild(2).GetComponent<Text>().text = null;
         }else{
-            if(new_item==null){
-                test.transform.GetChild(0).GetComponent<Text>().text = null;
-                test.transform.GetChild(1).GetComponent<Image>().sprite = null;
-                newColor.a = 0;
-                inventory.slots[slot_index].GetComponent<SlotContainer>().inventorySlot.transform.GetChild(1).GetComponent<Image>().color = newColor;
-                inventory.slots[slot_index].GetComponent<SlotContainer>().inventorySlot.transform.GetChild(2).GetComponent<Text>().text = null;
-            }else{
-                Debug.Log("Test name: " + test.GetComponent<InventorySlot>().item.name);
-                test.transform.GetChild(0).GetComponent<Text>().text = new_item.name;
-                test.transform.GetChild(1).GetComponent<Image>().sprite = new_item.icon;
-                newColor.a = 1;
-                inventory.slots[slot_index].GetComponent<SlotContainer>().inventorySlot.transform.GetChild(1).GetComponent<Image>().color = newColor;
-                inventory.slots[slot_index].GetComponent<SlotContainer>().inventorySlot.transform.GetChild(2).GetComponent<Text>().text = inventory.slots[slot_index].GetComponent<SlotContainer>().inventorySlot.GetComponent<InventorySlot>().stack_size.ToString();
-            }
+            newColor.a = 1;
+            inventorySlots[slot.index].GetComponent<SlotContainer>().inventorySlot.transform.GetChild(0).GetComponent<Text>().text = slot.item.name;
+            inventorySlots[slot.index].GetComponent<SlotContainer>().inventorySlot.transform.GetChild(1).GetComponent<Image>().sprite = slot.item.icon;
+            inventorySlots[slot.index].GetComponent<SlotContainer>().inventorySlot.transform.GetChild(2).GetComponent<Text>().text = slot.stack_size.ToString();
         }
+        inventorySlots[slot.index].GetComponent<SlotContainer>().inventorySlot.transform.GetChild(1).GetComponent<Image>().color = newColor;
+
+        // we also need to change the underlying value of the InventorySlotButton, which honestly is so fucked up because there's too many places this is stored
+        inventorySlots[slot.index].GetComponent<SlotContainer>().inventorySlot.GetComponent<InventorySlot>().item = slot.item;
     }
 
+    // this function may be outdated with events update :)
     public virtual void EmptySlot(int slot_index){
-        Color newColor = inventory.slots[slot_index].GetComponent<SlotContainer>().inventorySlot.transform.GetChild(1).GetComponent<Image>().color;
+        Color newColor = inventorySlots[slot_index].GetComponent<SlotContainer>().inventorySlot.transform.GetChild(1).GetComponent<Image>().color;
         newColor.a = 0;
-        inventory.slots[slot_index].GetComponent<SlotContainer>().inventorySlot.transform.GetChild(0).GetComponent<Text>().text = null;
-        inventory.slots[slot_index].GetComponent<SlotContainer>().inventorySlot.transform.GetChild(1).GetComponent<Image>().sprite = null;
-        inventory.slots[slot_index].GetComponent<SlotContainer>().inventorySlot.transform.GetChild(1).GetComponent<Image>().color = newColor;
+        inventorySlots[slot_index].GetComponent<SlotContainer>().inventorySlot.transform.GetChild(0).GetComponent<Text>().text = null;
+        inventorySlots[slot_index].GetComponent<SlotContainer>().inventorySlot.transform.GetChild(1).GetComponent<Image>().sprite = null;
+        inventorySlots[slot_index].GetComponent<SlotContainer>().inventorySlot.transform.GetChild(1).GetComponent<Image>().color = newColor;
+    }
+
+    public virtual void ToggleUI(Component sender, object data){
+        hudView.SetActive((bool)data);
     }
 }

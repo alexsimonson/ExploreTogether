@@ -23,6 +23,5 @@ public class Gun : Weapon {
 
     public void Reload(GameObject owner){
         owner.GetComponent<PlayerCombat>().audioSource.GetComponent<AudioSource>().PlayOneShot(reloadSound);
-        Debug.Log("Reloading the fucking gun");
     }
 }

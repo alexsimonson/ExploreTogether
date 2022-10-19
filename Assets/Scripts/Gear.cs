@@ -7,45 +7,37 @@ public class Gear : Inventory, IInventory {
     GameObject content;
     void Awake(){
         max_slots=12;
-        slots = new GameObject[max_slots];
+        slots = new ItemSlot[max_slots];
+        // this initialization is required, otherwise the array slots themselves are NULL, and not an ItemSlot...
+        for(int i=0;i<max_slots;i++){
+            slots[i] = ScriptableObject.CreateInstance("ItemSlot") as ItemSlot;
+            slots[i].item = null;
+            slots[i].stack_size = 0;
+            slots[i].index = i;
+        }
     }
 
     // Start is called before the first frame update
     void Start(){
+        onInventoryChanged = Resources.Load("Events/EquipmentChanged", typeof(GameEvent)) as GameEvent;
         manager = GameObject.Find("Manager").GetComponent<Manager>();
         ListInventory();
     }
-
-
-    // Update is called once per frame
-    void Update(){
-        PlayerInput();
-    }
     
     public override void Initialize(){
-        RelevantScrollView = manager.hud.transform.GetChild(5).gameObject;
-        content = manager.hud.transform.GetChild(5).gameObject.transform.GetChild(0).GetChild(0).gameObject;
-        manager.hud.transform.GetChild(5).gameObject.SetActive(false);
-        int i=0;
-        foreach(Transform child in content.transform){
-            slots[i] = child.gameObject;
-            slots[i].GetComponent<SlotContainer>().index = i;
-            i++;
-        }
+        
     }
 
     public override void AddItem(Item new_item){
         if(new_item.stack){
             // we should FindItemInSlot
             int slot_index = FindItemInSlot(new_item);
-            Debug.Log("Found slot index: " + slot_index);
             if(slot_index < 0){
                 // there was no slot found containing this item, we should add to the next available slot
                 AddItemCheck(new_item);
             }else{
-                Debug.Log("We are increasing");
-                slots[slot_index].GetComponent<SlotContainer>().inventorySlot.GetComponent<InventorySlot>().stack_size++;
-                RelevantScrollView.GetComponent<InventoryUI>().UpdateSlot(slot_index, new_item);
+                slots[slot_index].stack_size++;
+                // this data needs passed to the UI, so it can update
             }
         }else{
             AddItemCheck(new_item);
@@ -56,10 +48,10 @@ public class Gear : Inventory, IInventory {
         int empty_slot_index = FindEmptySlot();
         if(empty_slot_index >= 0){
             // we should add to this slot
-            slots[empty_slot_index].GetComponent<SlotContainer>().inventorySlot.GetComponent<InventorySlot>().item = new_item;
-            slots[empty_slot_index].GetComponent<SlotContainer>().inventorySlot.GetComponent<InventorySlot>().stack_size = 1;
+            slots[empty_slot_index].item = new_item;
+            slots[empty_slot_index].stack_size = 1;
             // this data needs passed to the UI, so it can update
-            manager.hud.transform.GetChild(5).gameObject.GetComponent<InventoryUI>().UpdateSlot(empty_slot_index, new_item);
+            // manager.hud.transform.GetChild(5).gameObject.GetComponent<InventoryUI>().UpdateSlot(empty_slot_index, new_item);
         }else{
             Debug.Log("Inventory is full, cannot add item");
         }
@@ -67,30 +59,22 @@ public class Gear : Inventory, IInventory {
 
     int FindEmptySlot(){
         for(int slot_index=0;slot_index<slots.Length;slot_index++){
-            if(slots[slot_index].GetComponent<SlotContainer>().inventorySlot.GetComponent<InventorySlot>().item==null) return slot_index;
+            if(slots[slot_index].item==null) return slot_index;
         }
         return -1;
     }
 
     int FindItemInSlot(Item find_item){
         for(int slot_index=0;slot_index<slots.Length;slot_index++){
-            if(slots[slot_index]!=null && slots[slot_index].GetComponent<SlotContainer>().inventorySlot!=null){
-                if(slots[slot_index].GetComponent<SlotContainer>().inventorySlot.GetComponent<InventorySlot>().item!=null){
-                    if(slots[slot_index].GetComponent<SlotContainer>().inventorySlot.GetComponent<InventorySlot>().item.id==find_item.id && slots[slot_index].GetComponent<SlotContainer>().inventorySlot.GetComponent<InventorySlot>().stack_size < find_item.max_stack_size){
-                        Debug.Log("Slot stack size: " + slots[slot_index].GetComponent<SlotContainer>().inventorySlot.GetComponent<InventorySlot>().stack_size.ToString());
-                        Debug.Log(find_item.name + " max stack size: " + find_item.max_stack_size.ToString());
-                        return slot_index;
-                    }
-                }
-            }
+            if(slots[slot_index].item.id==find_item.id && slots[slot_index].stack_size < find_item.max_stack_size) return slot_index;
         }
         return -1;
     }
 
     public override void ListInventory(){
-        foreach(GameObject slot in slots){
-            if(slot!=null && slot.GetComponent<SlotContainer>().inventorySlot!=null && slot.GetComponent<SlotContainer>().inventorySlot.GetComponent<EquipmentSlot>().item!=null){
-                Debug.Log("Slot item: " + slot.GetComponent<SlotContainer>().inventorySlot.GetComponent<EquipmentSlot>().item.name);
+        foreach(ItemSlot slot in slots){
+            if(slot!=null && slot.item!=null){
+                Debug.Log("Slot item: " + slot.item.name);
             }
         }
     }

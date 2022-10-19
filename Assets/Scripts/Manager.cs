@@ -29,6 +29,11 @@ public class Manager : MonoBehaviour {
 
     public Item dungeon_pass;
 
+
+    // holding player inventory here for now during rehaul
+    public Inventory player_inventory;
+    public Gear player_gear;
+
     // eventually convert this to SO enum
     public enum GameState{
         Menu,
@@ -58,6 +63,10 @@ public class Manager : MonoBehaviour {
         hud.transform.GetChild(8).gameObject.SetActive(true);
         player = Instantiate(playerPrefab, playerSpawnPoint, Quaternion.identity);
         player.name = "Player";
+        player_inventory = ScriptableObject.CreateInstance("Inventory") as Inventory;
+        // player_inventory
+        player_gear = ScriptableObject.CreateInstance("Gear") as Gear;
+        player_gear.Initialize();
         // maze = Instantiate(maze_generator_prefab);
         // maze.GetComponent<Maze>().manager = gameObject.GetComponent<Manager>();
         Setup();
@@ -83,7 +92,6 @@ public class Manager : MonoBehaviour {
         game_rules.Initialize();
         game_rules.SpawnEnemies();
         player.GetComponent<PlayerMovement>().AllowMovement();
-        player.GetComponent<Inventory>().ResetUI();
     }
 
     public Item GenerateItem(){

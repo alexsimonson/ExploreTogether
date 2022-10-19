@@ -30,6 +30,7 @@ public class PlayerCombat : MonoBehaviour{
         if(revoke_combat){
             return;
         }
+        if(weaponSlot==null) return;
         if(weaponSlot.item==null){
             return;
         }
@@ -79,5 +80,9 @@ public class PlayerCombat : MonoBehaviour{
 
     public void AllowCombat(){
         revoke_combat = false;
+    }
+
+    public void ToggleCombat(Component sender, object data){
+        revoke_combat = (bool)data;
     }
 }

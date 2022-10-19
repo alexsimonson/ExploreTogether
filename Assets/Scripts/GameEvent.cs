@@ -8,6 +8,7 @@ public class GameEvent : ScriptableObject {
     public List<GameEventListener> listeners = new List<GameEventListener>();
 
     public void Raise(Component sender, object data){
+        // this will break if we ever set one of these objects inactive...
         foreach(GameEventListener listener in listeners){
             listener.OnEventRaised(sender, data);
         }

@@ -18,8 +18,10 @@ public class Resource : MonoBehaviour, IInteraction {
     public Material empty;
 
     private MeshRenderer mesh_renderer;
+    Manager manager;
 
     void Start(){
+        manager = GameObject.Find("Manager").GetComponent<Manager>();
         mesh_renderer = gameObject.GetComponent<MeshRenderer>();
         mesh_renderer.material = active;
     }
@@ -33,7 +35,7 @@ public class Resource : MonoBehaviour, IInteraction {
                 Debug.Log("Must add items as reward in order to interact with resources");
                 return;
             }
-            interactingWith.GetComponent<Inventory>().AddItem(GiveResource());
+            manager.player_inventory.AddItem(GiveResource());
             if(single_use){
                 Depleted();
             }else{

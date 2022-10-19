@@ -19,14 +19,7 @@ public class DeathPanel : MonoBehaviour{
     void OnRestartButtonPressed(){
         // pop the transition panel
         onGameStateChanged.Raise(this, Manager.GameState.Transition);
-        // manager.hud.transform.GetChild(8).gameObject.SetActive(true);
         SceneManager.LoadScene("Scenes/Maze");
-        // manager.player.GetComponent<PlayerHealth>().ResetHealth();
-        // manager.game_rules.ResetGameMode();
-        // manager.player.GetComponent<Inventory>().Clear();
-        // manager.player.GetComponent<Gear>().Clear();
-        // manager.player.GetComponent<Inventory>().ResetUI();
         Cursor.visible = false;
-        // gameObject.SetActive(false);
     }
 }

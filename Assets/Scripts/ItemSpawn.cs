@@ -6,15 +6,16 @@ public class ItemSpawn : MonoBehaviour, IInteraction {
 
     public Item item;
     private MeshRenderer mesh_renderer;
+    Manager manager;
     
     void Start(){
+        manager = GameObject.Find("Manager").GetComponent<Manager>();
         mesh_renderer = gameObject.GetComponent<MeshRenderer>();
     }
 
     public void Interaction(GameObject interacting){
-        Debug.Log("Interacting with item spawn");
         if(item){
-            interacting.GetComponent<Inventory>().AddItem(item);
+            manager.player_inventory.AddItem(item);
             Destroy(gameObject);
         }else{
             Debug.Log("No item to reward lol");

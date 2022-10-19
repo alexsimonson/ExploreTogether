@@ -227,10 +227,10 @@ GameObject:
   - component: {fileID: 5364875320611121767}
   - component: {fileID: 5797847245022985723}
   - component: {fileID: -3053763300026531410}
-  - component: {fileID: 6489062375140490175}
   - component: {fileID: 6654121761325831222}
-  - component: {fileID: 4202415353013811586}
   - component: {fileID: 3076970631314084794}
+  - component: {fileID: 765476320457443884}
+  - component: {fileID: 5601816436168076932}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -396,53 +396,6 @@ MonoBehaviour:
   currentHealth: 100
   onPlayerHealthChanged: {fileID: 11400000, guid: a592f3db4cf46e34882c8cff2af6b280, type: 2}
   onGameStateChanged: {fileID: 11400000, guid: 99e6f07bed15a9945bcfc40b81c09042, type: 2}
---- !u!114 &6489062375140490175
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8593980595237084293}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 53d6c78ee3f8c8242b8fa789b6631bee, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  max_slots: 0
-  slots:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  RelevantScrollView: {fileID: 0}
-  manager: {fileID: 0}
-  sword_test: {fileID: 11400000, guid: 02ad56c938a24b04f9fbc5904de285ec, type: 2}
-  gun_test: {fileID: 11400000, guid: 98bd183e6b201ac4696ef525bc5b99d4, type: 2}
-  dungeon_pass: {fileID: 11400000, guid: 2f8059e44d675d840b1830a9f3c41b78, type: 2}
 --- !u!114 &6654121761325831222
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -457,37 +410,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interactWith: {fileID: 0}
   itemInteraction: []
---- !u!114 &4202415353013811586
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8593980595237084293}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea5b9393979db0f49972d55b26b7f515, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  max_slots: 0
-  slots:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  RelevantScrollView: {fileID: 0}
-  manager: {fileID: 0}
-  sword_test: {fileID: 0}
-  gun_test: {fileID: 0}
-  dungeon_pass: {fileID: 0}
+  camera: {fileID: 86083475107608459}
 --- !u!114 &3076970631314084794
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -506,3 +429,69 @@ MonoBehaviour:
   playerCamera: {fileID: 0}
   crosshair: {fileID: 0}
   audioSource: {fileID: 0}
+--- !u!114 &765476320457443884
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8593980595237084293}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39a6801e8929c114f8679a2a6ea5d5e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onToggleInventory: {fileID: 11400000, guid: ad384330886754346b7e3979643cd4bb, type: 2}
+  hud_visible_state: 0
+--- !u!114 &5601816436168076932
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8593980595237084293}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dbac9a5f7d779254ab4671c813b4b1a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameEvent: {fileID: 11400000, guid: ad384330886754346b7e3979643cd4bb, type: 2}
+  response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 5364875320611121767}
+        m_TargetAssemblyTypeName: PlayerLook, Assembly-CSharp
+        m_MethodName: ToggleLook
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 3076970631314084794}
+        m_TargetAssemblyTypeName: PlayerCombat, Assembly-CSharp
+        m_MethodName: ToggleCombat
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 765476320457443884}
+        m_TargetAssemblyTypeName: PlayerInput, Assembly-CSharp
+        m_MethodName: HandleMouseState
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2

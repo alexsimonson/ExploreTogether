@@ -170,7 +170,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inventorySlot: {fileID: 0}
+  inventoryUI: {fileID: 0}
+  gearUI: {fileID: 0}
   index: 0
+  isEquipmentSlot: 0
+  onInventoryChanged: {fileID: 11400000, guid: 97b6aa3dc4c8e0b4088ba7ae5ca322d5, type: 2}
+  onEquipmentChanged: {fileID: 11400000, guid: 5ded36581e30fe44c88bc25a0cb4bd4b, type: 2}
 --- !u!225 &4402921139943934021
 CanvasGroup:
   m_ObjectHideFlags: 0

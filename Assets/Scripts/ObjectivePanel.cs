@@ -11,6 +11,7 @@ public class ObjectivePanel : MonoBehaviour {
 
     [Header("Events")]
     public GameEvent onGameStateChanged;
+    public GameEvent onToggleInventory;
     
     void Start(){
         manager = GameObject.Find("Manager").GetComponent<Manager>();
@@ -25,8 +26,9 @@ public class ObjectivePanel : MonoBehaviour {
         Debug.Log("Generate another dungeon");
         onGameStateChanged.Raise(this, Manager.GameState.Transition);
         // manager.hud.transform.GetChild(8).gameObject.SetActive(true);
-        manager.player.GetComponent<Inventory>().SetDisplayUI(false);
-        manager.player.GetComponent<Gear>().SetDisplayUI(false);
+        // manager.player_inventory.SetDisplayUI(false);
+        onToggleInventory.Raise(this, false);
+        // manager.player_gear.SetDisplayUI(false);
         manager.game_rules.ProgressGameMode();
         // gameObject.SetActive(false);
     }

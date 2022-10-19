@@ -20,18 +20,13 @@ public class PlayerLook : MonoBehaviour
 
     public bool revoke_look = false;
 
-
-    // Start is called before the first frame update
-    private void Start()
-    {
+    private void Start(){
         cam = GetComponentInChildren<Camera>();
         Cursor.lockState = CursorLockMode.Confined; // originally this was .Locked
         Cursor.visible = false;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
+    void Update(){
         if(!revoke_look){
             MyInput();
             cam.transform.localRotation = Quaternion.Euler(xRotation, 0, 0);
@@ -55,5 +50,9 @@ public class PlayerLook : MonoBehaviour
 
     public void AllowLook(){
         revoke_look = false;
+    }
+
+    public void ToggleLook(Component sender, object data){
+        revoke_look = (bool)data;
     }
 }

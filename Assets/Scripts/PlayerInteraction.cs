@@ -10,6 +10,7 @@ public class PlayerInteraction : MonoBehaviour {
     private GameObject interactionText;
     public List<Item> itemInteraction;  // temporary to avoid functionality loss
     Manager manager;
+    public GameObject camera;
 
     void Start(){
         // maybe this should be inside of the manager?
@@ -35,8 +36,8 @@ public class PlayerInteraction : MonoBehaviour {
 
     private void InteractRaycast(){
         RaycastHit hit;
-        if(gameObject.GetComponent<PlayerCombat>().playerCamera!=null){
-            if(Physics.Raycast(gameObject.GetComponent<PlayerCombat>().playerCamera.transform.position, gameObject.GetComponent<PlayerCombat>().playerCamera.transform.forward * 1, out hit, 2) && hit.transform.gameObject.layer==7){
+        if(camera!=null){
+            if(Physics.Raycast(camera.transform.position, camera.transform.forward * 1, out hit, 2) && hit.transform.gameObject.layer==7){
                 GiveInteractWith(hit.transform.gameObject);
                 return;
             }
@@ -72,8 +73,6 @@ public class PlayerInteraction : MonoBehaviour {
     }
 
     public void ChangeInteractionWithText(){
-        Debug.Log("interact with below");
-        Debug.Log(interactWith);
         string interacting_with_text = interactWith.GetComponent<IInteraction>().InteractionName();
         interactionText.GetComponent<Text>().text = "Press F to Interact with " + interacting_with_text;
     }
