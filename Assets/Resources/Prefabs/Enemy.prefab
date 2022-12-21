@@ -130,6 +130,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 100
   currentHealth: 100
+  onEnemyKilled: {fileID: 11400000, guid: 1e3961c471925124bb666c72b0c8eada, type: 2}
 --- !u!114 &8088579920938799388
 MonoBehaviour:
   m_ObjectHideFlags: 0

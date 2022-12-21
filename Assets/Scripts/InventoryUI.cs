@@ -20,6 +20,7 @@ public class InventoryUI : MonoBehaviour {
         hudView = gameObject.transform.GetChild(0).gameObject;
         content = hudView.transform.GetChild(0).GetChild(0).gameObject;
         DrawInventoryUI(manager.player_inventory);
+        Debug.Log("InventoryUI Has been started");
     }
 
     public virtual void DrawInventoryUI(Inventory inventory){

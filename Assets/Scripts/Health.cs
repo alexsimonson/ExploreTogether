@@ -9,6 +9,10 @@ public class Health : MonoBehaviour {
     private int layer;
 	private Manager manager;
 
+	[Header("Events")]
+    public GameEvent onEnemyKilled;
+	public GameEvent onSpawnerKilled;
+
     public virtual void Start(){
 		manager = GameObject.Find("Manager").GetComponent<Manager>();
         layer = gameObject.layer;    
@@ -38,7 +42,14 @@ public class Health : MonoBehaviour {
 	// this needs overhauled with an event
     private void HandleScore(){
         if(layer==9){
-			manager.game_rules.EnemyKilled();
+			// we can handle differently via tags
+			if(gameObject.tag=="Respawn"){
+				// handle respawn points removed
+				onSpawnerKilled.Raise(this, null);
+			}else{
+				// for now we only have two types
+				onEnemyKilled.Raise(this, null);
+			}
         }
     }
 

@@ -33,7 +33,7 @@ public class PlayerMovement : MonoBehaviour
     
     public bool revoke_movement = false;
 
-    private void Start(){
+    void Awake(){
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
     }

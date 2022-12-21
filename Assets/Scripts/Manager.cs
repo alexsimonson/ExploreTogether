@@ -7,7 +7,6 @@ public class Manager : MonoBehaviour {
 
     public GameObject hudPrefab;
     public GameObject game_mode_prefab;
-    public GameObject maze_generator_prefab;
     public GameObject playerPrefab;
     public GameObject enemy_prefab;
 
@@ -25,7 +24,8 @@ public class Manager : MonoBehaviour {
 
     public bool pause_functionality = false;
 
-    public Vector3 playerSpawnPoint = new Vector3(0, 1.5f, 0);
+    // public Vector3 playerSpawnPoint = new Vector3(0, 1.5f, 0);
+    public Vector3 playerSpawnPoint = new Vector3(0, 2, 0);
 
     public Item dungeon_pass;
 
@@ -49,8 +49,8 @@ public class Manager : MonoBehaviour {
         enemy_prefab = Resources.Load("Prefabs/Enemy", typeof(GameObject)) as GameObject;
         hudPrefab = Resources.Load("Prefabs/HUD", typeof(GameObject)) as GameObject;
         playerPrefab = Resources.Load("Prefabs/Player", typeof(GameObject)) as GameObject;
-        game_mode_prefab = Resources.Load("Prefabs/WaveSurvivalGM", typeof(GameObject)) as GameObject;
-        maze_generator_prefab = Resources.Load("Prefabs/MazeGenerator", typeof(GameObject)) as GameObject;
+        game_mode_prefab = Resources.Load("Prefabs/GMWaveSurvival", typeof(GameObject)) as GameObject;
+        // game_mode_prefab = Resources.Load("Prefabs/GMDungeonCrawler", typeof(GameObject)) as GameObject;
         item_bank = Resources.LoadAll<Item>("Items");
         dungeon_pass = Resources.Load("Items/Dungeon Pass", typeof(Item)) as Item;
     }
@@ -67,30 +67,28 @@ public class Manager : MonoBehaviour {
         // player_inventory
         player_gear = ScriptableObject.CreateInstance("Gear") as Gear;
         player_gear.Initialize();
-        // maze = Instantiate(maze_generator_prefab);
-        // maze.GetComponent<Maze>().manager = gameObject.GetComponent<Manager>();
         Setup();
     }
 
     public void Setup(){
-        maze = Instantiate(maze_generator_prefab);
-        maze.GetComponent<Maze>().manager = gameObject.GetComponent<Manager>();
         game_mode = Instantiate(game_mode_prefab, new Vector3(0, 0, 0), Quaternion.identity);
         game_rules = game_mode.GetComponent<IGameMode>();
+        game_rules.SpawnMap();
     }
 
-    void HandleRound(){
+    public void HandleRound(){
         game_rules.SetupNextRound();
         game_rules.Initialize();
         StartCoroutine(game_rules.BeginTransitionPeriod());
     }
 
-    public void MazeGenerated(){
+    public void MapSetupCallback(){
         // start the game mode
+        Debug.Log("Map setup callback?");
         hud.transform.GetChild(8).gameObject.SetActive(false);
         player.transform.position = playerSpawnPoint;
         game_rules.Initialize();
-        game_rules.SpawnEnemies();
+        // game_rules.SpawnEnemies();        
         player.GetComponent<PlayerMovement>().AllowMovement();
     }
 

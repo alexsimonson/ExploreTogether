@@ -48,7 +48,9 @@ public class Weapon : Equipment {
         int layerMask = 1 << 9;
         if(Physics.Raycast(owner.GetComponent<PlayerCombat>().playerCamera.transform.position, owner.GetComponent<PlayerCombat>().playerCamera.transform.forward * 1000, out hit, Mathf.Infinity, layerMask)){
             Debug.DrawRay(owner.GetComponent<PlayerCombat>().playerCamera.transform.position, owner.GetComponent<PlayerCombat>().playerCamera.transform.forward * hit.distance, Color.red, 2.0f, false);
-            hit.transform.gameObject.GetComponent<Health>().DealDamage(100);
+            if(hit.transform.gameObject.GetComponent<Health>()!=null){
+                hit.transform.gameObject.GetComponent<Health>().DealDamage(100);
+            }
         }else{
             Debug.DrawRay(owner.GetComponent<PlayerCombat>().playerCamera.transform.position, owner.GetComponent<PlayerCombat>().playerCamera.transform.forward * 1000, Color.green, 2.0f, false);
         }

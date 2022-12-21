@@ -51,6 +51,7 @@ public class Maze : MonoBehaviour {
     }
 
     void Start(){
+        manager = GameObject.Find("Manager").GetComponent<Manager>();
         nav_builder = gameObject.GetComponent<NavigationBuilder>();
     }
 
@@ -78,7 +79,7 @@ public class Maze : MonoBehaviour {
         // when the maze is generated we should alert the manager if there is one
         if(manager==null) return;
         nav_builder.BuildNavigation(surfaces);
-        manager.MazeGenerated();
+        manager.MapSetupCallback();
 
     }
 
@@ -332,7 +333,6 @@ public class Maze : MonoBehaviour {
         // ensure the mazePosition is n-depth away from the player (we need a function for this)
         GameObject enemy = null;
         enemy = Instantiate(enemyPrefab, new Vector3(generated_nodes[random_index].mazePosition.x * prefabSize, generated_nodes[random_index].mazePosition.y * prefabSize + 1.5f, generated_nodes[random_index].mazePosition.z * prefabSize), Quaternion.identity);
-        
         enemy.transform.SetParent(gameObject.transform);
         enemy.name = "Enemy";
     }
