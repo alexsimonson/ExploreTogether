@@ -34,7 +34,8 @@ public class NPC : MonoBehaviour{
         Attack,
         Defend,
         Flee,
-        Knockback
+        Knockback,
+        Frozen
     }
 
     private GameObject chaseTarget = null;
@@ -47,7 +48,7 @@ public class NPC : MonoBehaviour{
     public AnimationClip equipAC;
     public AnimationClip attackSlashAC;
     public float attackSpeed = .6f;
-    public int attackDamage = 100;
+    public int attackDamage = 20;
 
     private bool isAttacking = false;
     private bool isFleeing = false;
@@ -85,61 +86,67 @@ public class NPC : MonoBehaviour{
     }
 
     void Update(){
-        if(!isDead){
-            timer += Time.deltaTime;
-            AnimateMovement();
-            FOVScan();  // always watching
-            // DrawFOV();
-            if(debugMode) Debug.Log("Current state: " + state.ToString());
-            if(type==Type.Zombie){
-                // we should be looking for nearby prey, otherwise wandering around
-                if(chaseTarget==null || state==State.Wander){
-                    ZombieWander();
-                }else if(chaseTarget && state==State.Chase){
-                    ZombieChase();
-                }else if(chaseTarget && state==State.Attack){
-                    if(!isAttacking){
-                        StartCoroutine(ZombieAttack());
-                    }
+        if(isDead) return;        
+        timer += Time.deltaTime;
+        AnimateMovement();
+        FOVScan();  // always watching
+        // DrawFOV();
+        if(debugMode) Debug.Log("Current state: " + state.ToString());
+        if(state==State.Frozen){
+            gameObject.GetComponent<NavMeshAgent>().isStopped = true;
+            Debug.Log("The state is frozen man");
+            return;
+        }else{
+            gameObject.GetComponent<NavMeshAgent>().isStopped = false;
+        }
+        if(type==Type.Zombie){
+            // we should be looking for nearby prey, otherwise wandering around
+            if(chaseTarget==null || state==State.Wander){
+                ZombieWander();
+            }else if(chaseTarget && state==State.Chase){
+                ZombieChase();
+            }else if(chaseTarget && state==State.Attack){
+                if(!isAttacking){
+                    StartCoroutine(ZombieAttack());
                 }
-            }else if(type==Type.Citizen){
-                // we should be wandering around, unless we feel threatened, then we should seek help
-                if(CheckThreats()){
-                    state = State.Flee;
-                }else{
-                    state = State.Wander;
-                }
+            }
+        }else if(type==Type.Citizen){
+            // we should be wandering around, unless we feel threatened, then we should seek help
+            if(CheckThreats()){
+                state = State.Flee;
+            }else{
+                state = State.Wander;
+            }
 
-                // if there are no threats, we should check if we have any tasks before falling back on "default" behavior
-                if(state==State.Flee){
-                    // run away from the zombie
-                    if(debugMode) // Debug.Log("Citizen should be fleeing");
-                    if(!isFleeing){
-                        StartCoroutine(Flee());
-                    }
+            // if there are no threats, we should check if we have any tasks before falling back on "default" behavior
+            if(state==State.Flee){
+                // run away from the zombie
+                if(debugMode) // Debug.Log("Citizen should be fleeing");
+                if(!isFleeing){
+                    StartCoroutine(Flee());
+                }
+            }else{
+                if(debugMode) Debug.Log("COUNT OF TASKS: " + GetComponent<Brain>().tasks.Count);
+                if(GetComponent<Brain>().tasks.Count > 0){
+                    // we should accomplish these tasks before default behavior
+                    AccomplishTask(GetComponent<Brain>().tasks);
                 }else{
-                    if(debugMode) Debug.Log("COUNT OF TASKS: " + GetComponent<Brain>().tasks.Count);
-                    if(GetComponent<Brain>().tasks.Count > 0){
-                        // we should accomplish these tasks before default behavior
-                        AccomplishTask(GetComponent<Brain>().tasks);
-                    }else{
-                        if(debugMode) Debug.Log("NO tasks to accomplish");
-                        if(state==State.Wander){
-                            Wander();
-                        }
+                    if(debugMode) Debug.Log("NO tasks to accomplish");
+                    if(state==State.Wander){
+                        Wander();
                     }
                 }
-            }else if(type==Type.Guard){
-                // we should patrol or guard certain areas, unless our help is needed
-                if(state==State.Defend){
-                    GuardDefend();
-                }
-                // equip and unequip weapon
-                
             }
-            if(state==State.Knockback){
-                StartCoroutine(IKnockback());
+        }else if(type==Type.Guard){
+            // we should patrol or guard certain areas, unless our help is needed
+            if(state==State.Defend){
+                GuardDefend();
             }
+            // equip and unequip weapon
+            
+        }
+        if(state==State.Knockback){
+            StartCoroutine(IKnockback());
         }
     }
 
@@ -464,5 +471,18 @@ public class NPC : MonoBehaviour{
         yield return new WaitForSeconds(.2f);
         gameObject.GetComponent<NavMeshAgent>().enabled = true;
         state = State.Wander;
+    }
+
+    public void FreezeNPC(float time){
+        StartCoroutine(IFreezeTime(time));
+    }
+
+    IEnumerator IFreezeTime(float time){
+        Debug.Log("Freezing NPC");
+        var prior_state = state;
+        state = State.Frozen;
+        yield return new WaitForSeconds(time);
+        state = prior_state;
+        Debug.Log("NPC UNFrozen");
     }
 }

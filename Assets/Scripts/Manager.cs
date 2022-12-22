@@ -74,6 +74,7 @@ public class Manager : MonoBehaviour {
         game_mode = Instantiate(game_mode_prefab, new Vector3(0, 0, 0), Quaternion.identity);
         game_rules = game_mode.GetComponent<IGameMode>();
         game_rules.SpawnMap();
+        MapSetupCallback();
     }
 
     public void HandleRound(){

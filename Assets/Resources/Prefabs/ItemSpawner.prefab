@@ -110,6 +110,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   item_offered: {fileID: 0}
+  onScoreSpent: {fileID: 11400000, guid: 1b3d712e03ea9d64ab35d85251846867, type: 2}
 --- !u!65 &4339611115943938095
 BoxCollider:
   m_ObjectHideFlags: 0

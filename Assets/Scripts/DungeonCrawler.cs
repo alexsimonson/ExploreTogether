@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class DungeonCrawler : GameMode, IGameMode {
-
+    bool killable_spawners = false;
     int current_round = 0;
     int score = 0;
     static int enemies_spawned_this_round_max_default = 5;
@@ -13,7 +13,14 @@ public class DungeonCrawler : GameMode, IGameMode {
     int enemies_currently_spawned = 0;
     int enemies_spawned_this_round = 0;
     int enemies_eliminated_this_round = 0;
+    int spawners_this_round = 1;
+    int spawners_eliminated_this_round = 0;
+
+    // enemy spawners
+    public GameObject[] enemy_spawners;
+
     public bool transition_period = false;
+
     public GameObject enemy_prefab;
 
     public Manager manager;
@@ -40,6 +47,39 @@ public class DungeonCrawler : GameMode, IGameMode {
         dungeon_pass = Resources.Load("Items/Dungeon Pass", typeof(Item)) as Item;
     }
 
+    // I don't think this function is used within dungeon crawler
+    void DetectWaveEnd(){
+        if(spawners_eliminated_this_round!=spawners_this_round){
+            return; // game mode is not over
+        }
+        if(enemies_currently_spawned>0){
+            return; // game mode is not over
+        }
+        ProgressGameMode();
+    }
+
+    public void SpawnerKilledListener(Component sender, object data){
+        spawners_eliminated_this_round += 1;
+        Debug.Log("spawners_eliminated_this_round: " + spawners_eliminated_this_round);
+        // DetectWaveEnd();
+    }
+
+    public void EnemyKilledListener(Component sender, object data){
+        enemies_currently_spawned -= 1;
+        enemies_eliminated_this_round += 1;
+        Debug.Log("enemies_eliminated_this_round: " + enemies_eliminated_this_round.ToString());
+        if(manager.game_rules.ShouldSpawnEnemy()){
+            // pick a random spawn point and then call spawn enemy
+            if(killable_spawners){
+                enemy_spawners = GameObject.FindGameObjectsWithTag("Respawn");
+            }
+            // we could add code to remove the closest spawner to the player from the array and then choose randomly of those
+            int rnd_index = Random.Range(0, enemy_spawners.Length);
+            enemy_spawners[rnd_index].GetComponent<RespawnPoint>().SpawnEnemy();
+        }
+        // DetectWaveEnd();
+    }
+
     public override void SpawnMap(){
         manager.maze = Instantiate(maze_generator_prefab);
         manager.maze.GetComponent<Maze>().manager = gameObject.GetComponent<Manager>();
@@ -52,23 +92,6 @@ public class DungeonCrawler : GameMode, IGameMode {
         manager.player_inventory.AddItem(gun_test);
         // manager.player_inventory.AddItem(dungeon_pass);
         EndRound();
-    }
-
-    public override void SpawnEnemies(){
-        while(enemies_currently_spawned < enemies_spawned_max && enemies_spawned_this_round < enemies_spawned_this_round_max){
-            manager.maze.GetComponent<Maze>().SpawnEnemy();
-            enemies_currently_spawned += 1;
-            enemies_spawned_this_round += 1;
-        }
-        if(enemies_currently_spawned==enemies_spawned_max){
-            // Debug.Log("Awaiting enemy death before spawning more");
-        }
-        if(enemies_spawned_this_round==enemies_spawned_this_round_max){
-            // Debug.Log("No more enemies will be spawned this round.");
-        }
-        if(enemies_eliminated_this_round==enemies_spawned_this_round_max){
-            EndRound();
-        }
     }
 
     public override bool ShouldSpawnEnemy(){
@@ -125,11 +148,6 @@ public class DungeonCrawler : GameMode, IGameMode {
         transition_period = false;
     }
 
-    public override void EnemyKilled(){
-        enemies_currently_spawned -= 1;
-        enemies_eliminated_this_round += 1;
-    }
-
     public override void ResetGameMode(){
         // we should delete every single game object that isn't essential
         manager.DestroyNonEssentialGameObjects();
@@ -152,5 +170,14 @@ public class DungeonCrawler : GameMode, IGameMode {
 
     public override bool TransitionPeriod(){
         return transition_period;
-    }    
+    }
+
+    public override List<KeyValuePair<string, int>> GetScoreData(){
+        Debug.Log("Get score data");
+        List<KeyValuePair<string, int>> listi = new List<KeyValuePair<string, int>>();
+        return listi;
+    }
+    public override int GetUnspentScore(){
+        return score;
+    }
 }

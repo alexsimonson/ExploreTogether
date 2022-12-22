@@ -5,16 +5,21 @@ using UnityEngine.UI;
 
 public class WaveSurvival : GameMode, IGameMode {
 
+    bool killable_spawners = false;
+
     int current_round = 0;
     int score = 0;
     static int enemies_spawned_this_round_max_default = 5;
     int enemies_spawned_this_round_max = enemies_spawned_this_round_max_default;  // how many enemies will spawn and be defeated before the round ends
-    int enemies_spawned_max = 10;
+    int enemies_currently_spawned_max = 10;
     int enemies_currently_spawned = 0;
     int enemies_spawned_this_round = 0;
     int enemies_eliminated_this_round = 0;
     int spawners_this_round = 1;
     int spawners_eliminated_this_round = 0;
+
+    int total_enemies_eliminated = 0;
+    int total_score = 0;
 
     // enemy spawners
     public GameObject[] enemy_spawners;
@@ -31,6 +36,8 @@ public class WaveSurvival : GameMode, IGameMode {
     public Melee sword_test;
     public Gun gun_test;
     public Item dungeon_pass;
+    public Magic blood_wand;
+    public Magic ice_wand;
 
     // game mode overhaul
     public GameObject maze_generator_prefab;
@@ -41,6 +48,8 @@ public class WaveSurvival : GameMode, IGameMode {
         sword_test = Resources.Load("Items/Sword", typeof(Melee)) as Melee;
         gun_test = Resources.Load("Items/Pistol", typeof(Gun)) as Gun;
         dungeon_pass = Resources.Load("Items/Dungeon Pass", typeof(Item)) as Item;
+        blood_wand = Resources.Load("Items/Blood Wand", typeof(Magic)) as Magic;
+        ice_wand = Resources.Load("Items/Ice Wand", typeof(Magic)) as Magic;
     }
 
     public void Start(){
@@ -51,7 +60,7 @@ public class WaveSurvival : GameMode, IGameMode {
 
     // determine when the wave will end based on some data
     void DetectWaveEnd(){
-        if(spawners_eliminated_this_round!=spawners_this_round){
+        if(killable_spawners && spawners_eliminated_this_round!=spawners_this_round){
             return; // game mode is not over
         }
         if(enemies_currently_spawned>0){
@@ -61,26 +70,56 @@ public class WaveSurvival : GameMode, IGameMode {
     }
 
     public void SpawnerKilledListener(Component sender, object data){
-        spawners_eliminated_this_round += 1;
-        Debug.Log("spawners_eliminated_this_round: " + spawners_eliminated_this_round);
-        DetectWaveEnd();
+        if(killable_spawners){
+            spawners_eliminated_this_round += 1;
+            Debug.Log("spawners_eliminated_this_round: " + spawners_eliminated_this_round);
+            DetectWaveEnd();
+        }
     }
 
     public void EnemyKilledListener(Component sender, object data){
-        EnemyKilled();
+        enemies_currently_spawned -= 1;
+        enemies_eliminated_this_round += 1;
+        total_enemies_eliminated += 1;
+        score += 10;
+        total_score += 10;
+        manager.hud.transform.GetChild(9).gameObject.GetComponent<Text>().text = "Score: " + score.ToString();
         if(manager.game_rules.ShouldSpawnEnemy()){
             // pick a random spawn point and then call spawn enemy
-            enemy_spawners = GameObject.FindGameObjectsWithTag("Respawn");
+            if(killable_spawners){
+                enemy_spawners = GameObject.FindGameObjectsWithTag("Respawn");
+            }
+            // we could add code to remove the closest spawner to the player from the array and then choose randomly of those
             int rnd_index = Random.Range(0, enemy_spawners.Length);
             enemy_spawners[rnd_index].GetComponent<RespawnPoint>().SpawnEnemy();
         }
         DetectWaveEnd();
     }
 
+    public void PlayerKilledListener(Component sender, object data){
+        if(data is int && (int)data == 0){
+            List<KeyValuePair<string, int>> scoreData = GetScoreData();
+            foreach(KeyValuePair<string, int> score in scoreData){
+                Debug.Log("key: " + score.Key);
+                Debug.Log("Value: " + score.Value.ToString());
+            }
+        }
+    }
+
+    public void ScoreSpentListener(Component sender, object data){
+        Debug.Log("score spent listener");
+        if(data is int){
+            score -= (int)data;
+            manager.hud.transform.GetChild(9).gameObject.GetComponent<Text>().text = "Score: " + score.ToString();
+        }
+    }
+
     public override void SpawnMap(){
         // we should just implement the basic wave survival scenario
-        InstantiateMap();
-        manager.MapSetupCallback();
+        manager.maze = Instantiate(maze_generator_prefab);
+        // handle the navmesh now
+        // manager.maze.GetComponent<Maze>().GetArenaPieces();
+        // manager.maze.GetComponent<Maze>().BuildMapNavigation();
     }
 
     public override void Initialize(){
@@ -92,39 +131,18 @@ public class WaveSurvival : GameMode, IGameMode {
         EndRound("Initialize");
     }
 
-    // there's a null reference here that should go away soon, it is not the game mode's responsibility for spawning enemies
-    // though it should keep track of necessary data that will be used to potentially control the spawns
-    public override void SpawnEnemies(){
-        // Debug.Log("Running the spawn enemies script");
-        // while(enemies_currently_spawned < enemies_spawned_max && enemies_spawned_this_round < enemies_spawned_this_round_max){
-        //     manager.maze.GetComponent<Maze>().SpawnEnemy();
-        //     enemies_currently_spawned += 1;
-        //     enemies_spawned_this_round += 1;
-        // }
-        // if(enemies_currently_spawned==enemies_spawned_max){
-        //     // Debug.Log("Awaiting enemy death before spawning more");
-        // }
-        // if(enemies_spawned_this_round==enemies_spawned_this_round_max){
-        //     // Debug.Log("No more enemies will be spawned this round.");
-        // }
-        // if(enemies_eliminated_this_round==enemies_spawned_this_round_max){
-        //     EndRound();
-        // }
-    }
-
     public override bool ShouldSpawnEnemy(){
-        // if(enemies_currently_spawned < enemies_spawned_max && enemies_spawned_this_round < enemies_spawned_this_round_max){
+        // if(enemies_currently_spawned < enemies_currently_spawned_max && enemies_spawned_this_round < enemies_spawned_this_round_max){
         // right now this spawner will constantly spawn enemies unless there are too many spawned at once
-        if(spawners_eliminated_this_round == spawners_this_round){
+        if(killable_spawners && spawners_eliminated_this_round == spawners_this_round){
             Debug.Log("There are no more spawners available");
             return false;
         }
-        if(enemies_currently_spawned < enemies_spawned_max){
+        if(enemies_currently_spawned < enemies_currently_spawned_max && enemies_spawned_this_round < enemies_spawned_this_round_max){
             // increase data, then return true to spawn the enemy
             enemies_currently_spawned += 1;
             enemies_spawned_this_round += 1;
             Debug.Log("enemies_currently_spawned: " + enemies_currently_spawned.ToString());
-            Debug.Log("enemies_spawned_this_round: " + enemies_spawned_this_round.ToString());
             return true;
         }
         return false;
@@ -141,17 +159,22 @@ public class WaveSurvival : GameMode, IGameMode {
         current_round += 1;
         manager.hud.transform.GetChild(0).gameObject.GetComponent<Text>().text = "Round " + current_round.ToString();
         IncreaseEnemies();
-        RewardRoundBonus();
+        if(current_round!=1){
+            RewardRoundBonus();
+        }
         ResetRoundDefaults();
     }
 
     // this algorithm will determine how many enemies are present in each round
     void IncreaseEnemies(){
         enemies_spawned_this_round_max += 1;
+        Debug.Log("New max enemies spawned this round: " + enemies_spawned_this_round_max.ToString());
     }
 
     void RewardRoundBonus(){
         score += 1000;
+        total_score += 1000;
+        manager.hud.transform.GetChild(9).gameObject.GetComponent<Text>().text = "Score: " + score.ToString();
     }
 
     public override GameObject[] GetPlayerInventoryBackup(){
@@ -178,14 +201,10 @@ public class WaveSurvival : GameMode, IGameMode {
         if(current_round==1){
             manager.player_inventory.AddItem(sword_test);
             manager.player_inventory.AddItem(gun_test);
-            manager.player_inventory.AddItem(dungeon_pass);
+            manager.player_inventory.AddItem(blood_wand);
+            manager.player_inventory.AddItem(ice_wand);
+            // manager.player_inventory.AddItem(dungeon_pass);
         }
-    }
-
-    public override void EnemyKilled(){
-        enemies_currently_spawned -= 1;
-        enemies_eliminated_this_round += 1;
-        Debug.Log("enemies_eliminated_this_round: " + enemies_eliminated_this_round.ToString());
     }
 
     public override void ResetGameMode(){
@@ -193,6 +212,9 @@ public class WaveSurvival : GameMode, IGameMode {
         manager.DestroyNonEssentialGameObjects();
         manager.Setup();
         current_round = 0;
+        total_enemies_eliminated = 0;
+        total_score = 0;
+        score = 0;
         enemies_spawned_this_round_max = enemies_spawned_this_round_max_default;
         manager.player.transform.position = manager.playerSpawnPoint;
         EndRound("Reset GameMode");
@@ -200,18 +222,35 @@ public class WaveSurvival : GameMode, IGameMode {
 
     public override void ProgressGameMode(){
         // pop the transition panel
-        manager.DestroyNonEssentialGameObjects();
-        InstantiateMap();
+        // manager.DestroyNonEssentialGameObjects();
+        // SpawnMap();
         EndRound("ProgressGameMode");
-    }
-
-    public void InstantiateMap(){
-        // we should just implement the basic wave survival scenario
-        manager.maze = Instantiate(maze_generator_prefab);
-        // manager.MapSetupCallback();
+        while(ShouldSpawnEnemy()){
+            if(killable_spawners){
+                enemy_spawners = GameObject.FindGameObjectsWithTag("Respawn");
+            }
+            // we could add code to remove the closest spawner to the player from the array and then choose randomly of those
+            int rnd_index = Random.Range(0, enemy_spawners.Length);
+            Debug.Log("rnd_index: " + rnd_index.ToString());
+            enemy_spawners[rnd_index].GetComponent<RespawnPoint>().SpawnEnemy();
+        }
     }
 
     public override bool TransitionPeriod(){
         return transition_period;
     }    
+
+    public override List<KeyValuePair<string, int>> GetScoreData(){
+        List<KeyValuePair<string, int>> highscoreList = new List<KeyValuePair<string, int>>();
+        highscoreList.Add(new KeyValuePair<string, int>("death_round", current_round));
+        highscoreList.Add(new KeyValuePair<string, int>("rounds_survived", current_round - 1));
+        highscoreList.Add(new KeyValuePair<string, int>("total_enemies_eliminated", total_enemies_eliminated));
+        highscoreList.Add(new KeyValuePair<string, int>("total_score", total_score));
+        highscoreList.Add(new KeyValuePair<string, int>("unspent_score", score));
+        return highscoreList;
+    }
+
+    public override int GetUnspentScore(){
+        return score;
+    }
 }

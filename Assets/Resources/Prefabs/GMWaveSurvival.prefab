@@ -12,6 +12,8 @@ GameObject:
   - component: {fileID: 6072050143875271621}
   - component: {fileID: 2208588806552057131}
   - component: {fileID: 2698311721485151904}
+  - component: {fileID: 1641806069897655924}
+  - component: {fileID: 1921114559461192818}
   m_Layer: 0
   m_Name: GMWaveSurvival
   m_TagString: essential
@@ -103,6 +105,62 @@ MonoBehaviour:
       - m_Target: {fileID: 6072050143875271621}
         m_TargetAssemblyTypeName: WaveSurvival, Assembly-CSharp
         m_MethodName: EnemyKilledListener
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &1641806069897655924
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6658295550142281709}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dbac9a5f7d779254ab4671c813b4b1a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameEvent: {fileID: 11400000, guid: a592f3db4cf46e34882c8cff2af6b280, type: 2}
+  response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6072050143875271621}
+        m_TargetAssemblyTypeName: WaveSurvival, Assembly-CSharp
+        m_MethodName: PlayerKilledListener
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &1921114559461192818
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6658295550142281709}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dbac9a5f7d779254ab4671c813b4b1a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameEvent: {fileID: 11400000, guid: 1b3d712e03ea9d64ab35d85251846867, type: 2}
+  response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6072050143875271621}
+        m_TargetAssemblyTypeName: WaveSurvival, Assembly-CSharp
+        m_MethodName: ScoreSpentListener
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

@@ -12,6 +12,7 @@ public class Health : MonoBehaviour {
 	[Header("Events")]
     public GameEvent onEnemyKilled;
 	public GameEvent onSpawnerKilled;
+	public GameEvent onPlayerKilled;
 
     public virtual void Start(){
 		manager = GameObject.Find("Manager").GetComponent<Manager>();
@@ -26,6 +27,11 @@ public class Health : MonoBehaviour {
 	public virtual void Death(bool shouldDestroy=true){
         HandleScore();
 		if(shouldDestroy) Destroy(gameObject);
+	}
+
+	public virtual void HealthAmount(int heal){
+		currentHealth += heal;	// we want to cap this at the maxHealth
+		if(currentHealth > maxHealth) currentHealth = maxHealth;
 	}
 
 	public virtual void ResetHealth(){

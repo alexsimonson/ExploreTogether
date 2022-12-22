@@ -32,11 +32,12 @@ public class PlayerGhostAim : MonoBehaviour {
         }
     }
 
-    public void HandlePortalPlacement(){
+    public void HandlePortalPlacement(Magic weapon){
+        Debug.Log("Name from portal place: " + weapon.name);
         //Debug.Log("Placing portal at " + pos);
         if(!portalOut) return;
         CleanupPlacedGhostAim();
-        PlacePortal();
+        PlacePortal(weapon);
         StartCoroutine(PlacedGhostAimDespawn());
     }
 
@@ -79,9 +80,10 @@ public class PlayerGhostAim : MonoBehaviour {
         }
     }
 
-    void PlacePortal(){
+    void PlacePortal(Magic weapon){
         placedGhostAim = Instantiate(portal, pos, gameObject.transform.rotation);
         placedGhostAim.gameObject.GetComponent<MeshRenderer>().material = red_material;
         placedGhostAim.gameObject.GetComponent<AreaOfEffect>().areaToEffect = true;
+        placedGhostAim.gameObject.GetComponent<AreaOfEffect>().weapon = weapon;
     }
 }

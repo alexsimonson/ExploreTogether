@@ -13,6 +13,7 @@ public class Weapon : Equipment {
 
     public Style style;
     public AudioClip attackSound;
+    public int damage = 10;
 
     public Weapon(){
         type = Type.Weapon;

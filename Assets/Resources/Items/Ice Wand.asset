@@ -21,3 +21,5 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: dd7a469f7eb6c9047b6ab7f385e4ab77, type: 3}
   type: 10
   style: 2
+  attackSound: {fileID: 0}
+  magicStyle: 1

@@ -78,9 +78,13 @@ public class Maze : MonoBehaviour {
         maze_generated = true;
         // when the maze is generated we should alert the manager if there is one
         if(manager==null) return;
-        nav_builder.BuildNavigation(surfaces);
+        BuildMapNavigation();
         manager.MapSetupCallback();
 
+    }
+
+    public void BuildMapNavigation(){
+        nav_builder.BuildNavigation(surfaces);
     }
 
     List<Vector3> FindNeighbors(Vector3 position){
@@ -282,6 +286,21 @@ public class Maze : MonoBehaviour {
         surfaces.Add(spawnedMazePiece.GetComponent<NavMeshSurface>());
     }
 
+    public void GetArenaPieces(){
+        Transform[] ts = gameObject.GetComponentsInChildren<Transform>();
+        if(ts==null){
+            Debug.Log("Returning sad");
+            return;
+        }
+        foreach(Transform t in ts){
+
+            if(gameObject.tag!="Respawn"){
+                surfaces.Add(t.gameObject.GetComponent<NavMeshSurface>());
+            }
+        }
+        Debug.Log("surfaces is ready");
+    }
+
     void FillMazeWithItems(){
 
         // x junction is not reliable in smaller mazes, until we overhaul our random generation algorithm to more randomly place junctions
@@ -319,21 +338,21 @@ public class Maze : MonoBehaviour {
             itemSpawned.name = "Item: " + itemSpawn.GetComponent<ItemSpawn>().item.name.ToString();
             itemSpawn.GetComponent<ItemSpawn>().item = manager.GenerateItem();
             // spawn enemy every 3rd item
-            if(i%4==2){
-                SpawnEnemy(random_index);
-            }
+            // if(i%4==2){
+            //     SpawnEnemy(random_index);    // this function needs to be the standardized spawn function.... not a different one here
+            // }
         }
     }
 
-    public void SpawnEnemy(int index=-1){
-        int random_index = index;
-        if(random_index==-1){
-            random_index = Random.Range(25, generated_nodes.Count - 25);
-        }
-        // ensure the mazePosition is n-depth away from the player (we need a function for this)
-        GameObject enemy = null;
-        enemy = Instantiate(enemyPrefab, new Vector3(generated_nodes[random_index].mazePosition.x * prefabSize, generated_nodes[random_index].mazePosition.y * prefabSize + 1.5f, generated_nodes[random_index].mazePosition.z * prefabSize), Quaternion.identity);
-        enemy.transform.SetParent(gameObject.transform);
-        enemy.name = "Enemy";
-    }
+    // public void SpawnEnemy(int index=-1){
+    //     int random_index = index;
+    //     if(random_index==-1){
+    //         random_index = Random.Range(25, generated_nodes.Count - 25);
+    //     }
+    //     // ensure the mazePosition is n-depth away from the player (we need a function for this)
+    //     GameObject enemy = null;
+    //     enemy = Instantiate(enemyPrefab, new Vector3(generated_nodes[random_index].mazePosition.x * prefabSize, generated_nodes[random_index].mazePosition.y * prefabSize + 1.5f, generated_nodes[random_index].mazePosition.z * prefabSize), Quaternion.identity);
+    //     enemy.transform.SetParent(gameObject.transform);
+    //     enemy.name = "Enemy";
+    // }
 }
