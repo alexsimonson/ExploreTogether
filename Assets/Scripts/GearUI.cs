@@ -42,6 +42,24 @@ public class GearUI : InventoryUI {
             return;
         }
         ItemSlot slot = (ItemSlot)data;
+        Equipment equipped_equipment = (Equipment)slot.item;
+        if(equipped_equipment!=null){
+            if(equipped_equipment.type==Equipment.Type.Weapon){
+                Weapon equipped_weapon = (Weapon)equipped_equipment;
+                if(equipped_weapon!=null){
+                    Debug.Log("Fix here");
+                    // equipped_weapon.UpdateWeaponUI();
+                }
+                
+                // we have equipped something and we should change the title
+                // Gun equipped_gun = (Gun)equipped_weapon;
+                // if(equipped_gun==null){
+                //     gameObject.GetComponent<Text>().text = equipped_weapon.name;
+                // }else{
+                //     gameObject.GetComponent<Text>().text = equipped_gun.name + "\n" + equipped_gun.magazineRounds + " | " + equipped_gun.bulletCount;
+                // }
+            }
+        }
         Color newColor = inventorySlots[slot.index].GetComponent<SlotContainer>().inventorySlot.transform.GetChild(1).GetComponent<Image>().color;
 
         // ideally only this code should run in every instance
