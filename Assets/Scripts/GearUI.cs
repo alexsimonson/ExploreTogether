@@ -6,6 +6,9 @@ using UnityEngine.EventSystems;
 
 public class GearUI : InventoryUI {
 
+    [Header("Events")]
+    public GameEvent onWeaponChanged;   // this doesn't apply to the InventoryUI
+
     void Start(){
         hudView = gameObject.transform.GetChild(0).gameObject;
         content = hudView.transform.GetChild(0).gameObject;
@@ -14,16 +17,6 @@ public class GearUI : InventoryUI {
     }
 
     public override void DrawInventoryUI(Inventory inventory){
-        // inventorySlots = new GameObject[inventory.max_slots];
-
-        // for(int slot_index=0;slot_index<inventory.slots.Length;slot_index++){
-        //     if(inventorySlots[slot_index]==null){
-        //         GameObject slot_container = Instantiate(slotContainerPrefab, content.transform.position, content.transform.rotation);
-        //         slot_container.transform.SetParent(content.transform, false);
-        //         inventorySlots[slot_index] = slot_container;
-        //         inventorySlots[slot_index].GetComponent<SlotContainer>().index = slot_index;
-        //     }
-        // }
         // we need to dynamically generate gear slots based on the existing gear
         if(inventory==null){
             Debug.Log("No gear set");
@@ -47,17 +40,8 @@ public class GearUI : InventoryUI {
             if(equipped_equipment.type==Equipment.Type.Weapon){
                 Weapon equipped_weapon = (Weapon)equipped_equipment;
                 if(equipped_weapon!=null){
-                    Debug.Log("Fix here");
-                    // equipped_weapon.UpdateWeaponUI();
+                    onWeaponChanged.Raise(this, equipped_weapon);
                 }
-                
-                // we have equipped something and we should change the title
-                // Gun equipped_gun = (Gun)equipped_weapon;
-                // if(equipped_gun==null){
-                //     gameObject.GetComponent<Text>().text = equipped_weapon.name;
-                // }else{
-                //     gameObject.GetComponent<Text>().text = equipped_gun.name + "\n" + equipped_gun.magazineRounds + " | " + equipped_gun.bulletCount;
-                // }
             }
         }
         Color newColor = inventorySlots[slot.index].GetComponent<SlotContainer>().inventorySlot.transform.GetChild(1).GetComponent<Image>().color;

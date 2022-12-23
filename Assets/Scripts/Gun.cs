@@ -52,8 +52,6 @@ public class Gun : Weapon {
     }
 
     public void UpdateWeaponUI(){
-        var new_ui_str = name + "\n" + magazineRounds.ToString() + " | " + bulletCount.ToString();
-        Debug.Log("New ui str: " + new_ui_str);
-        onWeaponUIChanged.Raise(null, new_ui_str);
+        onWeaponUIChanged.Raise(null, this);
     }
 }

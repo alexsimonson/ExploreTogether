@@ -47,6 +47,7 @@ public class EquipmentSlot : MonoBehaviour, IPointerDownHandler, IBeginDragHandl
     }
 
     public void OnEndDrag(PointerEventData eventData){
+        Debug.Log("This is up?");
         cg.alpha = 1f;
         cg.blocksRaycasts = true;
         eventData.pointerDrag.transform.localPosition = new Vector3(0, 0, 0);   // this returns the pointer back to its original position

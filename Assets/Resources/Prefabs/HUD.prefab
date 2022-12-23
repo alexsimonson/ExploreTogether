@@ -772,9 +772,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: 'Weapon
-
-    10/10'
+  m_Text: 
 --- !u!114 &6081263038503810310
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1982,6 +1980,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0.1289568
       objectReference: {fileID: 0}
+    - target: {fileID: 2470145115455101339, guid: e4a558133edc7064680c23ced167634a, type: 3}
+      propertyPath: onWeaponChanged
+      value: 
+      objectReference: {fileID: 11400000, guid: 1b27aed22c120fa4d9db05fc23444b47, type: 2}
     - target: {fileID: 2819861281988868391, guid: e4a558133edc7064680c23ced167634a, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -2004,11 +2006,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6016813831712090153, guid: e4a558133edc7064680c23ced167634a, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 16.07143
+      value: 16.32653
       objectReference: {fileID: 0}
     - target: {fileID: 6016813831712090153, guid: e4a558133edc7064680c23ced167634a, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 20.357145
+      value: 20.680273
       objectReference: {fileID: 0}
     - target: {fileID: 6016813831712090153, guid: e4a558133edc7064680c23ced167634a, type: 3}
       propertyPath: m_LocalPosition.z

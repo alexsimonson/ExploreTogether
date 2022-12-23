@@ -4,26 +4,16 @@ using UnityEngine.UI;
 public class WeaponUI : MonoBehaviour {
 
     public void UpdateWeaponUI(Component sender, object data){
-        // if(data.GetType().ToString()!="ItemSlot"){
-        //     Debug.LogError("Invalid update data type");
-        //     return;
-        // }
-        Debug.Log("Updating weapon UI");
-        Debug.Log(data);
-        gameObject.GetComponent<Text>().text = data.ToString();
-        return;
-        // ItemSlot slot = (ItemSlot)data;
-        // Equipment equipped_weapon = (Equipment)slot.item;
-        // if(equipped_weapon!=null){
-        //     if(equipped_weapon.type==Equipment.Type.Weapon){
-        //         Debug.Log("Fuck you");
-        //         // Gun equipped_gun = (Gun)equipped_weapon;
-        //         // if(equipped_gun==null){
-        //         //     gameObject.GetComponent<Text>().text = equipped_weapon.name;
-        //         // }else{
-        //         //     gameObject.GetComponent<Text>().text = equipped_gun.name + "\n" + equipped_gun.magazineRounds + " | " + equipped_gun.bulletCount;
-        //         // }
-        //     }
-        // }
+        Weapon equipped_weapon = (Weapon)data;
+        if(equipped_weapon==null) return;
+        var new_ui_str = "";
+        if(data.GetType().ToString()=="Gun"){
+            Gun equipped_gun = (Gun)equipped_weapon;
+            if(equipped_gun==null) return;
+            new_ui_str = equipped_gun.name + "\n" + equipped_gun.magazineRounds.ToString() + " | " + equipped_gun.bulletCount.ToString();
+        }else{
+            new_ui_str = equipped_weapon.name;
+        }
+        gameObject.GetComponent<Text>().text = new_ui_str;
     }
 }

@@ -23,8 +23,10 @@ MonoBehaviour:
   style: 1
   attackSound: {fileID: 8300000, guid: 2367a5f4a1666234280058a069fa59d8, type: 3}
   damage: 10
+  name: Pistol
   onWeaponUIChanged: {fileID: 11400000, guid: 1b27aed22c120fa4d9db05fc23444b47, type: 2}
   reloadSound: {fileID: 8300000, guid: 25a7b4df05577424fbfadc05c2d93b49, type: 3}
-  magazineRounds: 2
+  magazineRounds: 10
   magazineSizeMax: 10
   bulletCount: 30
+  name: Pistol
