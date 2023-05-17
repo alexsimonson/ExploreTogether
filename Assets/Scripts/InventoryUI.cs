@@ -46,20 +46,13 @@ public class InventoryUI : MonoBehaviour {
     }
 
     public virtual void UpdateSlot(Component sender, object data){
-        Debug.Log("Updating slot please work");
         if(data.GetType().ToString()!="ItemSlot"){
             Debug.LogError("Invalid update data type");
             return;
         }
-        Debug.Log("Updating slot please work cunt");
+
         ItemSlot slot = (ItemSlot)data;
         
-        Debug.Log("Updating slot please pussy");
-        if(slot.index >= 0 && slot.index < inventorySlots.Length){
-            Debug.Log("This should be working fine");
-        }else{
-            Debug.Log("Suck my fucking dick");
-        }
         Color newColor = inventorySlots[slot.index].GetComponent<SlotContainer>().inventorySlot.transform.GetChild(1).GetComponent<Image>().color;
         Debug.Log("Updating slot please dick");
         // ideally only this code should run in every instance

@@ -80,8 +80,6 @@ public class Manager : MonoBehaviour {
 
     public void Setup(){
         game_mode.SpawnMap();
-        Debug.Log("Calling mapsetupcallback from Setup on Manager");
-        MapSetupCallback();
     }
 
     public void HandleRound(){
