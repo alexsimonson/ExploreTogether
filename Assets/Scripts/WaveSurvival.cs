@@ -8,7 +8,6 @@ public class WaveSurvival : GameMode, IGameMode {
     bool killable_spawners = false;
 
     int current_round = 0;
-    int score = 0;
     static int enemies_spawned_this_round_max_default = 5;
     int enemies_spawned_this_round_max = enemies_spawned_this_round_max_default;  // how many enemies will spawn and be defeated before the round ends
     int enemies_currently_spawned_max = 10;
@@ -24,14 +23,7 @@ public class WaveSurvival : GameMode, IGameMode {
     // enemy spawners
     public GameObject[] enemy_spawners;
 
-
-    public bool transition_period = false;
     public GameObject enemy_prefab;
-
-    public Manager manager;
-
-    public GameObject[] playerInventoryBackup;
-    public GameObject[] playerGearBackup;
 
     public Melee sword_test;
     public Gun gun_test;
@@ -116,14 +108,13 @@ public class WaveSurvival : GameMode, IGameMode {
 
     public override void SpawnMap(){
         // we should just implement the basic wave survival scenario
-        manager.maze = Instantiate(maze_generator_prefab);
+        manager.map = Instantiate(maze_generator_prefab);
         // handle the navmesh now
-        // manager.maze.GetComponent<Maze>().GetArenaPieces();
-        // manager.maze.GetComponent<Maze>().BuildMapNavigation();
+        // manager.map.GetComponent<Maze>().GetArenaPieces();
+        // manager.map.GetComponent<Maze>().BuildMapNavigation();
     }
 
     public override void Initialize(){
-        manager.player_inventory = ScriptableObject.CreateInstance("Inventory") as Inventory;
         // there's something about the loading that's preventing items from being loaded at this exact point in time...
         manager.player_inventory.AddItem(sword_test);
         manager.player_inventory.AddItem(gun_test);

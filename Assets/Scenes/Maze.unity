@@ -179,6 +179,10 @@ PrefabInstance:
       value: Manager
       objectReference: {fileID: 0}
     - target: {fileID: 1843024592737962031, guid: 251d62e81af731d42ac0cbea8b36a465, type: 3}
+      propertyPath: lobby_mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1843024592737962031, guid: 251d62e81af731d42ac0cbea8b36a465, type: 3}
       propertyPath: maze_generator_prefab
       value: 
       objectReference: {fileID: 4207370693126075639, guid: bea004fe2a646a84596c497d2fe6ebe1, type: 3}

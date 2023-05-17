@@ -14,7 +14,7 @@ public class Manager : MonoBehaviour {
     public GameObject hud;
 
 
-    public GameObject maze;
+    public GameObject map;
 
     public Item[] item_bank;
 
@@ -80,6 +80,7 @@ public class Manager : MonoBehaviour {
 
     public void Setup(){
         game_mode.SpawnMap();
+        Debug.Log("Calling mapsetupcallback from Setup on Manager");
         MapSetupCallback();
     }
 
@@ -95,7 +96,7 @@ public class Manager : MonoBehaviour {
         hud.transform.GetChild(8).gameObject.SetActive(false);
         player.transform.position = playerSpawnPoint;
         // commenting this out for now, as the race condition is stumping me
-        // game_mode.Initialize();  // this is causing an index race condition
+        game_mode.Initialize();  // this is causing an index race condition
         player.GetComponent<PlayerMovement>().AllowMovement();
     }
 

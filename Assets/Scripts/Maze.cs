@@ -79,6 +79,7 @@ public class Maze : MonoBehaviour {
         // when the maze is generated we should alert the manager if there is one
         if(manager==null) return;
         BuildMapNavigation();
+        Debug.Log("Calling mapsetupcallback from Gen random maze");
         manager.MapSetupCallback();
 
     }

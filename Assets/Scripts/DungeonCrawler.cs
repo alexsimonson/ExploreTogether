@@ -6,7 +6,6 @@ using UnityEngine.UI;
 public class DungeonCrawler : GameMode, IGameMode {
     bool killable_spawners = false;
     int current_round = 0;
-    int score = 0;
     static int enemies_spawned_this_round_max_default = 5;
     int enemies_spawned_this_round_max = enemies_spawned_this_round_max_default;  // how many enemies will spawn and be defeated before the round ends
     int enemies_spawned_max = 10;
@@ -19,14 +18,7 @@ public class DungeonCrawler : GameMode, IGameMode {
     // enemy spawners
     public GameObject[] enemy_spawners;
 
-    public bool transition_period = false;
-
     public GameObject enemy_prefab;
-
-    public Manager manager;
-
-    public GameObject[] playerInventoryBackup;
-    public GameObject[] playerGearBackup;
 
     public Melee sword_test;
     public Gun gun_test;
@@ -81,18 +73,18 @@ public class DungeonCrawler : GameMode, IGameMode {
     }
 
     public override void SpawnMap(){
-        manager.maze = Instantiate(maze_generator_prefab);
+        manager.map = Instantiate(maze_generator_prefab);
         // I have no idea why I'm setting below... or how it's obtaining this correctly...
         // I'm going to "correct" it and hope for the best
-        manager.maze.GetComponent<Maze>().manager = manager;    // still works... so let's just do this
+        manager.map.GetComponent<Maze>().manager = manager;    // still works... so let's just do this
     }
 
     // Start is called before the first frame update
     public override void Initialize(){
-        manager.player_inventory = ScriptableObject.CreateInstance("Inventory") as Inventory;
-        // manager.player_inventory.AddItem(sword_test);
+        Debug.Log("Init dc shit");
+        manager.player_inventory.AddItem(sword_test);
         manager.player_inventory.AddItem(gun_test);
-        // manager.player_inventory.AddItem(dungeon_pass);
+        manager.player_inventory.AddItem(dungeon_pass);
         EndRound();
     }
 

@@ -11,8 +11,12 @@ public abstract class GameMode : ScriptableObject, IGameMode {
         Demo
     }
 
+    public Manager manager;
     public Mode mode;
+    public int score = 0;
     public bool transition_period;
+    public GameObject[] playerInventoryBackup;
+    public GameObject[] playerGearBackup;
 
     public abstract bool TransitionPeriod();
     public abstract void Initialize();
