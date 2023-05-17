@@ -5,6 +5,7 @@ using UnityEngine;
 public class Resource : MonoBehaviour, IInteraction {
     
     public new string name;
+    public Tool tool_requirement;   // the tool required to harvest
     public Item[] resources;   // the item obtained during a successful harvest
     public bool single_use = true;
     int rng_size = 512;
@@ -19,6 +20,7 @@ public class Resource : MonoBehaviour, IInteraction {
 
     private MeshRenderer mesh_renderer;
     Manager manager;
+
 
     void Start(){
         manager = GameObject.Find("Manager").GetComponent<Manager>();

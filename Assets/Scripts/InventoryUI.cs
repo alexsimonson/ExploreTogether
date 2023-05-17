@@ -29,7 +29,6 @@ public class InventoryUI : MonoBehaviour {
         // we need to dynamically generate inventory slots based on the existing inventory
         // if slots has not yet been instantiated, we should do that too
         inventorySlots = new GameObject[inventory.max_slots];
-        Debug.Log("Slot length: " + inventory.slots.Length.ToString());
         for(int slot_index=0;slot_index<inventory.slots.Length;slot_index++){
             if(inventorySlots[slot_index]==null){
                 GameObject slot_container = Instantiate(slotContainerPrefab, content.transform.position, content.transform.rotation);
@@ -54,7 +53,7 @@ public class InventoryUI : MonoBehaviour {
         ItemSlot slot = (ItemSlot)data;
         
         Color newColor = inventorySlots[slot.index].GetComponent<SlotContainer>().inventorySlot.transform.GetChild(1).GetComponent<Image>().color;
-        Debug.Log("Updating slot please dick");
+
         // ideally only this code should run in every instance
         if(slot.item==null){
             newColor.a = 0;

@@ -123,6 +123,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   name: Tree
+  tool_requirement: {fileID: 11400000, guid: c61089944636703459a25887799c1144, type: 2}
   resources:
   - {fileID: 11400000, guid: a585d2691ebc5134bb73105e31c92721, type: 2}
   single_use: 0

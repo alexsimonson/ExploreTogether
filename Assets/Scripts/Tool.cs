@@ -8,6 +8,7 @@ public class Tool : Weapon {
     
     public Tool(){
         type = Type.Weapon;
+        name = "tool";
         // style = Style.Melee; // not all tools are necessarily melee (nail gun???)
     }
 

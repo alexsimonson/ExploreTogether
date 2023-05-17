@@ -14,10 +14,10 @@ public class Weapon : Equipment {
     public Style style;
     public AudioClip attackSound;
     public int damage = 10;
-    public string name = "weapon";
-
+    
     public Weapon(){
         type = Type.Weapon;
+        name = "weapon";
     }
 
     public virtual void Attack(GameObject owner){

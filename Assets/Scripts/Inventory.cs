@@ -37,7 +37,6 @@ public class Inventory : ScriptableObject, IInventory {
 
     public virtual void AddItem(Item new_item){
         if(new_item==null) return;
-        Debug.Log("Item passed is not null: " + new_item.name);
         if(new_item.stack){
             // we should FindItemInSlot
             int slot_index = FindItemInSlot(new_item);
@@ -54,7 +53,6 @@ public class Inventory : ScriptableObject, IInventory {
         }
         // default back to non-stacking behavior
         int empty_slot_index = FindEmptySlot();
-        Debug.Log("Empty slot index: " + empty_slot_index.ToString());
         if(empty_slot_index >= 0){
             // we should add to this slot
             slots[empty_slot_index].item = new_item;

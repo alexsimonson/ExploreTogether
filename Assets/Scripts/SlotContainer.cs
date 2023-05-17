@@ -10,7 +10,7 @@ public class SlotContainer : MonoBehaviour, IDropHandler {
     public GearUI gearUI;
     public int index;
     public bool isEquipmentSlot;
-    private static string[] valid_equipment_types = {"Equipment", "Weapon", "Gun", "Magic", "Melee"};
+    private static string[] valid_equipment_types = {"Equipment", "Weapon", "Gun", "Magic", "Melee", "Tool"};
     private List<string> valid_equipment_types_list = new List<string>(valid_equipment_types);
     Manager manager;
 
@@ -126,6 +126,7 @@ public class SlotContainer : MonoBehaviour, IDropHandler {
         int drag_index = pointerDragParent.GetComponent<SlotContainer>().index;
         GameObject tempSlot = inventorySlot;
         string dragSlotType = dragSlot.GetComponent<InventorySlot>().item.GetType().ToString();
+        Debug.Log("Drag Slot Type: " + dragSlotType);
         if(valid_equipment_types_list.Contains(dragSlotType)){
             // before we just go through with it, we need to ensure this item is of the correct type
             // we will need the type we are looking for, from this dropped on slot

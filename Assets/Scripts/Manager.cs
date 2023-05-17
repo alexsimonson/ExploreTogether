@@ -59,14 +59,12 @@ public class Manager : MonoBehaviour {
         player = Instantiate(playerPrefab, playerSpawnPoint, Quaternion.identity);
         player.name = "Player";
         player_inventory = ScriptableObject.CreateInstance("Inventory") as Inventory;
-        // player_inventory
         player_gear = ScriptableObject.CreateInstance("Gear") as Gear;
         player_gear.Initialize();
         Setup();
     }
 
     public GameMode LoadGameMode(){
-        Debug.Log("Lobby game mode: " + lobby_mode.ToString());
         if(lobby_mode==GameMode.Mode.Demo){
             return ScriptableObject.CreateInstance("Demo") as GameMode;
         }else if(lobby_mode==GameMode.Mode.DungeonCrawler){
@@ -90,7 +88,6 @@ public class Manager : MonoBehaviour {
 
     public void MapSetupCallback(){
         // start the game mode
-        Debug.Log("Map setup callback?");
         hud.transform.GetChild(8).gameObject.SetActive(false);
         player.transform.position = playerSpawnPoint;
         // commenting this out for now, as the race condition is stumping me

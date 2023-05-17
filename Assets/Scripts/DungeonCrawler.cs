@@ -81,7 +81,6 @@ public class DungeonCrawler : GameMode, IGameMode {
 
     // Start is called before the first frame update
     public override void Initialize(){
-        Debug.Log("Init dc shit");
         manager.player_inventory.AddItem(sword_test);
         manager.player_inventory.AddItem(gun_test);
         manager.player_inventory.AddItem(dungeon_pass);

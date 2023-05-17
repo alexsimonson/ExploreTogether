@@ -10,6 +10,7 @@ public class Demo : GameMode, IGameMode {
     public Item dungeon_pass;
     public Magic blood_wand;
     public Magic ice_wand;
+    public Tool axe;
 
     public GameObject maze_generator_prefab;
 
@@ -20,6 +21,7 @@ public class Demo : GameMode, IGameMode {
         dungeon_pass = Resources.Load("Items/Dungeon Pass", typeof(Item)) as Item;
         blood_wand = Resources.Load("Items/Blood Wand", typeof(Magic)) as Magic;
         ice_wand = Resources.Load("Items/Ice Wand", typeof(Magic)) as Magic;
+        axe = Resources.Load("Items/Axe", typeof(Tool)) as Tool;
         maze_generator_prefab = Resources.Load("Prefabs/Map", typeof(GameObject)) as GameObject;
     }
 
@@ -32,11 +34,12 @@ public class Demo : GameMode, IGameMode {
     }
 
     public override void Initialize(){
-        Debug.Log("Init demo shit");
+        Debug.Log("Initializing player inventory with some test items");
         manager.player_inventory.AddItem(sword_test);
         manager.player_inventory.AddItem(gun_test);
         manager.player_inventory.AddItem(blood_wand);
         manager.player_inventory.AddItem(ice_wand);
+        manager.player_inventory.AddItem(axe);
     }
 
     public override void SetupNextRound(){
@@ -65,9 +68,7 @@ public class Demo : GameMode, IGameMode {
 
     public override void SpawnMap(){
         manager.map = Instantiate(maze_generator_prefab);
-        // I have no idea why I'm setting below... or how it's obtaining this correctly...
-        // I'm going to "correct" it and hope for the best
-        manager.map.GetComponent<Map>().manager = manager;    // still works... so let's just do this
+        manager.map.GetComponent<Map>().manager = manager;
     }
 
     public override List<KeyValuePair<string, int>> GetScoreData(){

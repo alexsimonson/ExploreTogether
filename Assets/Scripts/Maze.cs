@@ -79,9 +79,7 @@ public class Maze : MonoBehaviour {
         // when the maze is generated we should alert the manager if there is one
         if(manager==null) return;
         BuildMapNavigation();
-        Debug.Log("Calling mapsetupcallback from Gen random maze");
         manager.MapSetupCallback();
-
     }
 
     public void BuildMapNavigation(){
@@ -163,7 +161,6 @@ public class Maze : MonoBehaviour {
         }
         List<Vector3> empty_neighbors = FindEmptyNeighbors(FindNeighborsGrid(current_node.mazePosition));
         if(total_count==max_dungeon_length){
-            Debug.Log("Max dungeon length reached");
             return;
         }
         // when there are no empty neighbors, I should pop the stack and "backtrack" to try the last node
@@ -172,7 +169,6 @@ public class Maze : MonoBehaviour {
             generating_stack.Pop();
             if(generating_stack.Count <= 0){
                 control = false;
-                Debug.Log("The end of the line");
             }else{
                 current_node = generating_stack.Peek();
                 empty_neighbors = FindEmptyNeighbors(FindNeighborsGrid(current_node.mazePosition));
@@ -180,7 +176,6 @@ public class Maze : MonoBehaviour {
         }
         // otherwise we will choose a random neighbor and go
         if(empty_neighbors.Count <=0){
-            Debug.Log("Returning no neighbors");
             return;
         }
         Vector3 random_neighbor = empty_neighbors[Random.Range(0, empty_neighbors.Count)];
