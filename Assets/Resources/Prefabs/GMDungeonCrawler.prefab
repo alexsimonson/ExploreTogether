@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 118716349820312487}
-  - component: {fileID: -3569583556216285492}
   m_Layer: 0
   m_Name: GMDungeonCrawler
   m_TagString: essential
@@ -31,25 +30,3 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &-3569583556216285492
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3877344483868323756}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e79cc98bd2889a14b9c21f9e5e844f47, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mode: 1
-  transition_period: 0
-  enemy_prefab: {fileID: 0}
-  manager: {fileID: 0}
-  playerInventoryBackup: []
-  playerGearBackup: []
-  sword_test: {fileID: 0}
-  gun_test: {fileID: 0}
-  dungeon_pass: {fileID: 0}
-  maze_generator_prefab: {fileID: 4207370693126075639, guid: bea004fe2a646a84596c497d2fe6ebe1, type: 3}

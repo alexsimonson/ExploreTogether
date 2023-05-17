@@ -50,11 +50,11 @@ public class WaveSurvival : GameMode, IGameMode {
         dungeon_pass = Resources.Load("Items/Dungeon Pass", typeof(Item)) as Item;
         blood_wand = Resources.Load("Items/Blood Wand", typeof(Magic)) as Magic;
         ice_wand = Resources.Load("Items/Ice Wand", typeof(Magic)) as Magic;
+        maze_generator_prefab = Resources.Load("Prefabs/Arena/Arena", typeof(GameObject)) as GameObject;
     }
 
     public void Start(){
         mode = Mode.WaveSurvival;
-        maze_generator_prefab = Resources.Load("Prefabs/Arena", typeof(GameObject)) as GameObject;
         enemy_spawners = GameObject.FindGameObjectsWithTag("Respawn");
     }
 
@@ -84,7 +84,7 @@ public class WaveSurvival : GameMode, IGameMode {
         score += 10;
         total_score += 10;
         manager.hud.transform.GetChild(9).gameObject.GetComponent<Text>().text = "Score: " + score.ToString();
-        if(manager.game_rules.ShouldSpawnEnemy()){
+        if(manager.game_mode.ShouldSpawnEnemy()){
             // pick a random spawn point and then call spawn enemy
             if(killable_spawners){
                 enemy_spawners = GameObject.FindGameObjectsWithTag("Respawn");
@@ -125,9 +125,10 @@ public class WaveSurvival : GameMode, IGameMode {
     public override void Initialize(){
         manager.player_inventory = ScriptableObject.CreateInstance("Inventory") as Inventory;
         // there's something about the loading that's preventing items from being loaded at this exact point in time...
-        // manager.player_inventory.AddItem(sword_test);
-        // manager.player_inventory.AddItem(gun_test);
-        // manager.player_inventory.AddItem(dungeon_pass);
+        manager.player_inventory.AddItem(sword_test);
+        manager.player_inventory.AddItem(gun_test);
+        manager.player_inventory.AddItem(blood_wand);
+        manager.player_inventory.AddItem(ice_wand);
         EndRound("Initialize");
     }
 
@@ -151,7 +152,7 @@ public class WaveSurvival : GameMode, IGameMode {
     // this function will be ran after all enemies are defeated
     void EndRound(string test = "test"){
         Debug.Log("End round caLLED with " + test);
-        StartCoroutine(BeginTransitionPeriod());
+        manager.BeginTransition_SO();
         SetupNextRound();
     }
 
@@ -189,22 +190,6 @@ public class WaveSurvival : GameMode, IGameMode {
         enemies_currently_spawned = 0;
         enemies_spawned_this_round = 0;
         spawners_eliminated_this_round = 0;
-    }
-
-    public override IEnumerator BeginTransitionPeriod(){
-        transition_period = true;
-        Debug.Log("Transition period started");
-        yield return new WaitForSeconds(1);
-        Debug.Log("Transition period ending.");
-        transition_period = false;
-        // band aid
-        if(current_round==1){
-            manager.player_inventory.AddItem(sword_test);
-            manager.player_inventory.AddItem(gun_test);
-            manager.player_inventory.AddItem(blood_wand);
-            manager.player_inventory.AddItem(ice_wand);
-            // manager.player_inventory.AddItem(dungeon_pass);
-        }
     }
 
     public override void ResetGameMode(){

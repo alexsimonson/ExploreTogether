@@ -2,18 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class GameMode : MonoBehaviour, IGameMode {
+[CreateAssetMenu(fileName = "New Game Mode", menuName = "Game Mode")]
+public abstract class GameMode : ScriptableObject, IGameMode {
     
     public enum Mode{
         WaveSurvival,
-        DungeonCrawler
+        DungeonCrawler,
+        Demo
     }
 
     public Mode mode;
+    public bool transition_period;
 
     public abstract bool TransitionPeriod();
     public abstract void Initialize();
-    public abstract IEnumerator BeginTransitionPeriod();
     public abstract void SetupNextRound();
     public abstract bool ShouldSpawnEnemy();
     public abstract void ResetGameMode();

@@ -2,20 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEditor;
 
 public class Manager : MonoBehaviour {
 
     public GameObject hudPrefab;
-    public GameObject game_mode_prefab;
+    public GameMode game_mode;
     public GameObject playerPrefab;
-    public GameObject enemy_prefab;
-
-
 
     public GameObject player;
     public GameObject hud;
-    public GameObject game_mode;
-    public IGameMode game_rules;
 
 
     public GameObject maze;
@@ -27,12 +23,13 @@ public class Manager : MonoBehaviour {
     // public Vector3 playerSpawnPoint = new Vector3(0, 1.5f, 0);
     public Vector3 playerSpawnPoint = new Vector3(0, 2, 0);
 
-    public Item dungeon_pass;
-
-
     // holding player inventory here for now during rehaul
     public Inventory player_inventory;
     public Gear player_gear;
+
+    public GameMode.Mode lobby_mode; // rename this later, but decoupling refactor will be utilizing this name
+
+    public bool transition_period = false;
 
     // eventually convert this to SO enum
     public enum GameState{
@@ -46,13 +43,11 @@ public class Manager : MonoBehaviour {
     public GameState current_game_state;
     
     void Awake(){
-        enemy_prefab = Resources.Load("Prefabs/Enemy", typeof(GameObject)) as GameObject;
+        item_bank = Resources.LoadAll<Item>("Items");
         hudPrefab = Resources.Load("Prefabs/HUD", typeof(GameObject)) as GameObject;
         playerPrefab = Resources.Load("Prefabs/Player", typeof(GameObject)) as GameObject;
-        game_mode_prefab = Resources.Load("Prefabs/GMWaveSurvival", typeof(GameObject)) as GameObject;
-        // game_mode_prefab = Resources.Load("Prefabs/GMDungeonCrawler", typeof(GameObject)) as GameObject;
-        item_bank = Resources.LoadAll<Item>("Items");
-        dungeon_pass = Resources.Load("Items/Dungeon Pass", typeof(Item)) as Item;
+        // we should load the game mode prefab based on the enum set
+        game_mode = LoadGameMode();
     }
 
     // Start is called before the first frame update
@@ -70,17 +65,28 @@ public class Manager : MonoBehaviour {
         Setup();
     }
 
+    public GameMode LoadGameMode(){
+        Debug.Log("Lobby game mode: " + lobby_mode.ToString());
+        if(lobby_mode==GameMode.Mode.Demo){
+            return ScriptableObject.CreateInstance("Demo") as GameMode;
+        }else if(lobby_mode==GameMode.Mode.DungeonCrawler){
+            return ScriptableObject.CreateInstance("DungeonCrawler") as GameMode;
+        }else if(lobby_mode==GameMode.Mode.WaveSurvival){
+            return ScriptableObject.CreateInstance("WaveSurvival") as GameMode;
+        }
+        Debug.Log("Error: GameMode not set.  Please set a game mode to continue properly.");
+        return null;
+    }
+
     public void Setup(){
-        game_mode = Instantiate(game_mode_prefab, new Vector3(0, 0, 0), Quaternion.identity);
-        game_rules = game_mode.GetComponent<IGameMode>();
-        game_rules.SpawnMap();
+        game_mode.SpawnMap();
         MapSetupCallback();
     }
 
     public void HandleRound(){
-        game_rules.SetupNextRound();
-        game_rules.Initialize();
-        StartCoroutine(game_rules.BeginTransitionPeriod());
+        game_mode.SetupNextRound();
+        game_mode.Initialize();
+        StartCoroutine(BeginTransitionPeriod());
     }
 
     public void MapSetupCallback(){
@@ -88,8 +94,8 @@ public class Manager : MonoBehaviour {
         Debug.Log("Map setup callback?");
         hud.transform.GetChild(8).gameObject.SetActive(false);
         player.transform.position = playerSpawnPoint;
-        game_rules.Initialize();
-        // game_rules.SpawnEnemies();        
+        // commenting this out for now, as the race condition is stumping me
+        // game_mode.Initialize();  // this is causing an index race condition
         player.GetComponent<PlayerMovement>().AllowMovement();
     }
 
@@ -152,5 +158,17 @@ public class Manager : MonoBehaviour {
         }else if(_state==GameState.Menu){
             Debug.Log("Still need to setup a main menu");   // eventually this will just load the main menu scene
         }
+    }
+
+    public void BeginTransition_SO(int wait_time=5){
+        StartCoroutine(BeginTransitionPeriod(wait_time));
+    }
+
+    public IEnumerator BeginTransitionPeriod(int wait_time=5){
+        transition_period = true;
+        Debug.Log("Transition period started");
+        yield return new WaitForSeconds(wait_time);
+        Debug.Log("Transition period ending.");
+        transition_period = false;
     }
 }

@@ -37,14 +37,14 @@ public class DungeonCrawler : GameMode, IGameMode {
 
     public void Awake(){
         manager = GameObject.Find("Manager").GetComponent<Manager>();
-    }
-
-    public void Start(){
-        mode = Mode.DungeonCrawler;
         maze_generator_prefab = Resources.Load("Prefabs/MazeGenerator", typeof(GameObject)) as GameObject;
         sword_test = Resources.Load("Items/Sword", typeof(Melee)) as Melee;
         gun_test = Resources.Load("Items/Pistol", typeof(Gun)) as Gun;
         dungeon_pass = Resources.Load("Items/Dungeon Pass", typeof(Item)) as Item;
+    }
+
+    public void Start(){
+        mode = Mode.DungeonCrawler;
     }
 
     // I don't think this function is used within dungeon crawler
@@ -68,7 +68,7 @@ public class DungeonCrawler : GameMode, IGameMode {
         enemies_currently_spawned -= 1;
         enemies_eliminated_this_round += 1;
         Debug.Log("enemies_eliminated_this_round: " + enemies_eliminated_this_round.ToString());
-        if(manager.game_rules.ShouldSpawnEnemy()){
+        if(manager.game_mode.ShouldSpawnEnemy()){
             // pick a random spawn point and then call spawn enemy
             if(killable_spawners){
                 enemy_spawners = GameObject.FindGameObjectsWithTag("Respawn");
@@ -82,7 +82,9 @@ public class DungeonCrawler : GameMode, IGameMode {
 
     public override void SpawnMap(){
         manager.maze = Instantiate(maze_generator_prefab);
-        manager.maze.GetComponent<Maze>().manager = gameObject.GetComponent<Manager>();
+        // I have no idea why I'm setting below... or how it's obtaining this correctly...
+        // I'm going to "correct" it and hope for the best
+        manager.maze.GetComponent<Maze>().manager = manager;    // still works... so let's just do this
     }
 
     // Start is called before the first frame update
@@ -106,7 +108,7 @@ public class DungeonCrawler : GameMode, IGameMode {
 
     // this function will be ran after all enemies are defeated
     void EndRound(){
-        StartCoroutine(BeginTransitionPeriod());
+        manager.BeginTransition_SO();
         SetupNextRound();
     }
 
@@ -138,14 +140,6 @@ public class DungeonCrawler : GameMode, IGameMode {
         enemies_eliminated_this_round = 0;
         enemies_currently_spawned = 0;
         enemies_spawned_this_round = 0;
-    }
-
-    public override IEnumerator BeginTransitionPeriod(){
-        transition_period = true;
-        Debug.Log("Transition period started");
-        yield return new WaitForSeconds(5);
-        Debug.Log("Transition period ending.");
-        transition_period = false;
     }
 
     public override void ResetGameMode(){

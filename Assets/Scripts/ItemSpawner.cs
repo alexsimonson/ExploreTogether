@@ -21,7 +21,7 @@ public class ItemSpawner : MonoBehaviour, IInteraction {
 
     public void Interaction(GameObject interacting){
         if(random_box==true){
-            var score = manager.game_rules.GetUnspentScore();
+            var score = manager.game_mode.GetUnspentScore();
             if(score<cost){
                 Debug.Log("Not enough money");
                 return;

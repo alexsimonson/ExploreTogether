@@ -11,7 +11,7 @@ public class RespawnPoint : MonoBehaviour {
 
     void Start(){
         manager = GameObject.Find("Manager").GetComponent<Manager>();
-        while(manager.game_rules.ShouldSpawnEnemy()){
+        while(manager.game_mode.ShouldSpawnEnemy()){
             SpawnEnemy();
         }
     }

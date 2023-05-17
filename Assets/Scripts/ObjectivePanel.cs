@@ -29,7 +29,7 @@ public class ObjectivePanel : MonoBehaviour {
         // manager.player_inventory.SetDisplayUI(false);
         onToggleInventory.Raise(this, false);
         // manager.player_gear.SetDisplayUI(false);
-        manager.game_rules.ProgressGameMode();
+        manager.game_mode.ProgressGameMode();
         // gameObject.SetActive(false);
     }
 

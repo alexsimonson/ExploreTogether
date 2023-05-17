@@ -12,11 +12,13 @@ public class InventoryUI : MonoBehaviour {
     public GameObject[] inventorySlots;    // this is a conversion of the original slots variable from Inventory.cs
     public Manager manager;
 
-    void Start(){
+    void Awake(){
         slotContainerPrefab = Resources.Load("Prefabs/SlotContainer", typeof(GameObject)) as GameObject;
         slotButtonPrefab = Resources.Load("Prefabs/InventorySlotButton", typeof(GameObject)) as GameObject;
-        
         manager = GameObject.Find("Manager").GetComponent<Manager>();
+    }
+
+    void Start(){
         hudView = gameObject.transform.GetChild(0).gameObject;
         content = hudView.transform.GetChild(0).GetChild(0).gameObject;
         DrawInventoryUI(manager.player_inventory);
@@ -27,6 +29,7 @@ public class InventoryUI : MonoBehaviour {
         // we need to dynamically generate inventory slots based on the existing inventory
         // if slots has not yet been instantiated, we should do that too
         inventorySlots = new GameObject[inventory.max_slots];
+        Debug.Log("Slot length: " + inventory.slots.Length.ToString());
         for(int slot_index=0;slot_index<inventory.slots.Length;slot_index++){
             if(inventorySlots[slot_index]==null){
                 GameObject slot_container = Instantiate(slotContainerPrefab, content.transform.position, content.transform.rotation);
@@ -48,6 +51,7 @@ public class InventoryUI : MonoBehaviour {
             return;
         }
         ItemSlot slot = (ItemSlot)data;
+        
         Color newColor = inventorySlots[slot.index].GetComponent<SlotContainer>().inventorySlot.transform.GetChild(1).GetComponent<Image>().color;
         // ideally only this code should run in every instance
         if(slot.item==null){

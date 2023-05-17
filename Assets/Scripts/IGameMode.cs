@@ -4,8 +4,6 @@ using UnityEngine;
 public interface IGameMode{
     bool TransitionPeriod();
     void Initialize();
-    
-    IEnumerator BeginTransitionPeriod();
     void SetupNextRound();
     bool ShouldSpawnEnemy();
     void ResetGameMode();
