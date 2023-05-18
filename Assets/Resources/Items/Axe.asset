@@ -23,3 +23,4 @@ MonoBehaviour:
   style: 0
   attackSound: {fileID: 0}
   damage: 10
+  role: 0

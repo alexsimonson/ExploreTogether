@@ -5,7 +5,6 @@ using UnityEngine;
 public class Resource : MonoBehaviour, IInteraction {
     
     public new string name;
-    public Tool tool_requirement;   // the tool required to harvest
     public Item[] resources;   // the item obtained during a successful harvest
     public bool single_use = true;
     int rng_size = 512;
@@ -21,6 +20,8 @@ public class Resource : MonoBehaviour, IInteraction {
     private MeshRenderer mesh_renderer;
     Manager manager;
 
+    public Tool.Role required_role;
+
 
     void Start(){
         manager = GameObject.Find("Manager").GetComponent<Manager>();
@@ -33,7 +34,12 @@ public class Resource : MonoBehaviour, IInteraction {
         if(depleted) return;
         // the weapon slot is index 9
         if(!(manager.player_gear.slots[9].item is Tool)){
-            Debug.Log("The interaction is not happening with a tool");
+            Debug.Log("Incorrect tool for resource.");
+            return;
+        }
+        var interacting_tool = manager.player_gear.slots[9].item as Tool;
+        if(interacting_tool.role!=required_role){
+            Debug.Log("Incorrect tool for resource.");
             return;
         }
         if(rnd_index >= min_bounds && rnd_index <= max_bounds){

@@ -5,6 +5,18 @@ using UnityEngine.AI;
 
 [CreateAssetMenu(fileName = "New Tool", menuName = "Tool")]
 public class Tool : Weapon {
+
+    // tools will be used alongside skills, so we could break them up like so
+    public enum Role{
+        Axe,
+        Pickaxe,
+        Shovel,
+        Rake,
+        Screwdriver,
+        Hammer,
+    }
+
+    public Role role;
     
     public Tool(){
         type = Type.Weapon;
