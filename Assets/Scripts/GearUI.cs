@@ -59,6 +59,7 @@ public class GearUI : InventoryUI {
             inventorySlots[slot.index].GetComponent<SlotContainer>().inventorySlot.transform.GetChild(2).GetComponent<Text>().text = slot.stack_size.ToString();
         }
         inventorySlots[slot.index].GetComponent<SlotContainer>().inventorySlot.transform.GetChild(1).GetComponent<Image>().color = newColor;
+        manager.player_gear.slots[slot.index].item = slot.item;
     }
 
     public override void EmptySlot(int slot_index){

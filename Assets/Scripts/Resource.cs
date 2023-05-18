@@ -31,6 +31,11 @@ public class Resource : MonoBehaviour, IInteraction {
     public void Interaction(GameObject interactingWith){
         int rnd_index = Random.Range(0, rng_size);
         if(depleted) return;
+        // the weapon slot is index 9
+        if(!(manager.player_gear.slots[9].item is Tool)){
+            Debug.Log("The interaction is not happening with a tool");
+            return;
+        }
         if(rnd_index >= min_bounds && rnd_index <= max_bounds){
             Debug.Log("Reward them a resource");
             if(resources.Length<0){

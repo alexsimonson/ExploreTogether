@@ -13,6 +13,7 @@ public class Maze : MonoBehaviour {
     public GameObject itemSpawn;
     public GameObject enemyPrefab;
     public GameObject torchPrefab;
+    public GameObject treePrefab;
 
     private int prefabSize = 5;
 
@@ -48,6 +49,7 @@ public class Maze : MonoBehaviour {
         itemSpawn = Resources.Load("Prefabs/Item", typeof(GameObject)) as GameObject;
         enemyPrefab = Resources.Load("Prefabs/Enemy", typeof(GameObject)) as GameObject;
         torchPrefab = Resources.Load("Prefabs/Torch Particle", typeof(GameObject)) as GameObject;
+        treePrefab = Resources.Load("Prefabs/TreeResource", typeof(GameObject)) as GameObject;
     }
 
     void Start(){
@@ -337,18 +339,33 @@ public class Maze : MonoBehaviour {
             // if(i%4==2){
             //     SpawnEnemy(random_index);    // this function needs to be the standardized spawn function.... not a different one here
             // }
+            if(i%4==2){
+                SpawnPrefab(treePrefab, random_index, "tree_prefab_"+i.ToString());
+            }
         }
     }
 
-    // public void SpawnEnemy(int index=-1){
-    //     int random_index = index;
-    //     if(random_index==-1){
-    //         random_index = Random.Range(25, generated_nodes.Count - 25);
-    //     }
-    //     // ensure the mazePosition is n-depth away from the player (we need a function for this)
-    //     GameObject enemy = null;
-    //     enemy = Instantiate(enemyPrefab, new Vector3(generated_nodes[random_index].mazePosition.x * prefabSize, generated_nodes[random_index].mazePosition.y * prefabSize + 1.5f, generated_nodes[random_index].mazePosition.z * prefabSize), Quaternion.identity);
-    //     enemy.transform.SetParent(gameObject.transform);
-    //     enemy.name = "Enemy";
-    // }
+    public void SpawnPrefab(GameObject prefab, int index=-1, string _name="spawned prefab"){
+        int random_index = index;
+        if(random_index==-1){
+            random_index = Random.Range(25, generated_nodes.Count - 25);
+        }
+        // ensure the mazePosition is n-depth away from the player (we need a function for this)
+        GameObject spawned_prefab = null;
+        spawned_prefab = Instantiate(prefab, new Vector3(generated_nodes[random_index].mazePosition.x * prefabSize, generated_nodes[random_index].mazePosition.y * prefabSize + 1.5f, generated_nodes[random_index].mazePosition.z * prefabSize), Quaternion.identity);
+        spawned_prefab.transform.SetParent(gameObject.transform);
+        spawned_prefab.name = _name;
+    }
+
+    public void SpawnEnemy(int index=-1){
+        int random_index = index;
+        if(random_index==-1){
+            random_index = Random.Range(25, generated_nodes.Count - 25);
+        }
+        // ensure the mazePosition is n-depth away from the player (we need a function for this)
+        GameObject enemy = null;
+        enemy = Instantiate(enemyPrefab, new Vector3(generated_nodes[random_index].mazePosition.x * prefabSize, generated_nodes[random_index].mazePosition.y * prefabSize + 1.5f, generated_nodes[random_index].mazePosition.z * prefabSize), Quaternion.identity);
+        enemy.transform.SetParent(gameObject.transform);
+        enemy.name = "Enemy";
+    }
 }

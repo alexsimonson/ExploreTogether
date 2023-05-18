@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Axe
   m_EditorClassIdentifier: 
   id: 0
-  name: 
+  name: Axe
   description: 
   weight: 0
   stack: 0
