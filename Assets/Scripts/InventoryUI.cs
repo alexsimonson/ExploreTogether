@@ -70,6 +70,7 @@ public class InventoryUI : MonoBehaviour {
 
         // we also need to change the underlying value of the InventorySlotButton, which honestly is so fucked up because there's too many places this is stored
         inventorySlots[slot.index].GetComponent<SlotContainer>().inventorySlot.GetComponent<InventorySlot>().item = slot.item;
+        manager.player_inventory.slots[slot.index].item = slot.item;
     }
 
     // this function may be outdated with events update :)

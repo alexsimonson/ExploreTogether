@@ -53,6 +53,7 @@ public class Inventory : ScriptableObject, IInventory {
         }
         // default back to non-stacking behavior
         int empty_slot_index = FindEmptySlot();
+        Debug.Log("empty slot index: " + empty_slot_index.ToString());
         if(empty_slot_index >= 0){
             // we should add to this slot
             slots[empty_slot_index].item = new_item;
