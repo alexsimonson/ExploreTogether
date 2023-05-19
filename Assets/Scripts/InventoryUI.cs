@@ -11,17 +11,20 @@ public class InventoryUI : MonoBehaviour {
     public GameObject slotButtonPrefab;
     public GameObject[] inventorySlots;    // this is a conversion of the original slots variable from Inventory.cs
     public Manager manager;
+    // this will help us decouple the player from this script
+    public Inventory watching_inventory;
 
     void Awake(){
         slotContainerPrefab = Resources.Load("Prefabs/SlotContainer", typeof(GameObject)) as GameObject;
         slotButtonPrefab = Resources.Load("Prefabs/InventorySlotButton", typeof(GameObject)) as GameObject;
         manager = GameObject.Find("Manager").GetComponent<Manager>();
+        hudView = gameObject.transform.GetChild(0).gameObject;
+        content = hudView.transform.GetChild(0).GetChild(0).gameObject;
     }
 
     void Start(){
-        hudView = gameObject.transform.GetChild(0).gameObject;
-        content = hudView.transform.GetChild(0).GetChild(0).gameObject;
-        DrawInventoryUI(manager.player_inventory);
+        // if(watching_inventory==null) Debug.LogError("InventoryUI is missing reference to an inventory to display");
+        // DrawInventoryUI(watching_inventory);    // this doesn't HAVE to be done here... right?
         Debug.Log("InventoryUI Has been started");
     }
 
@@ -70,7 +73,7 @@ public class InventoryUI : MonoBehaviour {
 
         // we also need to change the underlying value of the InventorySlotButton, which honestly is so fucked up because there's too many places this is stored
         inventorySlots[slot.index].GetComponent<SlotContainer>().inventorySlot.GetComponent<InventorySlot>().item = slot.item;
-        manager.player_inventory.slots[slot.index].item = slot.item;
+        watching_inventory.slots[slot.index].item = slot.item;
     }
 
     // this function may be outdated with events update :)
@@ -84,5 +87,9 @@ public class InventoryUI : MonoBehaviour {
 
     public virtual void ToggleUI(Component sender, object data){
         hudView.SetActive((bool)data);
+    }
+
+    public virtual void SetWatchingInventoryByReference(ref Inventory inventory){
+        watching_inventory = inventory;
     }
 }

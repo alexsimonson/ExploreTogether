@@ -59,6 +59,8 @@ public class Manager : MonoBehaviour {
         player = Instantiate(playerPrefab, playerSpawnPoint, Quaternion.identity);
         player.name = "Player";
         player_inventory = ScriptableObject.CreateInstance("Inventory") as Inventory;
+        hud.transform.GetChild(3).gameObject.GetComponent<InventoryUI>().SetWatchingInventoryByReference(ref player_inventory);
+        hud.transform.GetChild(3).gameObject.GetComponent<InventoryUI>().DrawInventoryUI(player_inventory);
         player_gear = ScriptableObject.CreateInstance("Gear") as Gear;
         player_gear.Initialize();
         Setup();
@@ -127,6 +129,7 @@ public class Manager : MonoBehaviour {
     }
 
     // this logic probably makes more sense in the individual panels themselves
+    // maybe even handle this as an event on the HUD
     private void HandlePanels(GameState _state){
         if(_state==GameState.Dead){
             // show the death panel

@@ -43,11 +43,11 @@ public class Resource : MonoBehaviour, IInteraction {
             return;
         }
         if(rnd_index >= min_bounds && rnd_index <= max_bounds){
-            Debug.Log("Reward them a resource");
             if(resources.Length<0){
                 Debug.Log("Must add items as reward in order to interact with resources");
                 return;
             }
+            Debug.Log("Reward them a resource");
             manager.player_inventory.AddItem(GiveResource());
             if(single_use){
                 Depleted();

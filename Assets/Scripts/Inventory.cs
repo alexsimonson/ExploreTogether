@@ -37,6 +37,7 @@ public class Inventory : ScriptableObject, IInventory {
 
     public virtual void AddItem(Item new_item){
         if(new_item==null) return;
+        Debug.Log("Adding item");
         if(new_item.stack){
             // we should FindItemInSlot
             int slot_index = FindItemInSlot(new_item);
@@ -110,6 +111,8 @@ public class Inventory : ScriptableObject, IInventory {
         for(int slot_index=0;slot_index<slots.Length;slot_index++){
             if(slots[slot_index]!=null){
                 if(slots[slot_index].item!=null){
+                    Debug.Log("Find item id: " + find_item.id.ToString());
+                    Debug.Log("slot item id: " + slots[slot_index].item.id.ToString());
                     if(slots[slot_index].item.id==find_item.id && slots[slot_index].stack_size < find_item.max_stack_size) return slot_index;
                 }
             }

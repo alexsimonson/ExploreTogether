@@ -15,6 +15,7 @@ public class ItemSpawn : MonoBehaviour, IInteraction {
 
     public void Interaction(GameObject interacting){
         if(item){
+            Debug.Log("Interaction is running from itemspawn.cs");
             manager.player_inventory.AddItem(item);
             Destroy(gameObject);
         }else{
