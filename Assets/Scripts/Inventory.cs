@@ -37,7 +37,7 @@ public class Inventory : ScriptableObject, IInventory {
 
     public virtual void AddItem(Item new_item){
         if(new_item==null) return;
-        Debug.Log("Adding item");
+        Debug.Log("Adding item: " + new_item.name);
         if(new_item.stack){
             // we should FindItemInSlot
             int slot_index = FindItemInSlot(new_item);
