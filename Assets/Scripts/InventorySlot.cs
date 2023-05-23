@@ -14,6 +14,7 @@ public class InventorySlot : MonoBehaviour, IPointerDownHandler, IBeginDragHandl
     private CanvasGroup cg;
     private GameObject stack_size_text;
     private GameObject slot_container;
+    public GameObject parent_ui; // the ui object this slot belongs to
 
     void Start(){
         canvas = GameObject.Find("HUD").GetComponent<Canvas>();
@@ -40,6 +41,8 @@ public class InventorySlot : MonoBehaviour, IPointerDownHandler, IBeginDragHandl
             // let's drop the item
             if(item!=null){
                 slot_container.GetComponent<SlotContainer>().DropItem();
+            }else{
+                Debug.Log("Pointer down item not null: " + item.name);
             }
         }
     }
@@ -71,5 +74,9 @@ public class InventorySlot : MonoBehaviour, IPointerDownHandler, IBeginDragHandl
                 stack_size_text.SetActive(false);
             }
         }
+    }
+
+    public void SetParentUI(GameObject _parent){
+        parent_ui = _parent;
     }
 }

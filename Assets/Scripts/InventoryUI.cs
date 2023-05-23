@@ -14,6 +14,8 @@ public class InventoryUI : MonoBehaviour {
     // this will help us decouple the player from this script
     public Inventory watching_inventory;
 
+    public string debug_name;
+
     void Awake(){
         slotContainerPrefab = Resources.Load("Prefabs/SlotContainer", typeof(GameObject)) as GameObject;
         slotButtonPrefab = Resources.Load("Prefabs/InventorySlotButton", typeof(GameObject)) as GameObject;
@@ -26,6 +28,10 @@ public class InventoryUI : MonoBehaviour {
         // if(watching_inventory==null) Debug.LogError("InventoryUI is missing reference to an inventory to display");
         // DrawInventoryUI(watching_inventory);    // this doesn't HAVE to be done here... right?
         Debug.Log("InventoryUI Has been started");
+    }
+
+    public void UpdateInventory(Component sender, object data){
+        DrawInventoryUI(sender.gameObject.GetComponent<Storage>().storage_inventory);
     }
 
     public virtual void DrawInventoryUI(Inventory inventory){
@@ -44,16 +50,21 @@ public class InventoryUI : MonoBehaviour {
             inventorySlots[slot_index].GetComponent<SlotContainer>().inventorySlot = Instantiate(slotButtonPrefab, inventorySlots[slot_index].GetComponent<SlotContainer>().transform.position, inventorySlots[slot_index].GetComponent<SlotContainer>().transform.rotation);
             inventorySlots[slot_index].GetComponent<SlotContainer>().inventorySlot.transform.SetParent(inventorySlots[slot_index].transform, false);
             inventorySlots[slot_index].GetComponent<SlotContainer>().inventorySlot.transform.localPosition = new Vector3(0, 0, 0);
+            inventorySlots[slot_index].GetComponent<SlotContainer>().inventorySlot.GetComponent<InventorySlot>().SetParentUI(gameObject);
         }
     }
 
+    // this function is run by ALL inventories when one changes... how can I fix this?
     public virtual void UpdateSlot(Component sender, object data){
+
+        Debug.Log("Running update slot");
         if(data.GetType().ToString()!="ItemSlot"){
             Debug.LogError("Invalid update data type");
             return;
         }
 
         ItemSlot slot = (ItemSlot)data;
+        // Debug.Log("Item name in update slot: " + slot.item.name);    // this can break functionality...
         
         Color newColor = inventorySlots[slot.index].GetComponent<SlotContainer>().inventorySlot.transform.GetChild(1).GetComponent<Image>().color;
 
@@ -87,6 +98,16 @@ public class InventoryUI : MonoBehaviour {
 
     public virtual void ToggleUI(Component sender, object data){
         hudView.SetActive((bool)data);
+        if((bool)data==false){
+            // set manager value back to false
+            manager.GetComponent<Manager>().storage_hud_visible_state = false;
+        }
+    }
+
+    public virtual void HideUI(Component sender, object data){
+        if((bool)data==false){
+            hudView.SetActive(false);
+        }
     }
 
     public virtual void SetWatchingInventoryByReference(ref Inventory inventory){

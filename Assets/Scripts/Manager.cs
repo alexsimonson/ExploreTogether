@@ -12,6 +12,7 @@ public class Manager : MonoBehaviour {
 
     public GameObject player;
     public GameObject hud;
+    public bool storage_hud_visible_state = false;
 
 
     public GameObject map;
@@ -89,6 +90,7 @@ public class Manager : MonoBehaviour {
     }
 
     public void MapSetupCallback(){
+        Debug.Log("Map setup callback in manager");
         // start the game mode
         hud.transform.GetChild(8).gameObject.SetActive(false);
         player.transform.position = playerSpawnPoint;

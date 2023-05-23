@@ -110,3 +110,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Storage
   storage_inventory: {fileID: 0}
+  onStorageAccessed: {fileID: 11400000, guid: 2e858e2c48666904c933d2800964cd02, type: 2}

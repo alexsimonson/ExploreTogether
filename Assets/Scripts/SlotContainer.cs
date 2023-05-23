@@ -18,11 +18,13 @@ public class SlotContainer : MonoBehaviour, IDropHandler {
     [Header("Events")]
     public GameEvent onInventoryChanged;
     public GameEvent onEquipmentChanged;
+    public GameEvent onStorageChanged;
 
     void Start(){
         manager = GameObject.Find("Manager").GetComponent<Manager>();
         onInventoryChanged = Resources.Load("Events/InventoryChanged", typeof(GameEvent)) as GameEvent;
         onEquipmentChanged = Resources.Load("Events/EquipmentChanged", typeof(GameEvent)) as GameEvent;
+        onStorageChanged = Resources.Load("Events/StorageChanged", typeof(GameEvent)) as GameEvent;
         inventoryUI = manager.hud.transform.GetChild(3).gameObject.GetComponent<InventoryUI>();
         gearUI = manager.hud.transform.GetChild(5).gameObject.GetComponent<GearUI>();
         if(inventorySlot.GetComponent<EquipmentSlot>()!=null){
@@ -34,7 +36,6 @@ public class SlotContainer : MonoBehaviour, IDropHandler {
     }
 
     public void OnDrop(PointerEventData eventData){
-
         if(eventData.pointerDrag==null){
             return;
         }
@@ -64,27 +65,41 @@ public class SlotContainer : MonoBehaviour, IDropHandler {
             if(draggingEquipment){
                 UnEquipItem(eventData);
             }else{
+                Debug.Log("Swapping Item logic is running");
                 SwapItem(eventData);
             }
         }
 
     }
 
+    // this logic is done on the inventory we are dragging FROM
     void SwapItem(PointerEventData eventData){
+        // I need to declare these as variables for simplicity
+        InventorySlot drag_inventory_slot_ref = eventData.pointerDrag.gameObject.GetComponent<InventorySlot>();
+        InventorySlot other_inventory_slot_ref = inventorySlot.GetComponent<InventorySlot>();
+        InventoryUI drag_inventory_ui_ref = drag_inventory_slot_ref.parent_ui.GetComponent<InventoryUI>();
+        InventoryUI other_inventory_ui_ref = other_inventory_slot_ref.parent_ui.GetComponent<InventoryUI>();
+        string drag_inventory_ui_name = drag_inventory_ui_ref.debug_name;
+        string other_inventory_ui_name = other_inventory_ui_ref.debug_name;
+        Debug.Log("drag_inventory_ui_name: " + drag_inventory_ui_name);
+        Debug.Log("other_inventory_ui_name: " + other_inventory_ui_name);
+        // now that I have access to these debug names, I can effectively set logic to determine how to handle this appropriately
+
         // at this point in time, inventorySlot represents the slot where our mouse let go of the button
         // this logic is necessary for preventing a bug at this time
-        Item originalItem = inventorySlot.GetComponent<InventorySlot>().item;   // I need this value when the bool is false
-        int originalStackSize = inventorySlot.GetComponent<InventorySlot>().stack_size;   // I need this value when the bool is false
-        bool shouldBeEmpty = originalItem==null ? true : false; 
+        Item originalItem = other_inventory_slot_ref.item;   // I need this value when the bool is false
+        int originalStackSize = other_inventory_slot_ref.stack_size;   // I need this value when the bool is false
+        bool shouldBeEmpty = originalItem==null ? true : false;
+        Debug.Log("Should be empty: " + shouldBeEmpty.ToString());
 
         Transform pointerDragParent = eventData.pointerDrag.transform.parent;
         GameObject pointerDragSlotContainer = pointerDragParent.gameObject;
         GameObject dragSlot = pointerDragParent.GetComponent<SlotContainer>().inventorySlot;
         int drag_index = pointerDragParent.GetComponent<SlotContainer>().index;
-        GameObject tempSlot = inventorySlot;
+        GameObject tempSlot = inventorySlot;    // interesting that this isn't used...
 
-        inventorySlot.GetComponent<InventorySlot>().item = dragSlot.GetComponent<InventorySlot>().item;
-        inventorySlot.GetComponent<InventorySlot>().stack_size = dragSlot.GetComponent<InventorySlot>().stack_size;
+        other_inventory_slot_ref.item = dragSlot.GetComponent<InventorySlot>().item;
+        other_inventory_slot_ref.stack_size = dragSlot.GetComponent<InventorySlot>().stack_size;
         inventorySlot.transform.SetParent(gameObject.transform, false);
         inventorySlot.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 0, 0);
         
@@ -94,11 +109,12 @@ public class SlotContainer : MonoBehaviour, IDropHandler {
         dragSlot.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 0, 0);
         
         // we should instead raise two events, one for each slot effected
+        // we must branch this logic further, to determine exactly which inventories to update
+        // once determined, the events will be raised
         ItemSlot other_item_slot = ScriptableObject.CreateInstance("ItemSlot") as ItemSlot;
         other_item_slot.index = index;
-        other_item_slot.item = inventorySlot.GetComponent<InventorySlot>().item;
-        other_item_slot.stack_size = inventorySlot.GetComponent<InventorySlot>().stack_size;
-        onInventoryChanged.Raise(this, other_item_slot);
+        other_item_slot.item = other_inventory_slot_ref.item;
+        other_item_slot.stack_size = other_inventory_slot_ref.stack_size;
 
         ItemSlot drag_item_slot = ScriptableObject.CreateInstance("ItemSlot") as ItemSlot;
         drag_item_slot.index = drag_index;
@@ -109,7 +125,42 @@ public class SlotContainer : MonoBehaviour, IDropHandler {
             drag_item_slot.item = originalItem;
             drag_item_slot.stack_size = originalStackSize;
         }
-        onInventoryChanged.Raise(this, drag_item_slot);
+        // inventories determined, now raise the events
+        // I'm fairly certain we can handle this appropriately
+        if(drag_inventory_ui_name==other_inventory_ui_name){
+            // this means that we're swapping items within the same inventory
+            // either swap the inventory, or the storage...
+            if(drag_inventory_ui_name=="Storage Inventory"){
+                onStorageChanged.Raise(this, other_item_slot);
+                onStorageChanged.Raise(this, drag_item_slot);
+            }else{
+                onInventoryChanged.Raise(this, other_item_slot); // how it was originally
+                onInventoryChanged.Raise(this, drag_item_slot);  // how it was originally
+            }
+            Debug.Log("Swapping within same inventory");
+        }else{
+            // we only have two options right now, this needs to be cleaned up eventually...
+            if(drag_inventory_ui_name=="Storage Inventory"){
+                Debug.Log("Storage Inventory Logic");
+                onStorageChanged.Raise(this, drag_item_slot);
+                other_inventory_slot_ref.parent_ui.GetComponent<InventoryUI>().watching_inventory.onInventoryChanged.Raise(this, other_item_slot);   // attempt to raise on OTHER (// this is duplicating...)
+            }else{
+                Debug.Log("Else Logic");
+                onStorageChanged.Raise(this, other_item_slot);
+                other_inventory_slot_ref.parent_ui.GetComponent<InventoryUI>().watching_inventory.onInventoryChanged.Raise(this, drag_item_slot);   // attempt to raise on OTHER (// this is duplicating...)
+            }
+            // onStorageChanged.Raise(this, other_item_slot);
+            Debug.Log("Swapping items from " + drag_inventory_ui_name + " into " + other_inventory_ui_name);
+            // other_inventory_slot_ref.parent_ui.GetComponent<InventoryUI>().watching_inventory.onInventoryChanged.Raise(this, other_item_slot);   // attempt to raise on OTHER (// this is duplicating...)
+        }
+
+        // inventoryUI.watching_inventory.onInventoryChanged.Raise(this, other_item_slot);
+        // drag_inventory_ui_ref.parent_ui.GetComponent<InventoryUI>().watching_inventory.onInventoryChanged.Raise(this, other_item_slot);    // attempt to raise on THIS?
+
+        // I think we need to raise this event on the OTHER inventory
+        // other_inventory_slot_ref.parent_ui.GetComponent<InventoryUI>().watching_inventory.onInventoryChanged.Raise(this, drag_item_slot);   // attempt to raise on OTHER
+        // drag_inventory_ui_ref.parent_ui.GetComponent<InventoryUI>().watching_inventory.onInventoryChanged.Raise(this, drag_item_slot);    // attempt to raise on THIS? (// this is duplicating...)
+        
     }
 
     void EquipItem(PointerEventData eventData){
@@ -123,6 +174,7 @@ public class SlotContainer : MonoBehaviour, IDropHandler {
         Transform pointerDragParent = eventData.pointerDrag.transform.parent;
         GameObject pointerDragSlotContainer = pointerDragParent.gameObject;
         GameObject dragSlot = pointerDragParent.GetComponent<SlotContainer>().inventorySlot;
+        
         int drag_index = pointerDragParent.GetComponent<SlotContainer>().index;
         GameObject tempSlot = inventorySlot;
         string dragSlotType = dragSlot.GetComponent<InventorySlot>().item.GetType().ToString();
@@ -153,7 +205,6 @@ public class SlotContainer : MonoBehaviour, IDropHandler {
                 equipment_item_slot.item = inventorySlot.GetComponent<EquipmentSlot>().item;
                 equipment_item_slot.stack_size = inventorySlot.GetComponent<EquipmentSlot>().stack_size;
                 
-                onEquipmentChanged.Raise(this, equipment_item_slot);
                 
                 ItemSlot drag_item_slot = ScriptableObject.CreateInstance("ItemSlot") as ItemSlot;
                 drag_item_slot.index = drag_index;
@@ -164,7 +215,18 @@ public class SlotContainer : MonoBehaviour, IDropHandler {
                     drag_item_slot.item = originalItem;
                     drag_item_slot.stack_size = originalStackSize;
                 }
-                onInventoryChanged.Raise(this, drag_item_slot);
+                string drag_inventory_ui_name = dragSlot.GetComponent<InventorySlot>().parent_ui.GetComponent<InventoryUI>().debug_name;
+                Debug.Log("Surely I got the drag slot name: " + drag_inventory_ui_name);
+                // inventories determined, now raise the events
+                if(drag_inventory_ui_name=="Storage Inventory"){
+                    Debug.Log("Storage Inventory Logic");
+                    onStorageChanged.Raise(this, drag_item_slot);
+                }else{
+                    Debug.Log("Else Logic");
+                    // this is what was happening before I branched here... should keep existing behavior...
+                    onInventoryChanged.Raise(this, drag_item_slot);
+                }
+                onEquipmentChanged.Raise(this, equipment_item_slot);    // this should happen regardless
             }else{
                 return;
             }
@@ -226,7 +288,6 @@ public class SlotContainer : MonoBehaviour, IDropHandler {
             inventory_item_slot.index = index;
             inventory_item_slot.item = inventorySlot.GetComponent<InventorySlot>().item;
             inventory_item_slot.stack_size = inventorySlot.GetComponent<InventorySlot>().stack_size;
-            onInventoryChanged.Raise(this, inventory_item_slot);
 
             ItemSlot equipment_item_slot = ScriptableObject.CreateInstance("ItemSlot") as ItemSlot;
             equipment_item_slot.index = drag_index;
@@ -237,7 +298,19 @@ public class SlotContainer : MonoBehaviour, IDropHandler {
                 equipment_item_slot.item = originalItem;
                 equipment_item_slot.stack_size = originalStackSize;
             }
-            onEquipmentChanged.Raise(this, equipment_item_slot);
+
+            string other_inventory_ui_name = inventorySlot.GetComponent<InventorySlot>().parent_ui.GetComponent<InventoryUI>().debug_name;
+            Debug.Log("Surely I got the drag slot name: " + other_inventory_ui_name);
+            // inventories determined, now raise the events
+            if(other_inventory_ui_name=="Storage Inventory"){
+                Debug.Log("Storage Inventory Logic");
+                onStorageChanged.Raise(this, inventory_item_slot);
+            }else{
+                Debug.Log("Else Logic");
+                // this is what was happening before I branched here... should keep existing behavior...
+                onInventoryChanged.Raise(this, inventory_item_slot);
+            }
+            onEquipmentChanged.Raise(this, equipment_item_slot);    // this should happen regardless
         }else{
             return;
         }
@@ -286,6 +359,9 @@ public class SlotContainer : MonoBehaviour, IDropHandler {
     }
 
     public void DropItem(){
-        manager.player_inventory.DropItem(index);
+        Debug.Log("Calling Drop Item on this: " + gameObject.GetComponent<InventoryUI>().debug_name);
+        // we should update the inventory this slotcontainer is on...
+        gameObject.GetComponent<InventoryUI>().watching_inventory.DropItem(index);
+        // manager.player_inventory.DropItem(index);
     }
 }

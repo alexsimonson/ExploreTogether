@@ -12,9 +12,20 @@ public class PlayerInput : MonoBehaviour{
     void Update(){
         if ((Input.GetKeyDown("e"))){
             // we should swap everything
-            hud_visible_state = !hud_visible_state;
-            onToggleInventory.Raise(this, hud_visible_state);
+            ToggleHUD();
         }
+    }
+
+    // ? after bool allows for null assignment, which is perfect for this function
+    public void ToggleHUD(bool? _state=null){
+        if(_state==null){
+            // toggle
+            hud_visible_state = !hud_visible_state;
+        }else{
+            // otherwise use value as passed in
+            hud_visible_state = (bool)_state;
+        }
+        onToggleInventory.Raise(this, hud_visible_state);
     }
 
     public void HandleMouseState(Component sender, object data){

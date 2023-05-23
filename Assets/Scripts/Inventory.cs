@@ -64,6 +64,7 @@ public class Inventory : ScriptableObject, IInventory {
             item_slot.item = new_item;
             item_slot.stack_size = slots[empty_slot_index].stack_size;
             // this data needs passed to the UI, so it can update
+            Debug.Log("Raising event for inventory change...");
             onInventoryChanged.Raise(null, item_slot);
             return;
         }
