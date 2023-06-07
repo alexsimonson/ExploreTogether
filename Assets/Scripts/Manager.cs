@@ -61,7 +61,7 @@ public class Manager : MonoBehaviour {
         player.name = "Player";
         player_inventory = ScriptableObject.CreateInstance("Inventory") as Inventory;
         hud.transform.GetChild(3).gameObject.GetComponent<InventoryUI>().SetWatchingInventoryByReference(ref player_inventory);
-        hud.transform.GetChild(3).gameObject.GetComponent<InventoryUI>().DrawInventoryUI(player_inventory);
+        hud.transform.GetChild(3).gameObject.GetComponent<InventoryUI>().DrawInventoryUI();
         player_gear = ScriptableObject.CreateInstance("Gear") as Gear;
         player_gear.Initialize();
         Setup();
@@ -90,7 +90,6 @@ public class Manager : MonoBehaviour {
     }
 
     public void MapSetupCallback(){
-        Debug.Log("Map setup callback in manager");
         // start the game mode
         hud.transform.GetChild(8).gameObject.SetActive(false);
         player.transform.position = playerSpawnPoint;

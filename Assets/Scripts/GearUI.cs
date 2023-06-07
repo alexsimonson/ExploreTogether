@@ -9,16 +9,19 @@ public class GearUI : InventoryUI {
     [Header("Events")]
     public GameEvent onWeaponChanged;   // this doesn't apply to the InventoryUI
 
+    public Gear watching_gear;
+
     void Start(){
         hudView = gameObject.transform.GetChild(0).gameObject;
         content = hudView.transform.GetChild(0).gameObject;
         manager = GameObject.Find("Manager").GetComponent<Manager>();
-        DrawInventoryUI(manager.player_gear);
+        watching_gear = manager.player_gear;
+        DrawInventoryUI();
     }
 
-    public override void DrawInventoryUI(Inventory inventory){
+    public override void DrawInventoryUI(){
         // we need to dynamically generate gear slots based on the existing gear
-        if(inventory==null){
+        if(watching_gear==null){
             Debug.Log("No gear set");
             return;
         }

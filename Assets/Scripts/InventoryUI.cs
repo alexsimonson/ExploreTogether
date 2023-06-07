@@ -31,14 +31,21 @@ public class InventoryUI : MonoBehaviour {
     }
 
     public void UpdateInventory(Component sender, object data){
-        DrawInventoryUI(sender.gameObject.GetComponent<Storage>().storage_inventory);
+        DrawInventoryUI();
     }
 
-    public virtual void DrawInventoryUI(Inventory inventory){
+    // why is the inventory being passed in, when it should just draw the watching inventory
+    public virtual void DrawInventoryUI(){
         // we need to dynamically generate inventory slots based on the existing inventory
         // if slots has not yet been instantiated, we should do that too
-        inventorySlots = new GameObject[inventory.max_slots];
-        for(int slot_index=0;slot_index<inventory.slots.Length;slot_index++){
+        // every time this function runs, we need to remove existing inventorySlots
+        foreach(GameObject inventorySlot in inventorySlots){
+            Destroy(inventorySlot);
+        }
+
+        inventorySlots = new GameObject[watching_inventory.max_slots];
+        for(int slot_index=0;slot_index<watching_inventory.max_slots;slot_index++){
+            Debug.Log("slot_index: " + slot_index.ToString());
             if(inventorySlots[slot_index]==null){
                 GameObject slot_container = Instantiate(slotContainerPrefab, content.transform.position, content.transform.rotation);
                 slot_container.transform.SetParent(content.transform, false);
@@ -57,7 +64,6 @@ public class InventoryUI : MonoBehaviour {
     // this function is run by ALL inventories when one changes... how can I fix this?
     public virtual void UpdateSlot(Component sender, object data){
 
-        Debug.Log("Running update slot");
         if(data.GetType().ToString()!="ItemSlot"){
             Debug.LogError("Invalid update data type");
             return;
@@ -66,6 +72,11 @@ public class InventoryUI : MonoBehaviour {
         ItemSlot slot = (ItemSlot)data;
         // Debug.Log("Item name in update slot: " + slot.item.name);    // this can break functionality...
         
+        HandleSlotUpdate(slot);
+    }
+
+    public void HandleSlotUpdate(ItemSlot slot){
+        Debug.Log("Handle slot update at index: " + slot.index.ToString());
         Color newColor = inventorySlots[slot.index].GetComponent<SlotContainer>().inventorySlot.transform.GetChild(1).GetComponent<Image>().color;
 
         // ideally only this code should run in every instance
@@ -112,5 +123,12 @@ public class InventoryUI : MonoBehaviour {
 
     public virtual void SetWatchingInventoryByReference(ref Inventory inventory){
         watching_inventory = inventory;
+    }
+
+    // this function should very simply loop through all items and re-render them
+    public void UpdateInventorySlots(){
+        foreach(ItemSlot slot in watching_inventory.slots){
+            HandleSlotUpdate(slot);
+        }
     }
 }

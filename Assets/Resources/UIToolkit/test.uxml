@@ -1,0 +1,20 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:VisualElement>
+        <ui:GroupBox>
+            <ui:Label text="Increase Count" display-tooltip-when-elided="true" />
+            <ui:Button text="Button" display-tooltip-when-elided="true" name="increase" />
+        </ui:GroupBox>
+        <ui:GroupBox>
+            <ui:Label text="Decrease Count" display-tooltip-when-elided="true" />
+            <ui:Button text="Button" display-tooltip-when-elided="true" name="decrease" />
+        </ui:GroupBox>
+        <ui:GroupBox>
+            <ui:Label text="Set 0 Count" display-tooltip-when-elided="true" />
+            <ui:Button text="Button" display-tooltip-when-elided="true" name="set" />
+        </ui:GroupBox>
+    </ui:VisualElement>
+    <ui:GroupBox>
+        <ui:Label text="Count" display-tooltip-when-elided="true" />
+        <ui:Label text="0" display-tooltip-when-elided="true" name="count" />
+    </ui:GroupBox>
+</ui:UXML>

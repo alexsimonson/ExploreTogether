@@ -12,14 +12,19 @@ public class Storage : MonoBehaviour, IInteraction {
     public GameEvent onStorageAccessed;
 
     public GameObject storage_hud;
+    public int storage_slots;
 
     void Start(){
         manager = GameObject.Find("Manager").GetComponent<Manager>();
-        storage_hud = manager.hud.transform.GetChild(11).gameObject;
+        
         storage_inventory = ScriptableObject.CreateInstance("Inventory") as Inventory;
+        storage_inventory.max_slots = storage_slots;
     }
 
     public void Interaction(GameObject interactingWith){
+        if(storage_hud==null){
+            storage_hud = manager.hud.transform.GetChild(11).gameObject;
+        }
         // we should display the storage inventory to the player
         if(interactingWith.tag=="Player"){
             PlayerInput playerInput = interactingWith.GetComponent<PlayerInput>();
@@ -44,16 +49,12 @@ public class Storage : MonoBehaviour, IInteraction {
                 ToggleStorageHUD(temp_state);
             }
 
-            // temp_state is set
-            if(temp_state==true){
-            }
-
             // the HUD should match with playerInput variable here...
             if(temp_state==true){
                 // we should set the inventory as we're about to utilize it
                 manager.hud.transform.GetChild(11).gameObject.GetComponent<InventoryUI>().SetWatchingInventoryByReference(ref storage_inventory);
-                manager.hud.transform.GetChild(11).gameObject.GetComponent<InventoryUI>().DrawInventoryUI(storage_inventory);
-                // storage_hud.GetComponent<InventoryUI>().DrawInventoryUI(storage_hud.GetComponent<InventoryUI>().watching_inventory);
+                manager.hud.transform.GetChild(11).gameObject.GetComponent<InventoryUI>().DrawInventoryUI();
+                onStorageAccessed.Raise(this, manager.GetComponent<Manager>().storage_hud_visible_state);
             }
             playerInput.ToggleHUD(temp_state);
         }
@@ -68,7 +69,6 @@ public class Storage : MonoBehaviour, IInteraction {
             // otherwise use value as passed in
             manager.GetComponent<Manager>().storage_hud_visible_state = (bool)_state;
         }
-        onStorageAccessed.Raise(this, manager.GetComponent<Manager>().storage_hud_visible_state);
     }
 
     public string InteractionName(){

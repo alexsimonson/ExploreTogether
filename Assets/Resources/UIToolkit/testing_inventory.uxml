@@ -1,0 +1,7 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:VisualElement style="background-image: resource(&apos;UI/inventory_scroll_view&apos;); width: 450px; height: 700px;">
+        <ui:ScrollView name="inventory_group">
+            <ui:GroupBox name="inventory_group_box" style="flex-direction: row; flex-wrap: wrap;" />
+        </ui:ScrollView>
+    </ui:VisualElement>
+</ui:UXML>

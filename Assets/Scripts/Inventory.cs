@@ -37,7 +37,6 @@ public class Inventory : ScriptableObject, IInventory {
 
     public virtual void AddItem(Item new_item){
         if(new_item==null) return;
-        Debug.Log("Adding item: " + new_item.name);
         if(new_item.stack){
             // we should FindItemInSlot
             int slot_index = FindItemInSlot(new_item);
@@ -54,7 +53,6 @@ public class Inventory : ScriptableObject, IInventory {
         }
         // default back to non-stacking behavior
         int empty_slot_index = FindEmptySlot();
-        Debug.Log("empty slot index: " + empty_slot_index.ToString());
         if(empty_slot_index >= 0){
             // we should add to this slot
             slots[empty_slot_index].item = new_item;
@@ -64,7 +62,6 @@ public class Inventory : ScriptableObject, IInventory {
             item_slot.item = new_item;
             item_slot.stack_size = slots[empty_slot_index].stack_size;
             // this data needs passed to the UI, so it can update
-            Debug.Log("Raising event for inventory change...");
             onInventoryChanged.Raise(null, item_slot);
             return;
         }

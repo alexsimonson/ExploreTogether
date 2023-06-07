@@ -1,0 +1,9 @@
+#inventory-scroll-view{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.item-slot{
+    flex-basis: 25%;
+}

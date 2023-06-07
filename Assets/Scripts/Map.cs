@@ -17,7 +17,6 @@ public class Map : MonoBehaviour {
         if(controlled_render){
             controlled_render = false;
             manager.MapSetupCallback();
-            Debug.Log("Map is done");
         }
     }
 }

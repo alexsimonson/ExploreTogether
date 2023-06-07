@@ -65,7 +65,6 @@ public class SlotContainer : MonoBehaviour, IDropHandler {
             if(draggingEquipment){
                 UnEquipItem(eventData);
             }else{
-                Debug.Log("Swapping Item logic is running");
                 SwapItem(eventData);
             }
         }
@@ -90,7 +89,6 @@ public class SlotContainer : MonoBehaviour, IDropHandler {
         Item originalItem = other_inventory_slot_ref.item;   // I need this value when the bool is false
         int originalStackSize = other_inventory_slot_ref.stack_size;   // I need this value when the bool is false
         bool shouldBeEmpty = originalItem==null ? true : false;
-        Debug.Log("Should be empty: " + shouldBeEmpty.ToString());
 
         Transform pointerDragParent = eventData.pointerDrag.transform.parent;
         GameObject pointerDragSlotContainer = pointerDragParent.gameObject;
