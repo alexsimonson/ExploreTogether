@@ -28,7 +28,7 @@ public class Gear : Inventory, IInventory {
         
     }
 
-    public override void AddItem(Item new_item){
+    public override void AddItem(Item new_item, bool isStorage=false){
         if(new_item.stack){
             // we should FindItemInSlot
             int slot_index = FindItemInSlot(new_item);

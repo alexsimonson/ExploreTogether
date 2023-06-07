@@ -16,9 +16,9 @@ public class Storage : MonoBehaviour, IInteraction {
 
     void Start(){
         manager = GameObject.Find("Manager").GetComponent<Manager>();
-        
         storage_inventory = ScriptableObject.CreateInstance("Inventory") as Inventory;
         storage_inventory.max_slots = storage_slots;
+        Initialize();
     }
 
     public void Interaction(GameObject interactingWith){
@@ -73,5 +73,19 @@ public class Storage : MonoBehaviour, IInteraction {
 
     public string InteractionName(){
         return name;
+    }
+
+    public void Initialize(){
+        Debug.Log("Initializing storage inventory with some test items");
+
+        // let's spawn a bunch of random items to storage_inventory
+        // this will be for number of items
+        int minRange = 0;
+        int maxRange = storage_inventory.max_slots;
+        int randomNumItemsInt = Random.Range(minRange, maxRange + 1);
+        for(int i=0;i<randomNumItemsInt;i++){
+            var new_item = manager.item_bank[Random.Range(minRange, manager.item_bank.Length)];
+            storage_inventory.AddItem(new_item, true);
+        }
     }
 }

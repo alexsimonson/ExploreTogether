@@ -11,6 +11,7 @@ public class Inventory : ScriptableObject, IInventory {
     // THE INVENTORY IS RESPONSIBLE FOR RAISING EVENTS RELATED TO THE INVENTORY
     [Header("Events")]
     public GameEvent onInventoryChanged;
+    public GameEvent onStorageChanged;
 
     public GameObject RelevantScrollView;   // UI
     public Manager manager; // used to get the UI
@@ -28,6 +29,7 @@ public class Inventory : ScriptableObject, IInventory {
             slots[i].index = i;
         }
         onInventoryChanged = Resources.Load("Events/InventoryChanged", typeof(GameEvent)) as GameEvent;
+        onStorageChanged = Resources.Load("Events/StorageChanged", typeof(GameEvent)) as GameEvent;
         manager = GameObject.Find("Manager").GetComponent<Manager>();
     }
 
@@ -35,7 +37,7 @@ public class Inventory : ScriptableObject, IInventory {
         // RelevantScrollView = manager.hud.transform.GetChild(3).gameObject;
     }
 
-    public virtual void AddItem(Item new_item){
+    public virtual void AddItem(Item new_item, bool isStorage=false){
         if(new_item==null) return;
         if(new_item.stack){
             // we should FindItemInSlot
@@ -46,8 +48,12 @@ public class Inventory : ScriptableObject, IInventory {
                 item_slot.item = new_item;
                 item_slot.stack_size = slots[slot_index].stack_size;
                 slots[slot_index].stack_size++;
-                // will sending in this have issues?  this refers to a scriptable object...  other examples I was using a mono
-                onInventoryChanged.Raise(null, item_slot);
+                if(isStorage){
+                    onStorageChanged.Raise(null, item_slot);
+                }else{
+                    // will sending in this have issues?  this refers to a scriptable object...  other examples I was using a mono
+                    onInventoryChanged.Raise(null, item_slot);
+                }
                 return;
             }
         }
@@ -61,8 +67,12 @@ public class Inventory : ScriptableObject, IInventory {
             item_slot.index = empty_slot_index;
             item_slot.item = new_item;
             item_slot.stack_size = slots[empty_slot_index].stack_size;
-            // this data needs passed to the UI, so it can update
-            onInventoryChanged.Raise(null, item_slot);
+            if(isStorage){
+                onStorageChanged.Raise(null, item_slot);
+            }else{    
+                // this data needs passed to the UI, so it can update
+                onInventoryChanged.Raise(null, item_slot);
+            }
             return;
         }
         return;
