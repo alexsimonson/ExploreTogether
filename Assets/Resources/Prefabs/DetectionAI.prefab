@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ccb896c13b5a834a814a288ab54679e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  name: Dete
+  name: Soldier Inventory
   storage_inventory: {fileID: 0}
   onStorageAccessed: {fileID: 11400000, guid: 2e858e2c48666904c933d2800964cd02, type: 2}
   storage_hud: {fileID: 0}

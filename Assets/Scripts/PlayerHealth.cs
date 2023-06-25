@@ -20,7 +20,6 @@ public class PlayerHealth : Health{
         onPlayerHealthChanged.Raise(this, currentHealth);
     }
     public override void Death(bool shouldDestroy=true){
-        base.Death(false);
         is_dead = true;
         onGameStateChanged.Raise(this, Manager.GameState.Dead);
         gameObject.GetComponent<PlayerLook>().RevokeLook();
