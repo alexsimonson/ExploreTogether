@@ -34,15 +34,32 @@ public class PlayerInteraction : MonoBehaviour {
         }
     }
 
-    private void InteractRaycast(){
+    private void InteractRaycast() {
         RaycastHit hit;
-        if(camera!=null){
-            if(Physics.Raycast(camera.transform.position, camera.transform.forward * 1, out hit, 2) && hit.transform.gameObject.layer==7){
-                GiveInteractWith(hit.transform.gameObject);
-                return;
+        if (camera != null) {
+            if (Physics.Raycast(camera.transform.position, camera.transform.forward, out hit, 2)) {
+                Transform giveInteractionTo = IsInLayerRecursively(hit.transform, 7);
+                if (giveInteractionTo!=null) {
+                    GiveInteractWith(giveInteractionTo.gameObject);
+                    return;
+                }
             }
         }
         ClearInteractWith();
+    }
+
+    private Transform IsInLayerRecursively(Transform transform, int layer) {
+        if (transform.gameObject.layer == layer) {
+            return transform;
+        }
+
+        foreach (Transform child in transform) {
+            if (IsInLayerRecursively(child, layer)) {
+                return child;
+            }
+        }
+
+        return null;
     }
 
     public void CanInteractWith(Item interactable){
@@ -73,7 +90,9 @@ public class PlayerInteraction : MonoBehaviour {
     }
 
     public void ChangeInteractionWithText(){
-        string interacting_with_text = interactWith.GetComponent<IInteraction>().InteractionName();
-        interactionText.GetComponent<Text>().text = "Press F to Interact with " + interacting_with_text;
+        if(interactWith!=null && interactWith.GetComponent<IInteraction>()!=null){
+            string interacting_with_text = interactWith.GetComponent<IInteraction>().InteractionName();
+            interactionText.GetComponent<Text>().text = "Press F to Interact with " + interacting_with_text;
+        }
     }
 }

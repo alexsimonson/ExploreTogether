@@ -59,12 +59,16 @@ public class Storage : MonoBehaviour, IInteraction {
                 manager.hud.transform.GetChild(11).gameObject.GetComponent<InventoryUI>().DrawInventoryUI();
                 onStorageAccessed.Raise(this, manager.GetComponent<Manager>().storage_hud_visible_state);
                 // handle open animation
-                Debug.Log("Open the trigger");
-                animator.SetTrigger("TrOpen");
+                if(animator!=null){
+                    Debug.Log("Open the trigger");
+                    animator.SetTrigger("TrOpen");
+                }
             }else{
-                // handle close animation
-                Debug.Log("Close the trigger");
-                animator.SetTrigger("TrClose");
+                if(animator!=null){
+                    // handle close animation
+                    Debug.Log("Close the trigger");
+                    animator.SetTrigger("TrClose");
+                }
             }
             
             playerInput.ToggleHUD(temp_state);

@@ -16,6 +16,7 @@ public class PlayerHealth : Health{
     public override void DealDamage(int damage, RaycastHit? hit=null){
         if(is_dead) return;
         currentHealth -= damage;
+        CheckIfDead();
         onPlayerHealthChanged.Raise(this, currentHealth);
     }
     public override void Death(bool shouldDestroy=true){
@@ -36,5 +37,14 @@ public class PlayerHealth : Health{
 	public override void ResetHealth(){
 		base.ResetHealth();
         onPlayerHealthChanged.Raise(this, currentHealth);
+	}
+
+    public override bool CheckIfDead(){
+		if (currentHealth <= 0){
+			currentHealth = 0;
+			Death();
+			return true;
+		}
+		return false;
 	}
 }

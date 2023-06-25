@@ -21,8 +21,7 @@ public class Health : MonoBehaviour {
 
 	public virtual void DealDamage(int damage, RaycastHit? hit=null){
 		currentHealth -= damage;
-		if(checkifDead() && hit!=null){
-			// GetComponent<GenericNPC>().FakeDeathAnimation((RaycastHit)hit);]
+		if(CheckIfDead() && hit!=null){
 			GetComponent<GenericNPC>().ApplyForceToRagdoll((RaycastHit)hit, 1f);
 		}
 	}
@@ -42,7 +41,7 @@ public class Health : MonoBehaviour {
 		currentHealth = maxHealth;
 	}
 
-	private bool checkifDead(){
+	public virtual bool CheckIfDead(){
 		if (currentHealth <= 0){
 			currentHealth = 0;
 			Death();
