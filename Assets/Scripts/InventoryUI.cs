@@ -77,25 +77,27 @@ public class InventoryUI : MonoBehaviour {
 
     public void HandleSlotUpdate(ItemSlot slot){
         Debug.Log("Handle slot update at index: " + slot.index.ToString());
-        Color newColor = inventorySlots[slot.index].GetComponent<SlotContainer>().inventorySlot.transform.GetChild(1).GetComponent<Image>().color;
+        if(slot.index < inventorySlots.Length){
+            Color newColor = inventorySlots[slot.index].GetComponent<SlotContainer>().inventorySlot.transform.GetChild(1).GetComponent<Image>().color;
 
-        // ideally only this code should run in every instance
-        if(slot.item==null){
-            newColor.a = 0;
-            inventorySlots[slot.index].GetComponent<SlotContainer>().inventorySlot.transform.GetChild(0).GetComponent<Text>().text = null;
-            inventorySlots[slot.index].GetComponent<SlotContainer>().inventorySlot.transform.GetChild(1).GetComponent<Image>().sprite = null;
-            inventorySlots[slot.index].GetComponent<SlotContainer>().inventorySlot.transform.GetChild(2).GetComponent<Text>().text = null;
-        }else{
-            newColor.a = 1;
-            inventorySlots[slot.index].GetComponent<SlotContainer>().inventorySlot.transform.GetChild(0).GetComponent<Text>().text = slot.item.name;
-            inventorySlots[slot.index].GetComponent<SlotContainer>().inventorySlot.transform.GetChild(1).GetComponent<Image>().sprite = slot.item.icon;
-            inventorySlots[slot.index].GetComponent<SlotContainer>().inventorySlot.transform.GetChild(2).GetComponent<Text>().text = slot.stack_size.ToString();
+            // ideally only this code should run in every instance
+            if(slot.item==null){
+                newColor.a = 0;
+                inventorySlots[slot.index].GetComponent<SlotContainer>().inventorySlot.transform.GetChild(0).GetComponent<Text>().text = null;
+                inventorySlots[slot.index].GetComponent<SlotContainer>().inventorySlot.transform.GetChild(1).GetComponent<Image>().sprite = null;
+                inventorySlots[slot.index].GetComponent<SlotContainer>().inventorySlot.transform.GetChild(2).GetComponent<Text>().text = null;
+            }else{
+                newColor.a = 1;
+                inventorySlots[slot.index].GetComponent<SlotContainer>().inventorySlot.transform.GetChild(0).GetComponent<Text>().text = slot.item.name;
+                inventorySlots[slot.index].GetComponent<SlotContainer>().inventorySlot.transform.GetChild(1).GetComponent<Image>().sprite = slot.item.icon;
+                inventorySlots[slot.index].GetComponent<SlotContainer>().inventorySlot.transform.GetChild(2).GetComponent<Text>().text = slot.stack_size.ToString();
+            }
+            inventorySlots[slot.index].GetComponent<SlotContainer>().inventorySlot.transform.GetChild(1).GetComponent<Image>().color = newColor;
+
+            // we also need to change the underlying value of the InventorySlotButton, which honestly is so fucked up because there's too many places this is stored
+            inventorySlots[slot.index].GetComponent<SlotContainer>().inventorySlot.GetComponent<InventorySlot>().item = slot.item;
+            watching_inventory.slots[slot.index].item = slot.item;
         }
-        inventorySlots[slot.index].GetComponent<SlotContainer>().inventorySlot.transform.GetChild(1).GetComponent<Image>().color = newColor;
-
-        // we also need to change the underlying value of the InventorySlotButton, which honestly is so fucked up because there's too many places this is stored
-        inventorySlots[slot.index].GetComponent<SlotContainer>().inventorySlot.GetComponent<InventorySlot>().item = slot.item;
-        watching_inventory.slots[slot.index].item = slot.item;
     }
 
     // this function may be outdated with events update :)

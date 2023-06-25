@@ -13,9 +13,12 @@ public class Storage : MonoBehaviour, IInteraction {
 
     public GameObject storage_hud;
     public int storage_slots;
+    private Animator animator;
 
     void Start(){
         manager = GameObject.Find("Manager").GetComponent<Manager>();
+        animator = gameObject.GetComponent<Animator>();
+        onStorageAccessed = Resources.Load("Events/StorageAccessed", typeof(GameEvent)) as GameEvent;
         storage_inventory = ScriptableObject.CreateInstance("Inventory") as Inventory;
         storage_inventory.max_slots = storage_slots;
         Initialize();
@@ -55,8 +58,17 @@ public class Storage : MonoBehaviour, IInteraction {
                 manager.hud.transform.GetChild(11).gameObject.GetComponent<InventoryUI>().SetWatchingInventoryByReference(ref storage_inventory);
                 manager.hud.transform.GetChild(11).gameObject.GetComponent<InventoryUI>().DrawInventoryUI();
                 onStorageAccessed.Raise(this, manager.GetComponent<Manager>().storage_hud_visible_state);
+                // handle open animation
+                Debug.Log("Open the trigger");
+                animator.SetTrigger("TrOpen");
+            }else{
+                // handle close animation
+                Debug.Log("Close the trigger");
+                animator.SetTrigger("TrClose");
             }
+            
             playerInput.ToggleHUD(temp_state);
+            // handle animation
         }
     }
 

@@ -47,7 +47,7 @@ public class Maze : MonoBehaviour {
         xJunc = Resources.Load("Prefabs/Dungeon/X-Junction", typeof(GameObject)) as GameObject;
         cJunc = Resources.Load("Prefabs/Dungeon/C-Junction", typeof(GameObject)) as GameObject;
         itemSpawn = Resources.Load("Prefabs/Item", typeof(GameObject)) as GameObject;
-        enemyPrefab = Resources.Load("Prefabs/Enemy", typeof(GameObject)) as GameObject;
+        enemyPrefab = Resources.Load("Prefabs/DetectionAI", typeof(GameObject)) as GameObject;
         torchPrefab = Resources.Load("Prefabs/Torch Particle", typeof(GameObject)) as GameObject;
         treePrefab = Resources.Load("Prefabs/TreeResource", typeof(GameObject)) as GameObject;
     }
@@ -336,9 +336,9 @@ public class Maze : MonoBehaviour {
             itemSpawned.name = "Item: " + itemSpawn.GetComponent<ItemSpawn>().item.name.ToString();
             itemSpawn.GetComponent<ItemSpawn>().item = manager.GenerateItem();
             // spawn enemy every 3rd item
-            // if(i%4==2){
-            //     SpawnEnemy(random_index);    // this function needs to be the standardized spawn function.... not a different one here
-            // }
+            if(i%4==2){
+                SpawnEnemy(random_index);    // this function needs to be the standardized spawn function.... not a different one here
+            }
             if(i%4==2){
                 SpawnPrefab(treePrefab, random_index, "tree_prefab_"+i.ToString());
             }
