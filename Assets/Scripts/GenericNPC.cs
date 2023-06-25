@@ -5,9 +5,8 @@ using UnityEngine.AI;
 
 public class GenericNPC : MonoBehaviour
 {
+    private Rigidbody[] ragdollRigidbodies; // Array to store the rigidbodies of the ragdoll bones
 
-    Animation npcAnimation;
-    
     public State state;
     public enum State
     {
@@ -17,10 +16,11 @@ public class GenericNPC : MonoBehaviour
         Defend,
         Flee,
         Knockback,
-        Frozen
+        Frozen,
+        Death
     }
 
-    // Start is called before the first frame updateNavMeshAgent agent;
+    // Start is called before the first frame update
     UnityEngine.AI.NavMeshAgent agent;
 
     private VisionSystem visionSystem; // Reference to the VisionSystem script
@@ -31,30 +31,27 @@ public class GenericNPC : MonoBehaviour
     public float actionDistance = 2f; // Distance at which the NPC can take action
 
     private bool isAttacking = false;
+    Animation npcAnimation;
+
+    private bool deathHandled = false;
 
     private void Start()
     {
+        ragdollRigidbodies = GetComponentsInChildren<Rigidbody>(); // Get the rigidbodies of the ragdoll bones
         npcAnimation = GetComponentInChildren<Animation>();
+
         agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
         // Get the VisionSystem component from the GameObject
         visionSystem = GetComponent<VisionSystem>();
         // Get the player's transform using any desired method, e.g., by finding the player GameObject with a specific tag
         playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
+
+        // Disable the ragdoll rigidbodies initially
+        SetRagdollEnabled(false);
     }
 
     private void Update()
     {
-        // Check if the player is detected by the VisionSystem
-        if (visionSystem.playerDetected)
-        {
-            // Player detected, change the NPC state to Chase
-            state = State.Chase;
-        }
-        else
-        {
-            // Player not detected, change the NPC state to Wander (or any other desired default state)
-            state = State.Wander;
-        }
         switch (state)
         {
             case State.Wander:
@@ -77,6 +74,11 @@ public class GenericNPC : MonoBehaviour
                 break;
             case State.Frozen:
                 FrozenState();
+                break;
+            case State.Death:
+                if(!deathHandled){
+                    DeathState();
+                }
                 break;
         }
     }
@@ -125,7 +127,8 @@ public class GenericNPC : MonoBehaviour
             if (distanceToTarget <= actionDistance)
             {
                 // Take action against the chase target (e.g., attack)
-                state = State.Attack;
+                SetState(State.Attack);
+                isAttacking = true;
             }
             else
             {
@@ -144,15 +147,20 @@ public class GenericNPC : MonoBehaviour
     private void AttackState()
     {
         // Logic for the Attack state
-        if(!isAttacking){
+        if (isAttacking)
+        {
             StartCoroutine(Attack());
         }
     }
 
-    private IEnumerator Attack(){
-        isAttacking = true;
+    private IEnumerator Attack()
+    {
         // animator.Play("AttackSlash");
-        visionSystem.GetChaseTargetObject().GetComponent<Health>().DealDamage(100);
+        GameObject target = visionSystem.GetChaseTargetObject();
+        if (target != null)
+        {
+            target.GetComponent<Health>().DealDamage(100);
+        }
         //  the target should be null... because it's dead you know?
         yield return new WaitForSeconds(5); // we need to ensure this is eventually the length of time of attack animation
         isAttacking = false;
@@ -176,5 +184,86 @@ public class GenericNPC : MonoBehaviour
     private void FrozenState()
     {
         // Logic for the Frozen state
+    }
+
+    private void DeathState()
+    {
+        deathHandled = true;
+        isAttacking = false;
+        // Disable the NavMeshAgent component
+        agent.enabled = false;
+
+        // Disable the NPC's collider
+        GetComponent<Collider>().enabled = false;
+
+        // Enable the ragdoll rigidbodies
+        SetRagdollEnabled(true);
+
+        npcAnimation.enabled = false;
+    }
+
+    private void SetRagdollEnabled(bool enabled)
+    {
+        foreach (Rigidbody rb in ragdollRigidbodies)
+        {
+            rb.isKinematic = !enabled;
+            rb.useGravity = enabled;
+        }
+    }
+
+    public bool SetState(State newState)
+    {
+        if (state == State.Death && newState != State.Death)
+        {
+            return false;   // Cannot change state from Death to something else
+        }
+        if (state == newState)
+        {
+            return false;   // ignore multiple updates
+        }
+
+        if (isAttacking && newState != State.Death)
+        {
+            return false;   // we can't change the state when attacking, unless death occurs
+        }
+        state = newState;
+        Debug.Log("New state set: " + newState.ToString());
+        return true;
+    }
+
+    public void FakeDeathAnimation(RaycastHit hit)
+    {
+        agent.enabled = false;  // ensure it's disabled
+        Debug.Log("FAKE ANIMATION");
+        // Get the normal of the collision surface
+        Vector3 surfaceNormal = hit.normal;
+
+        // Calculate the rotation angle based on the normal
+        Quaternion targetRotation = Quaternion.FromToRotation(Vector3.up, surfaceNormal);
+
+        // Rotate the GameObject on the X/Z axis
+        transform.rotation = Quaternion.Euler(targetRotation.eulerAngles.x, transform.rotation.eulerAngles.y, targetRotation.eulerAngles.z);
+        Debug.Log("FAKE ANIMATION ENDS");
+    }
+
+    public void ApplyForceToRagdoll(RaycastHit hit, float forceAmount)
+    {
+        
+        // Check if the hit object is part of the ragdoll
+        Rigidbody hitRigidbody = hit.collider.attachedRigidbody;
+        if (hitRigidbody != null && IsPartOfRagdoll(hitRigidbody))
+        {
+            // Apply force in the direction of the ray
+            Vector3 force = hit.normal * forceAmount;
+            hitRigidbody.AddForceAtPosition(force, hit.point, ForceMode.Impulse);
+        }
+    }
+
+    // Function to check if a Rigidbody is part of the ragdoll
+    bool IsPartOfRagdoll(Rigidbody rb)
+    {
+        // Here, check if the Rigidbody is part of the ragdoll.
+        // For example, you could check if it's in the ragdollRigidbodies array.
+        return System.Array.IndexOf(ragdollRigidbodies, rb) >= 0;
     }
 }

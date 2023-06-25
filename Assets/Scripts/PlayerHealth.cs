@@ -13,9 +13,9 @@ public class PlayerHealth : Health{
         base.Start();
         onPlayerHealthChanged.Raise(this, currentHealth);
     }
-    public override void DealDamage(int damage){
+    public override void DealDamage(int damage, RaycastHit? hit=null){
         if(is_dead) return;
-        base.DealDamage(damage);
+        currentHealth -= damage;
         onPlayerHealthChanged.Raise(this, currentHealth);
     }
     public override void Death(bool shouldDestroy=true){

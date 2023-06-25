@@ -19,13 +19,17 @@ public class Health : MonoBehaviour {
         layer = gameObject.layer;    
     }
 
-	public virtual void DealDamage(int damage){
+	public virtual void DealDamage(int damage, RaycastHit? hit=null){
 		currentHealth -= damage;
-		checkifDead();
+		if(checkifDead() && hit!=null){
+			// GetComponent<GenericNPC>().FakeDeathAnimation((RaycastHit)hit);]
+			GetComponent<GenericNPC>().ApplyForceToRagdoll((RaycastHit)hit, 1f);
+		}
 	}
 
-	public virtual void Death(bool shouldDestroy=true){
+	public virtual void Death(bool shouldDestroy=false){
         HandleScore();
+		GetComponent<GenericNPC>().SetState(GenericNPC.State.Death);
 		if(shouldDestroy) Destroy(gameObject);
 	}
 
@@ -38,11 +42,13 @@ public class Health : MonoBehaviour {
 		currentHealth = maxHealth;
 	}
 
-	private void checkifDead(){
+	private bool checkifDead(){
 		if (currentHealth <= 0){
 			currentHealth = 0;
 			Death();
+			return true;
 		}
+		return false;
 	}
 
 	// this needs overhauled with an event

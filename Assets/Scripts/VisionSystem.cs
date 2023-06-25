@@ -13,10 +13,6 @@ public class VisionSystem : MonoBehaviour
     public Transform eyeballLocation; // Reference to the custom eyeball location transform
     public Material lineMaterial;
 
-    public Material GreenMaterial = Resources.Load("BasicMaterials/GreenMaterial", typeof(Material)) as Material;
-    public Material BlueMaterial = Resources.Load("BasicMaterials/BlueMaterial", typeof(Material)) as Material;
-    public Material RedMaterial = Resources.Load("BasicMaterials/RedMaterial", typeof(Material)) as Material;
-
     private LineRenderer lineRenderer;
     private int currentLineIndex = 0;
     public bool playerDetected = false;
@@ -54,9 +50,8 @@ public class VisionSystem : MonoBehaviour
         {
             // Player detected!
             Debug.Log("Player detected!");
-
-            // Set the chase target's transform as the player's transform
-            chaseTargetTransform = GameObject.FindGameObjectWithTag("Player").transform;
+            // should set the state to chase
+            GetComponent<GenericNPC>().SetState(GenericNPC.State.Chase);
         }
         else
         {
@@ -101,7 +96,7 @@ public class VisionSystem : MonoBehaviour
                         // Obstacle hit, adjust the view distance
                         if (drawLines)
                         {
-                            DrawLine(eyeballLocation.position, hit.point, BlueMaterial);
+                            DrawLine(eyeballLocation.position, hit.point);
                         }
                     }
                     else
@@ -109,9 +104,10 @@ public class VisionSystem : MonoBehaviour
                         // Player is visible and not obstructed by any obstacles
                         if (drawLines)
                         {
-                            DrawLine(eyeballLocation.position, eyeballLocation.position + direction * viewDistance, RedMaterial);
+                            DrawLine(eyeballLocation.position, eyeballLocation.position + direction * viewDistance);
                         }
                         this.playerDetected = true;
+                        chaseTargetTransform = hit.collider.gameObject.transform;
                     }
                 }
                 else
@@ -119,7 +115,7 @@ public class VisionSystem : MonoBehaviour
                     // No hit, draw the full view distance
                     if (drawLines)
                     {
-                        DrawLine(eyeballLocation.position, eyeballLocation.position + direction * viewDistance, GreenMaterial);
+                        DrawLine(eyeballLocation.position, eyeballLocation.position + direction * viewDistance);
                     }
                 }
             }
@@ -128,14 +124,12 @@ public class VisionSystem : MonoBehaviour
         return this.playerDetected;
     }
 
-    private void DrawLine(Vector3 start, Vector3 end, Material lineMaterial)
+    private void DrawLine(Vector3 start, Vector3 end)
     {
         int startIndex = currentLineIndex * 2;
 
         lineRenderer.SetPosition(startIndex, start);
         lineRenderer.SetPosition(startIndex + 1, end);
-
-        lineRenderer.material = lineMaterial;
 
         currentLineIndex++;
     }
