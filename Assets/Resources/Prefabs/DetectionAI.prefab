@@ -47,9 +47,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Soldier Inventory
   storage_inventory: {fileID: 0}
+  storage_gear: {fileID: 0}
   onStorageAccessed: {fileID: 11400000, guid: 2e858e2c48666904c933d2800964cd02, type: 2}
   storage_hud: {fileID: 0}
   storage_slots: 10
+  hasGear: 1
 --- !u!65 &1302728023923031279
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2938,7 +2940,7 @@ MonoBehaviour:
   eyeballLocation: {fileID: 0}
   lineMaterial: {fileID: 0}
   playerDetected: 0
-  drawLines: 0
+  drawLines: 1
 --- !u!114 &4434156940295093133
 MonoBehaviour:
   m_ObjectHideFlags: 0

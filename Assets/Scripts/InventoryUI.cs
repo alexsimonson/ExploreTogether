@@ -75,29 +75,72 @@ public class InventoryUI : MonoBehaviour {
         HandleSlotUpdate(slot);
     }
 
-    public void HandleSlotUpdate(ItemSlot slot){
+    public void HandleSlotUpdate(ItemSlot slot)
+    {
         Debug.Log("Handle slot update at index: " + slot.index.ToString());
-        if(slot.index < inventorySlots.Length){
-            Color newColor = inventorySlots[slot.index].GetComponent<SlotContainer>().inventorySlot.transform.GetChild(1).GetComponent<Image>().color;
 
-            // ideally only this code should run in every instance
-            if(slot.item==null){
-                newColor.a = 0;
-                inventorySlots[slot.index].GetComponent<SlotContainer>().inventorySlot.transform.GetChild(0).GetComponent<Text>().text = null;
-                inventorySlots[slot.index].GetComponent<SlotContainer>().inventorySlot.transform.GetChild(1).GetComponent<Image>().sprite = null;
-                inventorySlots[slot.index].GetComponent<SlotContainer>().inventorySlot.transform.GetChild(2).GetComponent<Text>().text = null;
-            }else{
-                newColor.a = 1;
-                inventorySlots[slot.index].GetComponent<SlotContainer>().inventorySlot.transform.GetChild(0).GetComponent<Text>().text = slot.item.name;
-                inventorySlots[slot.index].GetComponent<SlotContainer>().inventorySlot.transform.GetChild(1).GetComponent<Image>().sprite = slot.item.icon;
-                inventorySlots[slot.index].GetComponent<SlotContainer>().inventorySlot.transform.GetChild(2).GetComponent<Text>().text = slot.stack_size.ToString();
+        if (slot.index >= 0 && slot.index < inventorySlots.Length)
+        {
+            SlotContainer slotContainer = inventorySlots[slot.index].GetComponent<SlotContainer>();
+
+            if (slotContainer != null && slotContainer.inventorySlot != null)
+            {
+                Transform slotTransform = slotContainer.inventorySlot.transform;
+
+                if (slot.item == null)
+                {
+                    SetChildText(slotTransform, 0, null);
+                    SetChildImage(slotTransform, 1, null);
+                    SetChildText(slotTransform, 2, null);
+                }
+                else
+                {
+                    SetChildText(slotTransform, 0, slot.item.name);
+                    SetChildImage(slotTransform, 1, slot.item.icon);
+                    SetChildText(slotTransform, 2, slot.stack_size.ToString());
+                }
+
+                Color newColor = GetChildImage(slotTransform, 1).color;
+                newColor.a = (slot.item == null) ? 0 : 1;
+                GetChildImage(slotTransform, 1).color = newColor;
+
+                InventorySlot inventorySlotComponent = slotContainer.inventorySlot.GetComponent<InventorySlot>();
+
+                if (inventorySlotComponent != null)
+                {
+                    inventorySlotComponent.item = slot.item;
+                }
+
+                if (watching_inventory != null && watching_inventory.slots[slot.index] != null)
+                {
+                    watching_inventory.slots[slot.index].item = slot.item;
+                }
             }
-            inventorySlots[slot.index].GetComponent<SlotContainer>().inventorySlot.transform.GetChild(1).GetComponent<Image>().color = newColor;
-
-            // we also need to change the underlying value of the InventorySlotButton, which honestly is so fucked up because there's too many places this is stored
-            inventorySlots[slot.index].GetComponent<SlotContainer>().inventorySlot.GetComponent<InventorySlot>().item = slot.item;
-            watching_inventory.slots[slot.index].item = slot.item;
         }
+    }
+
+    private void SetChildText(Transform parent, int childIndex, string text)
+    {
+        Text childText = parent.GetChild(childIndex).GetComponent<Text>();
+        if (childText != null)
+        {
+            childText.text = text;
+        }
+    }
+
+    private void SetChildImage(Transform parent, int childIndex, Sprite sprite)
+    {
+        Image childImage = parent.GetChild(childIndex).GetComponent<Image>();
+        if (childImage != null)
+        {
+            childImage.sprite = sprite;
+        }
+    }
+
+    private Image GetChildImage(Transform parent, int childIndex)
+    {
+        Image childImage = parent.GetChild(childIndex).GetComponent<Image>();
+        return childImage;
     }
 
     // this function may be outdated with events update :)

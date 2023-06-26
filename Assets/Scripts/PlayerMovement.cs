@@ -15,27 +15,39 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Keybinds")]
     [SerializeField] KeyCode jumpKey = KeyCode.Space;
+    [SerializeField] KeyCode crouchKey = KeyCode.LeftControl;
 
-    
     
     float movementMultiplier = 10f;
     float airMultiplier = .4f;
     float horizontalMovement;
     float verticalMovement;
+    public bool isCrouching = false;
+    float crouchMultiplier = 5f;
 
     Vector3 moveDirection;
 
     Rigidbody rb;
     float groundDrag = 6f;
     float airDrag = 2f;
+    private float originalColliderHeight = 1.9f;
+    [SerializeField] private float crouchHeight = 1f; // The height to shrink the collider when crouched
+    private Vector3 originalColliderCenter;
 
     bool isGrounded;
     
     public bool revoke_movement = false;
 
+    private CapsuleCollider capsuleCollider;
+
+    Camera cam;
+
     void Awake(){
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
+        capsuleCollider = GetComponent<CapsuleCollider>();
+        originalColliderCenter = capsuleCollider.center;
+        cam = GetComponentInChildren<Camera>();
     }
 
     private void Update(){
@@ -46,6 +58,11 @@ public class PlayerMovement : MonoBehaviour
 
             if(Input.GetKeyDown(jumpKey) && isGrounded){
                 Jump();
+            }
+
+            if(Input.GetKeyDown(crouchKey)){
+                Debug.Log("Crouching key pressed");
+                ToggleCrouch();
             }
         }
     }
@@ -66,11 +83,16 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate(){
         MovePlayer();
+        HandleAnimation();
     }
 
     void MovePlayer(){
         if(isGrounded){
-            rb.AddForce(moveDirection.normalized * moveSpeed * movementMultiplier,  ForceMode.Acceleration);
+            if(isCrouching){
+                rb.AddForce(moveDirection.normalized * moveSpeed * crouchMultiplier,  ForceMode.Acceleration);
+            }else{
+                rb.AddForce(moveDirection.normalized * moveSpeed * movementMultiplier,  ForceMode.Acceleration);
+            }
         }else{
             rb.AddForce(moveDirection.normalized * moveSpeed * movementMultiplier * airMultiplier,  ForceMode.Acceleration);
         }
@@ -89,5 +111,35 @@ public class PlayerMovement : MonoBehaviour
         revoke_movement = false;
         rb.constraints = RigidbodyConstraints.None;
         rb.freezeRotation = true;
+    }
+
+    void HandleAnimation(){
+        if(gameObject.GetComponentInChildren<Animation>()==null) return;
+        if(moveDirection==Vector3.zero){
+            // stop animation
+            gameObject.GetComponentInChildren<Animation>().Stop();
+        }else{
+            gameObject.GetComponentInChildren<Animation>().Play("Walk");
+        }
+    }
+
+    private void ToggleCrouch()
+    {
+        isCrouching = !isCrouching;
+
+        if (isCrouching)
+        {
+            // Shrink the collider
+            capsuleCollider.height = crouchHeight;
+            capsuleCollider.center = new Vector3(0f, crouchHeight / 2f, 0f);
+            cam.transform.position = new Vector3(gameObject.transform.position.x, crouchHeight, gameObject.transform.position.z);
+        }
+        else
+        {
+            // Restore the collider to its original size
+            capsuleCollider.height = originalColliderHeight;
+            capsuleCollider.center = originalColliderCenter;
+            cam.transform.position = new Vector3(cam.transform.position.x, 1.7f, cam.transform.position.z);
+        }
     }
 }

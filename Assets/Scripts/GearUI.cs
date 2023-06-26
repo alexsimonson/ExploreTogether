@@ -10,12 +10,17 @@ public class GearUI : InventoryUI {
     public GameEvent onWeaponChanged;   // this doesn't apply to the InventoryUI
 
     public Gear watching_gear;
+    public bool storage_ui = true;
 
     void Start(){
         hudView = gameObject.transform.GetChild(0).gameObject;
         content = hudView.transform.GetChild(0).gameObject;
         manager = GameObject.Find("Manager").GetComponent<Manager>();
-        watching_gear = manager.player_gear;
+        if(storage_ui){
+            // this should be set elsewhere
+        }else{
+            watching_gear = manager.player_gear;
+        }
         DrawInventoryUI();
     }
 
@@ -37,16 +42,21 @@ public class GearUI : InventoryUI {
             Debug.LogError("Invalid update data type");
             return;
         }
+        Debug.Log("Data type: " + data.GetType().ToString());
         ItemSlot slot = (ItemSlot)data;
-        Equipment equipped_equipment = (Equipment)slot.item;
-        if(equipped_equipment!=null){
-            if(equipped_equipment.type==Equipment.Type.Weapon){
-                Weapon equipped_weapon = (Weapon)equipped_equipment;
-                if(equipped_weapon!=null){
-                    onWeaponChanged.Raise(this, equipped_weapon);
+        if(slot.item!=null){
+            Debug.Log("slot item type: " + slot.item.GetType().ToString());
+            Equipment equipped_equipment = slot.item as Equipment;
+            if(equipped_equipment!=null){
+                if(equipped_equipment.type==Equipment.Type.Weapon){
+                    Weapon equipped_weapon = (Weapon)equipped_equipment;
+                    if(equipped_weapon!=null){
+                        onWeaponChanged.Raise(this, equipped_weapon);
+                    }
                 }
             }
         }
+        
         Color newColor = inventorySlots[slot.index].GetComponent<SlotContainer>().inventorySlot.transform.GetChild(1).GetComponent<Image>().color;
 
         // ideally only this code should run in every instance
@@ -62,7 +72,7 @@ public class GearUI : InventoryUI {
             inventorySlots[slot.index].GetComponent<SlotContainer>().inventorySlot.transform.GetChild(2).GetComponent<Text>().text = slot.stack_size.ToString();
         }
         inventorySlots[slot.index].GetComponent<SlotContainer>().inventorySlot.transform.GetChild(1).GetComponent<Image>().color = newColor;
-        manager.player_gear.slots[slot.index].item = slot.item;
+        watching_gear.slots[slot.index].item = slot.item;
     }
 
     public override void EmptySlot(int slot_index){
@@ -73,5 +83,16 @@ public class GearUI : InventoryUI {
 
     public override void ToggleUI(Component sender, object data){
         hudView.SetActive((bool)data);
+    }
+
+    public void SetWatchingGearByReference(ref Gear gear){
+        watching_gear = gear;
+    }
+
+    // this function should very simply loop through all items and re-render them
+    public void UpdateGearSlots(){
+        foreach(ItemSlot slot in watching_gear.slots){
+            HandleSlotUpdate(slot);
+        }
     }
 }

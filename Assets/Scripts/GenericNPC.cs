@@ -25,7 +25,6 @@ public class GenericNPC : MonoBehaviour
 
     private VisionSystem visionSystem; // Reference to the VisionSystem script
 
-    private Transform playerTransform; // Reference to the player's transform
     public float chaseSpeed = 5f; // Speed at which the NPC chases the player
     public float chaseDistance = 10f; // Maximum distance at which the NPC can chase the player
     public float actionDistance = 2f; // Distance at which the NPC can take action
@@ -43,8 +42,6 @@ public class GenericNPC : MonoBehaviour
         agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
         // Get the VisionSystem component from the GameObject
         visionSystem = GetComponent<VisionSystem>();
-        // Get the player's transform using any desired method, e.g., by finding the player GameObject with a specific tag
-        playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
 
         // Disable the ragdoll rigidbodies initially
         SetRagdollEnabled(false);

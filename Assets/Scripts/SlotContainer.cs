@@ -19,12 +19,14 @@ public class SlotContainer : MonoBehaviour, IDropHandler {
     public GameEvent onInventoryChanged;
     public GameEvent onEquipmentChanged;
     public GameEvent onStorageChanged;
+    public GameEvent onStorageEquipmentChanged;
 
     void Start(){
         manager = GameObject.Find("Manager").GetComponent<Manager>();
         onInventoryChanged = Resources.Load("Events/InventoryChanged", typeof(GameEvent)) as GameEvent;
         onEquipmentChanged = Resources.Load("Events/EquipmentChanged", typeof(GameEvent)) as GameEvent;
         onStorageChanged = Resources.Load("Events/StorageChanged", typeof(GameEvent)) as GameEvent;
+        onStorageEquipmentChanged = Resources.Load("Events/StorageEquipmentChanged", typeof(GameEvent)) as GameEvent;
         inventoryUI = manager.hud.transform.GetChild(3).gameObject.GetComponent<InventoryUI>();
         gearUI = manager.hud.transform.GetChild(5).gameObject.GetComponent<GearUI>();
         if(inventorySlot.GetComponent<EquipmentSlot>()!=null){
@@ -57,7 +59,7 @@ public class SlotContainer : MonoBehaviour, IDropHandler {
 
         if(isEquipmentSlot){
             if(draggingEquipment){
-                // SwapEquipment(eventData);
+                SwapEquipment(eventData);
             }else{
                 EquipItem(eventData);
             }
@@ -162,6 +164,8 @@ public class SlotContainer : MonoBehaviour, IDropHandler {
     }
 
     void EquipItem(PointerEventData eventData){
+        // to obtain the parent UI element from this, we must go UP a lot
+        GearUI parent_gear = eventData.pointerEnter.transform.parent.parent.parent.parent.parent.parent.gameObject.GetComponent<GearUI>();
         // same code to start as SwapItem, but I will be adjusting things as necessary
         // at this point in time, inventorySlot represents the slot where our mouse let go of the button
         // this logic is necessary for preventing a bug at this time
@@ -224,7 +228,11 @@ public class SlotContainer : MonoBehaviour, IDropHandler {
                     // this is what was happening before I branched here... should keep existing behavior...
                     onInventoryChanged.Raise(this, drag_item_slot);
                 }
-                onEquipmentChanged.Raise(this, equipment_item_slot);    // this should happen regardless
+                if(parent_gear!=null && parent_gear.storage_ui){
+                    onStorageEquipmentChanged.Raise(this, equipment_item_slot);
+                }else{
+                    onEquipmentChanged.Raise(this, equipment_item_slot);
+                }
             }else{
                 return;
             }
@@ -234,6 +242,8 @@ public class SlotContainer : MonoBehaviour, IDropHandler {
     }
 
     void UnEquipItem(PointerEventData eventData){
+        // to obtain the parent UI element from this, we must go UP a lot
+        GearUI parent_gear = eventData.pointerDrag.transform.parent.parent.parent.parent.parent.gameObject.GetComponent<GearUI>();
         // same code to start as SwapItem, but I will be adjusting things as necessary
         // at this point in time, inventorySlot represents the slot where our mouse let go of the button
         // this logic is necessary for preventing a bug at this time
@@ -308,7 +318,12 @@ public class SlotContainer : MonoBehaviour, IDropHandler {
                 // this is what was happening before I branched here... should keep existing behavior...
                 onInventoryChanged.Raise(this, inventory_item_slot);
             }
-            onEquipmentChanged.Raise(this, equipment_item_slot);    // this should happen regardless
+            Debug.Log("parent gear storageUI from unequip: " + parent_gear.storage_ui.ToString());
+            if(parent_gear!=null && parent_gear.storage_ui){
+                onStorageEquipmentChanged.Raise(this, equipment_item_slot);
+            }else{
+                onEquipmentChanged.Raise(this, equipment_item_slot);
+            }
         }else{
             return;
         }
@@ -316,6 +331,7 @@ public class SlotContainer : MonoBehaviour, IDropHandler {
 
     // this function may simply never be necessary with type requirements...
     void SwapEquipment(PointerEventData eventData){
+        GearUI parent_gear = eventData.pointerDrag.transform.parent.parent.parent.parent.parent.gameObject.GetComponent<GearUI>();
         // at this point in time, inventorySlot represents the slot where our mouse let go of the button
         // this logic is necessary for preventing a bug at this time
         Equipment originalItem = inventorySlot.GetComponent<EquipmentSlot>().item;   // I need this value when the bool is false
@@ -340,8 +356,8 @@ public class SlotContainer : MonoBehaviour, IDropHandler {
 
         ItemSlot other_item_slot = ScriptableObject.CreateInstance("ItemSlot") as ItemSlot;
         other_item_slot.index = index;
-        other_item_slot.item = inventorySlot.GetComponent<InventorySlot>().item;
-        other_item_slot.stack_size = inventorySlot.GetComponent<InventorySlot>().stack_size;
+        other_item_slot.item = inventorySlot.GetComponent<EquipmentSlot>().item;
+        other_item_slot.stack_size = inventorySlot.GetComponent<EquipmentSlot>().stack_size;
         onEquipmentChanged.Raise(this, other_item_slot);
 
         ItemSlot drag_item_slot = ScriptableObject.CreateInstance("ItemSlot") as ItemSlot;
@@ -353,7 +369,14 @@ public class SlotContainer : MonoBehaviour, IDropHandler {
             drag_item_slot.item = originalItem;
             drag_item_slot.stack_size = originalStackSize;
         }
-        onEquipmentChanged.Raise(this, drag_item_slot);
+
+        if(parent_gear!=null && parent_gear.storage_ui){
+            onEquipmentChanged.Raise(this, other_item_slot);
+            onStorageEquipmentChanged.Raise(this, drag_item_slot);
+        }else{
+            onEquipmentChanged.Raise(this, drag_item_slot);
+            onStorageEquipmentChanged.Raise(this, other_item_slot);
+        }
     }
 
     public void DropItem(){

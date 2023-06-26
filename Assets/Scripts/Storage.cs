@@ -7,6 +7,7 @@ public class Storage : MonoBehaviour, IInteraction {
     public new string name;
     Manager manager;
     public Inventory storage_inventory;
+    public Gear storage_gear;   // optional, used on bodies
 
     [Header("Events")]
     public GameEvent onStorageAccessed;
@@ -14,6 +15,7 @@ public class Storage : MonoBehaviour, IInteraction {
     public GameObject storage_hud;
     public int storage_slots;
     private Animator animator;
+    public bool hasGear = false;
 
     void Start(){
         manager = GameObject.Find("Manager").GetComponent<Manager>();
@@ -21,6 +23,8 @@ public class Storage : MonoBehaviour, IInteraction {
         onStorageAccessed = Resources.Load("Events/StorageAccessed", typeof(GameEvent)) as GameEvent;
         storage_inventory = ScriptableObject.CreateInstance("Inventory") as Inventory;
         storage_inventory.max_slots = storage_slots;
+        storage_gear = ScriptableObject.CreateInstance("Gear") as Gear;
+        storage_gear.max_slots = 11;
         Initialize();
     }
 
@@ -57,6 +61,9 @@ public class Storage : MonoBehaviour, IInteraction {
                 // we should set the inventory as we're about to utilize it
                 manager.hud.transform.GetChild(11).gameObject.GetComponent<InventoryUI>().SetWatchingInventoryByReference(ref storage_inventory);
                 manager.hud.transform.GetChild(11).gameObject.GetComponent<InventoryUI>().DrawInventoryUI();
+                // if applicable, handle equipment UI for storage (looting bodies)
+                manager.hud.transform.GetChild(12).gameObject.GetComponent<GearUI>().SetWatchingGearByReference(ref storage_gear);
+                manager.hud.transform.GetChild(12).gameObject.GetComponent<GearUI>().DrawInventoryUI();
                 onStorageAccessed.Raise(this, manager.GetComponent<Manager>().storage_hud_visible_state);
                 // handle open animation
                 if(animator!=null){
