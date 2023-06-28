@@ -2,57 +2,59 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerLook : MonoBehaviour
-{
+namespace ExploreTogether {
+    public class PlayerLook : MonoBehaviour
+    {
 
-    [SerializeField] private float sensX;
-    [SerializeField] private float sensY;
+        [SerializeField] private float sensX;
+        [SerializeField] private float sensY;
 
-    Camera cam;
+        Camera cam;
 
-    float mouseX;
-    float mouseY;
+        float mouseX;
+        float mouseY;
 
-    float multiplier = 0.01f;
+        float multiplier = 0.01f;
 
-    float xRotation;
-    float yRotation;
+        float xRotation;
+        float yRotation;
 
-    public bool revoke_look = false;
+        public bool revoke_look = false;
 
-    private void Start(){
-        cam = GetComponentInChildren<Camera>();
-        Cursor.lockState = CursorLockMode.Confined; // originally this was .Locked
-        Cursor.visible = false;
-    }
-
-    void Update(){
-        if(!revoke_look){
-            MyInput();
-            cam.transform.localRotation = Quaternion.Euler(xRotation, 0, 0);
-            transform.rotation = Quaternion.Euler(0, yRotation, 0);
+        private void Start(){
+            cam = GetComponentInChildren<Camera>();
+            Cursor.lockState = CursorLockMode.Confined; // originally this was .Locked
+            Cursor.visible = false;
         }
-    }
 
-    void MyInput(){
-        mouseX = Input.GetAxisRaw("Mouse X");
-        mouseY = Input.GetAxisRaw("Mouse Y");
+        void Update(){
+            if(!revoke_look){
+                MyInput();
+                cam.transform.localRotation = Quaternion.Euler(xRotation, 0, 0);
+                transform.rotation = Quaternion.Euler(0, yRotation, 0);
+            }
+        }
 
-        yRotation += mouseX * sensX * multiplier;
-        xRotation -= mouseY * sensY * multiplier;
+        void MyInput(){
+            mouseX = Input.GetAxisRaw("Mouse X");
+            mouseY = Input.GetAxisRaw("Mouse Y");
 
-        xRotation = Mathf.Clamp(xRotation, -90f, 90f);
-    }
+            yRotation += mouseX * sensX * multiplier;
+            xRotation -= mouseY * sensY * multiplier;
 
-    public void RevokeLook(){
-        revoke_look = true;
-    }
+            xRotation = Mathf.Clamp(xRotation, -90f, 90f);
+        }
 
-    public void AllowLook(){
-        revoke_look = false;
-    }
+        public void RevokeLook(){
+            revoke_look = true;
+        }
 
-    public void ToggleLook(Component sender, object data){
-        revoke_look = (bool)data;
+        public void AllowLook(){
+            revoke_look = false;
+        }
+
+        public void ToggleLook(Component sender, object data){
+            revoke_look = (bool)data;
+        }
     }
 }

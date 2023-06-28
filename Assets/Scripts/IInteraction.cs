@@ -1,5 +1,7 @@
 using UnityEngine;
-public interface IInteraction{
-    void Interaction(GameObject interacting);
-    string InteractionName();
+namespace ExploreTogether {
+    public interface IInteraction{
+        void Interaction(GameObject interacting);
+        string InteractionName();
+    }
 }

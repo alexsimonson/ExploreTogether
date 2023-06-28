@@ -2940,7 +2940,7 @@ MonoBehaviour:
   eyeballLocation: {fileID: 0}
   lineMaterial: {fileID: 0}
   playerDetected: 0
-  drawLines: 1
+  drawLines: 0
 --- !u!114 &4434156940295093133
 MonoBehaviour:
   m_ObjectHideFlags: 0
