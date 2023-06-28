@@ -32,7 +32,7 @@ namespace ExploreTogether {
         float groundDrag = 6f;
         float airDrag = 2f;
         private float originalColliderHeight = 1.9f;
-        [SerializeField] private float crouchHeight = 1f; // The height to shrink the collider when crouched
+        [SerializeField] private float crouchHeightDiff = .7f; // The height to shrink the collider when crouched
         private Vector3 originalColliderCenter;
 
         bool isGrounded;
@@ -131,16 +131,16 @@ namespace ExploreTogether {
             if (isCrouching)
             {
                 // Shrink the collider
-                capsuleCollider.height = crouchHeight;
-                capsuleCollider.center = new Vector3(0f, crouchHeight / 2f, 0f);
-                cam.transform.position = new Vector3(gameObject.transform.position.x, crouchHeight, gameObject.transform.position.z);
+                capsuleCollider.height = originalColliderHeight - crouchHeightDiff;
+                capsuleCollider.center = new Vector3(0f, (originalColliderHeight - crouchHeightDiff) / 2f, 0f);
+                cam.transform.position = new Vector3(cam.transform.position.x, cam.transform.position.y - crouchHeightDiff, cam.transform.position.z);
             }
             else
             {
                 // Restore the collider to its original size
                 capsuleCollider.height = originalColliderHeight;
                 capsuleCollider.center = originalColliderCenter;
-                cam.transform.position = new Vector3(cam.transform.position.x, 1.7f, cam.transform.position.z);
+                cam.transform.position = new Vector3(cam.transform.position.x, cam.transform.position.y + crouchHeightDiff, cam.transform.position.z);
             }
         }
     }
