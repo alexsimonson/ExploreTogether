@@ -58,3 +58,17 @@ The following packages were updated:
   com.unity.probuilder from version 4.5.2 to 5.0.3
   com.unity.test-framework from version 1.1.26 to 1.1.31
   com.unity.timeline from version 1.4.8 to 1.6.4
+
+=== Fri Sep 27 17:43:21 2024
+
+Packages were changed.
+Update Mode: updateDependencies
+
+The following packages were updated:
+  com.unity.collab-proxy from version 1.5.7 to 2.3.1
+  com.unity.ide.rider from version 2.0.7 to 3.0.28
+  com.unity.ide.visualstudio from version 2.0.9 to 2.0.22
+  com.unity.ide.vscode from version 1.2.3 to 1.2.5
+  com.unity.probuilder from version 4.5.2 to 5.2.2
+  com.unity.test-framework from version 1.1.26 to 1.1.33
+  com.unity.timeline from version 1.4.8 to 1.6.5

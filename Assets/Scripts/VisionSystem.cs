@@ -50,7 +50,7 @@ namespace ExploreTogether {
             if (IsPlayerVisible())
             {
                 // Player detected!
-                Debug.Log("Player detected!");
+                // Debug.Log("Player detected!");
                 // should set the state to chase
                 GetComponent<GenericNPC>().SetState(GenericNPC.State.Chase);
             }

@@ -106,12 +106,24 @@ namespace ExploreTogether {
         public void RevokeMovement(){
             revoke_movement = true;
             rb.constraints = RigidbodyConstraints.FreezeAll;    // is this necessary?
+            horizontalMovement = 0;
+            verticalMovement = 0;
+            rb.velocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
         }
 
         public void AllowMovement(){
             revoke_movement = false;
             rb.constraints = RigidbodyConstraints.None;
             rb.freezeRotation = true;
+        }
+
+        public void SetRevokeMovement(Component sender, object _value){
+            if((bool)_value){
+                RevokeMovement();
+            }else{
+                AllowMovement();
+            }
         }
 
         void HandleAnimation(){

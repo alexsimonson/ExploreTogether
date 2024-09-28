@@ -382,7 +382,7 @@ namespace ExploreTogether {
         }
 
         public void DropItem(){
-            Debug.Log("Calling Drop Item on this: " + gameObject.GetComponent<InventoryUI>().debug_name);
+            // Debug.Log("Calling Drop Item on this: " + gameObject.GetComponent<InventoryUI>().debug_name);
             // we should update the inventory this slotcontainer is on...
             gameObject.GetComponent<InventoryUI>().watching_inventory.DropItem(index);
             // manager.player_inventory.DropItem(index);
