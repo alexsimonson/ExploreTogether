@@ -16,12 +16,13 @@ namespace ExploreTogether {
                 slots[i].stack_size = 0;
                 slots[i].index = i;
             }
+            onInventoryChanged = Resources.Load("Events/EquipmentChanged", typeof(GameEvent)) as GameEvent;
+            onStorageChanged = Resources.Load("Events/StorageChanged", typeof(GameEvent)) as GameEvent;
+            manager = GameObject.Find("Manager").GetComponent<Manager>();
         }
 
         // Start is called before the first frame update
         void Start(){
-            onInventoryChanged = Resources.Load("Events/EquipmentChanged", typeof(GameEvent)) as GameEvent;
-            manager = GameObject.Find("Manager").GetComponent<Manager>();
             ListInventory();
         }
         
@@ -43,6 +44,19 @@ namespace ExploreTogether {
             }else{
                 AddItemCheck(new_item);
             }
+        }
+
+        public override void RemoveItem(int index, bool shouldDrop=false){
+            Item removedItem = slots[index].item;
+            slots[index].item = null;
+            slots[index].stack_size = 0;
+            ItemSlot item_slot = ScriptableObject.CreateInstance("ItemSlot") as ItemSlot;
+            item_slot = slots[index];
+            if(shouldDrop){
+                GameObject dropped_item = Instantiate(Resources.Load("Prefabs/Item", typeof(GameObject)) as GameObject, manager.player.transform.position, Quaternion.identity);
+                dropped_item.GetComponent<ItemSpawn>().item = removedItem;
+            }
+            onInventoryChanged.Raise(null, item_slot);
         }
 
         void AddItemCheck(Item new_item){
@@ -73,11 +87,13 @@ namespace ExploreTogether {
         }
 
         public override void ListInventory(){
+            Debug.Log("~~~~~~~~~~~~LISTING THE GEAR BELOW~~~~~~~~~~~");
             foreach(ItemSlot slot in slots){
                 if(slot!=null && slot.item!=null){
                     Debug.Log("Slot item: " + slot.item.name);
                 }
             }
+            Debug.Log("~~~~~~~~~~~~LISTING THE GEAR ABOVE~~~~~~~~~~~");
         }
     }
 }

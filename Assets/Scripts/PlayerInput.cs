@@ -15,19 +15,6 @@ namespace ExploreTogether {
                 // we should swap everything
                 ToggleHUD();
             }
-
-            if(hud_visible_state){
-                // UI quality of life controls
-                if(Input.GetKey(KeyCode.LeftControl)){
-                    // modifier pressed
-                    if(Input.GetMouseButtonDown(0)){
-                        Debug.Log("Testing drop item or something");
-                    }
-
-                }else{
-                    // input as normal
-                }
-            }
         }
 
         // ? after bool allows for null assignment, which is perfect for this function

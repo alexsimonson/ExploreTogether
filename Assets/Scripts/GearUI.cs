@@ -39,14 +39,15 @@ namespace ExploreTogether {
         }
 
         public override void UpdateSlot(Component sender, object data){
+            Debug.Log("GEARUI ~~ UPDATE SLOT");
             if(data.GetType().ToString()!="ExploreTogether.ItemSlot"){
                 Debug.LogError("Invalid update data type: " +data.GetType().ToString());
                 return;
             }
-            Debug.Log("Data type: " + data.GetType().ToString());
+            // Debug.Log("Data type: " + data.GetType().ToString());
             ItemSlot slot = (ItemSlot)data;
             if(slot.item!=null){
-                Debug.Log("slot item type: " + slot.item.GetType().ToString());
+                // Debug.Log("slot item type: " + slot.item.GetType().ToString());
                 Equipment equipped_equipment = slot.item as Equipment;
                 if(equipped_equipment!=null){
                     if(equipped_equipment.type==Equipment.Type.Weapon){
@@ -56,6 +57,9 @@ namespace ExploreTogether {
                         }
                     }
                 }
+            }else{
+                // we dropped an item so fix this shit
+                
             }
             
             Color newColor = inventorySlots[slot.index].GetComponent<SlotContainer>().inventorySlot.transform.GetChild(1).GetComponent<Image>().color;
@@ -72,10 +76,16 @@ namespace ExploreTogether {
                 inventorySlots[slot.index].GetComponent<SlotContainer>().inventorySlot.transform.GetChild(1).GetComponent<Image>().sprite = slot.item.icon;
                 inventorySlots[slot.index].GetComponent<SlotContainer>().inventorySlot.transform.GetChild(2).GetComponent<Text>().text = slot.stack_size.ToString();
             }
+            // update the slot VERY important
+            SlotContainer slotContainer = inventorySlots[slot.index].GetComponent<SlotContainer>();
+            EquipmentSlot equipmentSlotComponent = slotContainer.inventorySlot.GetComponent<EquipmentSlot>();
+            if (equipmentSlotComponent != null){
+                equipmentSlotComponent.item = (Equipment)slot.item;
+            }
             inventorySlots[slot.index].GetComponent<SlotContainer>().inventorySlot.transform.GetChild(1).GetComponent<Image>().color = newColor;
             watching_gear.slots[slot.index].item = slot.item;
         }
-
+        
         public override void EmptySlot(int slot_index){
             // I need to make this actually just reset to an empty slot, instead of default item...
             inventorySlots[slot_index].GetComponent<SlotContainer>().inventorySlot.transform.GetChild(0).GetComponent<Text>().text = null;

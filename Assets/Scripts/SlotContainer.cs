@@ -165,7 +165,7 @@ namespace ExploreTogether {
         }
 
         void EquipItem(PointerEventData eventData){
-            Debug.Log("FUCK YOU IDIOT");
+            Debug.Log("EquipItem event in SlotContainer");
             // to obtain the parent UI element from this, we must go UP a lot
             GearUI parent_gear = eventData.pointerEnter.transform.parent.parent.parent.parent.parent.parent.gameObject.GetComponent<GearUI>();
             // same code to start as SwapItem, but I will be adjusting things as necessary
@@ -223,10 +223,10 @@ namespace ExploreTogether {
                     Debug.Log("Surely I got the drag slot name: " + drag_inventory_ui_name);
                     // inventories determined, now raise the events
                     if(drag_inventory_ui_name=="Storage Inventory"){
-                        Debug.Log("Storage Inventory Logic");
+                        Debug.Log("Raising storageChanged event");
                         onStorageChanged.Raise(this, drag_item_slot);
                     }else{
-                        Debug.Log("Else Logic");
+                        Debug.Log("Raising inventoryChanged event");
                         // this is what was happening before I branched here... should keep existing behavior...
                         onInventoryChanged.Raise(this, drag_item_slot);
                     }
@@ -381,11 +381,13 @@ namespace ExploreTogether {
             }
         }
 
-        public void DropItem(){
-            // Debug.Log("Calling Drop Item on this: " + gameObject.GetComponent<InventoryUI>().debug_name);
-            // we should update the inventory this slotcontainer is on...
-            gameObject.GetComponent<InventoryUI>().watching_inventory.DropItem(index);
-            // manager.player_inventory.DropItem(index);
+        public void DropItem(bool isInventory=true){
+            // I don't think this is good enough :)
+            if(isInventory){
+                inventoryUI.watching_inventory.DropItem(index);
+            }else{
+                gearUI.watching_gear.DropItem(index);
+            }
         }
     }
 }

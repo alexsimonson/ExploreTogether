@@ -38,14 +38,28 @@ namespace ExploreTogether {
         }
 
         public void OnPointerDown(PointerEventData eventData){
-            if(eventData.button==PointerEventData.InputButton.Right){
-                // let's drop the item
-                if(item!=null){
-                    slot_container.GetComponent<SlotContainer>().DropItem();
-                }else{
-                    Debug.Log("Pointer down item not null: " + item.name);
+            // UI quality of life controls
+            if(Input.GetKey(KeyCode.LeftControl)){
+                // modifier pressed
+                if(Input.GetMouseButtonDown(0)){
+                    Debug.Log("Testing grab item: " + item.name);
+                }else if(Input.GetMouseButtonDown(1)){
+                    if(item!=null){
+                        Debug.Log("Testing drop item");
+                        slot_container.GetComponent<SlotContainer>().DropItem();
+                    }
                 }
+            }else{
+                // input as normal
             }
+            // if(eventData.button==PointerEventData.InputButton.Right){
+            //     // let's drop the item
+            //     if(item!=null){
+            //         slot_container.GetComponent<SlotContainer>().DropItem();
+            //     }else{
+            //         Debug.Log("Pointer down item not null: " + item.name);
+            //     }
+            // }
         }
 
         public void OnBeginDrag(PointerEventData eventData){

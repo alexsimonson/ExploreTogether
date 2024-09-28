@@ -63,7 +63,7 @@ namespace ExploreTogether {
 
         // this function is run by ALL inventories when one changes... how can I fix this?
         public virtual void UpdateSlot(Component sender, object data){
-
+            Debug.Log("INVENTORY UI ~~ UPDATE SLOT");
             if(data.GetType().ToString()!="ExploreTogether.ItemSlot"){
                 Debug.LogError("Invalid update data type: " + data.GetType().ToString());
                 return;
@@ -77,8 +77,6 @@ namespace ExploreTogether {
 
         public void HandleSlotUpdate(ItemSlot slot)
         {
-            Debug.Log("Handle slot update at index: " + slot.index.ToString());
-
             if (slot.index >= 0 && slot.index < inventorySlots.Length)
             {
                 SlotContainer slotContainer = inventorySlots[slot.index].GetComponent<SlotContainer>();
@@ -104,15 +102,13 @@ namespace ExploreTogether {
                     newColor.a = (slot.item == null) ? 0 : 1;
                     GetChildImage(slotTransform, 1).color = newColor;
 
+                    // update the slot VERY important
                     InventorySlot inventorySlotComponent = slotContainer.inventorySlot.GetComponent<InventorySlot>();
-
-                    if (inventorySlotComponent != null)
-                    {
+                    if (inventorySlotComponent != null){
                         inventorySlotComponent.item = slot.item;
                     }
 
-                    if (watching_inventory != null && watching_inventory.slots[slot.index] != null)
-                    {
+                    if (watching_inventory != null && watching_inventory.slots[slot.index] != null){
                         watching_inventory.slots[slot.index].item = slot.item;
                     }
                 }

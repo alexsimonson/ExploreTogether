@@ -15,6 +15,7 @@ namespace ExploreTogether {
         private Canvas canvas;
         private CanvasGroup cg;
         private GameObject stack_size_text;
+        private GameObject slot_container;
 
         void Start(){
             canvas = GameObject.Find("HUD").GetComponent<Canvas>();
@@ -25,6 +26,7 @@ namespace ExploreTogether {
                 stack_size_text = gameObject.transform.GetChild(2).gameObject;
                 stack_size_text.GetComponent<Text>().text = type.ToString();
             }
+            slot_container = gameObject.transform.parent.gameObject;
         }
 
         void Update(){
@@ -37,7 +39,20 @@ namespace ExploreTogether {
         }
 
         public void OnPointerDown(PointerEventData eventData){
-            Debug.Log("Pointer Down From Inventory Slot");
+            // UI quality of life controls
+            if(Input.GetKey(KeyCode.LeftControl)){
+                // modifier pressed
+                if(Input.GetMouseButtonDown(0)){
+                    Debug.Log("Testing grab item: " + item.name);
+                }else if(Input.GetMouseButtonDown(1)){
+                    if(item!=null){
+                        Debug.Log("Testing drop item");
+                        slot_container.GetComponent<SlotContainer>().DropItem(false);
+                    }
+                }
+            }else{
+                // input as normal
+            }
         }
 
         public void OnBeginDrag(PointerEventData eventData){
@@ -48,7 +63,6 @@ namespace ExploreTogether {
         }
 
         public void OnEndDrag(PointerEventData eventData){
-            Debug.Log("This is up?");
             cg.alpha = 1f;
             cg.blocksRaycasts = true;
             eventData.pointerDrag.transform.localPosition = new Vector3(0, 0, 0);   // this returns the pointer back to its original position

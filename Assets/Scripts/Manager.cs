@@ -64,6 +64,8 @@ namespace ExploreTogether {
             hud.transform.GetChild(3).gameObject.GetComponent<InventoryUI>().SetWatchingInventoryByReference(ref player_inventory);
             hud.transform.GetChild(3).gameObject.GetComponent<InventoryUI>().DrawInventoryUI();
             player_gear = ScriptableObject.CreateInstance("Gear") as Gear;
+            hud.transform.GetChild(5).gameObject.GetComponent<GearUI>().SetWatchingGearByReference(ref player_gear);
+            hud.transform.GetChild(5).gameObject.GetComponent<GearUI>().DrawInventoryUI();
             player_gear.Initialize();
             Setup();
         }

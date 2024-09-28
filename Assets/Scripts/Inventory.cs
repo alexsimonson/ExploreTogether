@@ -79,7 +79,7 @@ namespace ExploreTogether {
             return;
         }
 
-        public void RemoveItem(int index, bool shouldDrop=false){
+        public virtual void RemoveItem(int index, bool shouldDrop=false){
             Item removedItem = slots[index].item;
             slots[index].item = null;
             slots[index].stack_size = 0;
@@ -120,8 +120,8 @@ namespace ExploreTogether {
             for(int slot_index=0;slot_index<slots.Length;slot_index++){
                 if(slots[slot_index]!=null){
                     if(slots[slot_index].item!=null){
-                        Debug.Log("Find item id: " + find_item.id.ToString());
-                        Debug.Log("slot item id: " + slots[slot_index].item.id.ToString());
+                        // Debug.Log("Find item id: " + find_item.id.ToString());
+                        // Debug.Log("slot item id: " + slots[slot_index].item.id.ToString());
                         if(slots[slot_index].item.id==find_item.id && slots[slot_index].stack_size < find_item.max_stack_size) return slot_index;
                     }
                 }
