@@ -47,6 +47,7 @@ namespace ExploreTogether {
         }
 
         public void BloodMagic(){
+            Debug.Log("Testing Blood Magic");
             // weapon_owner.GetComponent<PlayerHealth>().HealthAmount(last_damage);
             weapon_owner.GetComponent<PlayerHealth>().HealthAmount(10);
         }

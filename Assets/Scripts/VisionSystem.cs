@@ -49,16 +49,13 @@ namespace ExploreTogether {
             // Check if the player is within the field of view and visible
             // Debug.Log("Current State: " + GetComponent<GenericNPC>().GetState());
             if(GetComponent<GenericNPC>().GetIsAttacking()){
-                Debug.Log("ATTEMPTED IS ATTACKING FIX");
                 // we don't need to bother with setting chase state here
             }else if(IsPlayerVisible()){
-                Debug.Log("PLAYER IS VISIBLE IN VISION SYSTEM UPDATE");
                 // Player detected!
                 // Debug.Log("Player detected!");
                 // should set the state to chase
                 GetComponent<GenericNPC>().SetState(GenericNPC.State.Chase);
             }else{
-                Debug.Log("ELSE OF THE VISION");
                 // Reset the chase target's transform to null if the player is not visible
                 // consider not doing this if player is attacking...
                 chaseTargetTransform = null;

@@ -10,13 +10,19 @@ namespace ExploreTogether {
         public Magic weapon = null;
 
         void Effect(Collider afflicted){
-            if(areaToEffect){
-                afflicted.gameObject.GetComponent<Health>().DealDamage(weapon.last_damage);
-                if(weapon.magicStyle==Magic.MagicStyle.Frost){
-                    afflicted.gameObject.GetComponent<GenericNPC>().FreezeNPC(weapon.timer);
-                }else if(weapon.magicStyle==Magic.MagicStyle.Blood){
-                    weapon.BloodMagic();
-                }
+            Debug.Log("COLLIDER AFFLICTED: " + afflicted.name);
+            if(!areaToEffect){
+                return;
+            }
+            if(afflicted.tag!="NPC"){
+                return;
+            }
+            Debug.Log("WE FOUND THE CORRECT NPC FOR AFFLICTION");
+            afflicted.gameObject.GetComponent<Health>().DealDamage(weapon.last_damage);
+            if(weapon.magicStyle==Magic.MagicStyle.Frost){
+                afflicted.gameObject.GetComponent<GenericNPC>().FreezeNPC(weapon.timer);
+            }else if(weapon.magicStyle==Magic.MagicStyle.Blood){
+                weapon.BloodMagic();
             }
         }
 
