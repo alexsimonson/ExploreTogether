@@ -24,12 +24,14 @@ namespace ExploreTogether {
             onStorageAccessed = Resources.Load("Events/StorageAccessed", typeof(GameEvent)) as GameEvent;
             storage_inventory = ScriptableObject.CreateInstance("Inventory") as Inventory;
             storage_inventory.max_slots = storage_slots;
+            storage_inventory.isStorage = true;
             storage_gear = ScriptableObject.CreateInstance("Gear") as Gear;
             storage_gear.max_slots = 11;
             Initialize();
         }
 
         public void Interaction(GameObject interactingWith){
+            Debug.Log("Interaction via STORAGE");
             if(storage_hud==null){
                 storage_hud = manager.hud.transform.GetChild(11).gameObject;
             }
@@ -39,12 +41,10 @@ namespace ExploreTogether {
                 bool? temp_state = null;
                 // this branch will determine temp_state
                 if(playerInput.hud_visible_state==true && manager.GetComponent<Manager>().storage_hud_visible_state==true){
-                    Debug.Log("Hide hud when both are showing");
                     // we want to display the hud here
                     temp_state = false;
                     ToggleStorageHUD(temp_state);
                 }else if(playerInput.hud_visible_state==true){
-                    Debug.Log("show hud when only player inventory is open");
                     // we want to display the hud here
                     temp_state = true;
                     ToggleStorageHUD(temp_state);
@@ -56,6 +56,7 @@ namespace ExploreTogether {
                     temp_state = false;
                     ToggleStorageHUD(temp_state);
                 }
+                Debug.Log("Interacting with the player and temp_state is: " + temp_state.ToString());
 
                 // the HUD should match with playerInput variable here...
                 if(temp_state==true){
@@ -109,7 +110,7 @@ namespace ExploreTogether {
             int randomNumItemsInt = Random.Range(minRange, maxRange + 1);
             for(int i=0;i<randomNumItemsInt;i++){
                 var new_item = manager.item_bank[Random.Range(minRange, manager.item_bank.Length)];
-                storage_inventory.AddItem(new_item, true);
+                storage_inventory.AddItem(new_item);
             }
         }
     }

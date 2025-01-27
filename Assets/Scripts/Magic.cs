@@ -47,7 +47,8 @@ namespace ExploreTogether {
         }
 
         public void BloodMagic(){
-            weapon_owner.GetComponent<PlayerHealth>().HealthAmount(last_damage);
+            // weapon_owner.GetComponent<PlayerHealth>().HealthAmount(last_damage);
+            weapon_owner.GetComponent<PlayerHealth>().HealthAmount(10);
         }
 
         public void FrostMagic(){

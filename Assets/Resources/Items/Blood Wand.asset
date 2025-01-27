@@ -22,3 +22,10 @@ MonoBehaviour:
   type: 10
   style: 2
   attackSound: {fileID: 0}
+  damage: 0
+  magicStyle: 0
+  max_damage: 50
+  timer: 5
+  is_dot: 0
+  last_damage: 28
+  weapon_owner: {fileID: 0}

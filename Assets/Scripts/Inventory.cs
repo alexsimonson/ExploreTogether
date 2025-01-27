@@ -8,6 +8,7 @@ namespace ExploreTogether {
         // THE INVENTORY IS STRICTLY DATA
         public int max_slots;  // number of items an inventory can hold before full
         public ItemSlot[] slots;
+        public bool isStorage = false;
 
         // THE INVENTORY IS RESPONSIBLE FOR RAISING EVENTS RELATED TO THE INVENTORY
         [Header("Events")]
@@ -38,7 +39,7 @@ namespace ExploreTogether {
             // RelevantScrollView = manager.hud.transform.GetChild(3).gameObject;
         }
 
-        public virtual void AddItem(Item new_item, bool isStorage=false){
+        public virtual void AddItem(Item new_item){
             if(new_item==null) return;
             if(new_item.stack){
                 // we should FindItemInSlot
@@ -89,7 +90,12 @@ namespace ExploreTogether {
                 GameObject dropped_item = Instantiate(Resources.Load("Prefabs/Item", typeof(GameObject)) as GameObject, manager.player.transform.position, Quaternion.identity);
                 dropped_item.GetComponent<ItemSpawn>().item = removedItem;
             }
-            onInventoryChanged.Raise(null, item_slot);
+            if(isStorage){
+                onStorageChanged.Raise(null, item_slot);
+            }else{
+                // will sending in this have issues?  this refers to a scriptable object...  other examples I was using a mono
+                onInventoryChanged.Raise(null, item_slot);
+            }
         }
 
         public void DropItem(int index){
@@ -131,7 +137,11 @@ namespace ExploreTogether {
 
         public int CheckInventoryForItem(Item find_item){
             for(int slot_index=0;slot_index<slots.Length;slot_index++){
-                if(slots[slot_index].item.id==find_item.id) return slot_index;
+                if(slots[slot_index]!=null){
+                    if(slots[slot_index].item!=null){
+                        if(slots[slot_index].item.id==find_item.id) return slot_index;
+                    }
+                }
             }
             return -1;
         }

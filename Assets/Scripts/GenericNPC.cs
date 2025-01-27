@@ -9,6 +9,7 @@ namespace ExploreTogether {
         private Rigidbody[] ragdollRigidbodies; // Array to store the rigidbodies of the ragdoll bones
 
         public State state;
+        private State previousState;    // used after attack to return back to prior state
         public enum State
         {
             Wander,
@@ -28,14 +29,16 @@ namespace ExploreTogether {
 
         public float chaseSpeed = 5f; // Speed at which the NPC chases the player
         public float chaseDistance = 10f; // Maximum distance at which the NPC can chase the player
-        public float actionDistance = 2f; // Distance at which the NPC can take action
+        public float actionDistance = 5f; // Distance at which the NPC can take action
 
         private bool isAttacking = false;
+        private bool isAttackCoroutineRunning = false;
         Animation npcAnimation;
 
         private bool deathHandled = false;
         
         Vector3 knockback_vector;
+
 
         private void Start()
         {
@@ -107,8 +110,7 @@ namespace ExploreTogether {
         }
 
 
-        private void ChaseState()
-        {
+        private void ChaseState(){
             // Get the chase target's position from the VisionSystem
             Vector3 chaseTargetPosition = visionSystem.GetChaseTargetPosition();
 
@@ -116,54 +118,51 @@ namespace ExploreTogether {
             float distanceToTarget = Vector3.Distance(transform.position, chaseTargetPosition);
 
             // Check if the chase target is within chase distance
-            if (distanceToTarget <= chaseDistance)
-            {
+            if (distanceToTarget <= chaseDistance){
                 // Rotate towards the chase target's position
                 Vector3 direction = (chaseTargetPosition - transform.position).normalized;
                 Quaternion targetRotation = Quaternion.LookRotation(new Vector3(direction.x, 0f, direction.z));
                 transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 5f);
 
                 // Check if the chase target is within action distance
-                if (distanceToTarget <= actionDistance)
-                {
+                if (distanceToTarget <= actionDistance){
                     // Take action against the chase target (e.g., attack)
                     SetState(State.Attack);
                     isAttacking = true;
                 }
-                else
-                {
+                else{
                     // Move towards the chase target's position
                     agent.SetDestination(chaseTargetPosition);
                     agent.speed = chaseSpeed;
                 }
             }
-            else
-            {
+            else{
                 // Chase target is out of chase distance, transition to another state (e.g., Wander)
                 state = State.Wander;
             }
         }
 
-        private void AttackState()
-        {
+        private void AttackState(){
             // Logic for the Attack state
-            if (isAttacking)
-            {
+            if (isAttackCoroutineRunning==false){
+                isAttackCoroutineRunning = true;
+                Debug.Log("Beginning of attack state");
                 StartCoroutine(Attack());
             }
         }
 
-        private IEnumerator Attack()
-        {
+        private IEnumerator Attack(){
             // animator.Play("AttackSlash");
+            isAttacking = true;
             GameObject target = visionSystem.GetChaseTargetObject();
-            if (target != null)
-            {
-                target.GetComponent<Health>().DealDamage(100);
+            if (target != null){
+                target.GetComponent<Health>().DealDamage(20);
             }
             //  the target should be null... because it's dead you know?
-            yield return new WaitForSeconds(5); // we need to ensure this is eventually the length of time of attack animation
+            yield return new WaitForSeconds(2); // we need to ensure this is eventually the length of time of attack animation
             isAttacking = false;
+            isAttackCoroutineRunning = false;
+            SetState(previousState);
         }
 
         private void DefendState()
@@ -211,6 +210,10 @@ namespace ExploreTogether {
             }
         }
 
+        public bool GetIsAttacking(){
+            return isAttacking;
+        }
+
         public bool SetState(State newState)
         {
             if (state == State.Death && newState != State.Death)
@@ -226,6 +229,7 @@ namespace ExploreTogether {
             {
                 return false;   // we can't change the state when attacking, unless death occurs
             }
+            previousState = state;
             state = newState;
             Debug.Log("New state set: " + newState.ToString());
             return true;

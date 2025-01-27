@@ -76,6 +76,7 @@ namespace ExploreTogether {
 
         // this logic is done on the inventory we are dragging FROM
         void SwapItem(PointerEventData eventData){
+            Debug.Log("RUNNING SWAP ITEM LOGIC");
             // I need to declare these as variables for simplicity
             InventorySlot drag_inventory_slot_ref = eventData.pointerDrag.gameObject.GetComponent<InventorySlot>();
             InventorySlot other_inventory_slot_ref = inventorySlot.GetComponent<InventorySlot>();
@@ -244,6 +245,7 @@ namespace ExploreTogether {
         }
 
         void UnEquipItem(PointerEventData eventData){
+            Debug.Log("RUNNING UNEQUIP ITEM EVENT");
             // to obtain the parent UI element from this, we must go UP a lot
             GearUI parent_gear = eventData.pointerDrag.transform.parent.parent.parent.parent.parent.gameObject.GetComponent<GearUI>();
             // same code to start as SwapItem, but I will be adjusting things as necessary
@@ -333,6 +335,7 @@ namespace ExploreTogether {
 
         // this function may simply never be necessary with type requirements...
         void SwapEquipment(PointerEventData eventData){
+            Debug.Log("RUNNING SWAP Equipment LOGIC");
             GearUI parent_gear = eventData.pointerDrag.transform.parent.parent.parent.parent.parent.gameObject.GetComponent<GearUI>();
             // at this point in time, inventorySlot represents the slot where our mouse let go of the button
             // this logic is necessary for preventing a bug at this time

@@ -17,7 +17,7 @@ namespace ExploreTogether {
                 slots[i].index = i;
             }
             onInventoryChanged = Resources.Load("Events/EquipmentChanged", typeof(GameEvent)) as GameEvent;
-            onStorageChanged = Resources.Load("Events/StorageChanged", typeof(GameEvent)) as GameEvent;
+            onStorageChanged = Resources.Load("Events/StorageEquipmentChanged", typeof(GameEvent)) as GameEvent;
             manager = GameObject.Find("Manager").GetComponent<Manager>();
         }
 
@@ -30,7 +30,7 @@ namespace ExploreTogether {
             
         }
 
-        public override void AddItem(Item new_item, bool isStorage=false){
+        public override void AddItem(Item new_item){
             if(new_item.stack){
                 // we should FindItemInSlot
                 int slot_index = FindItemInSlot(new_item);
@@ -56,7 +56,11 @@ namespace ExploreTogether {
                 GameObject dropped_item = Instantiate(Resources.Load("Prefabs/Item", typeof(GameObject)) as GameObject, manager.player.transform.position, Quaternion.identity);
                 dropped_item.GetComponent<ItemSpawn>().item = removedItem;
             }
-            onInventoryChanged.Raise(null, item_slot);
+            if(isStorage){
+                onStorageChanged.Raise(null, item_slot);
+            }else{
+                onInventoryChanged.Raise(null, item_slot);
+            }
         }
 
         void AddItemCheck(Item new_item){
