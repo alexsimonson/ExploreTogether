@@ -71,6 +71,7 @@ public class MainMenuLogicUI : MonoBehaviour{
                 Debug.Log("Character name too long.  Must be between 1 and 20 characters.");
                 return false;
             }
+            return true;
         }
 
         string SanitizeCharacterName(string raw_input){
