@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 4434156940295093134}
   - component: {fileID: 3464205663896215729}
   m_Layer: 9
-  m_Name: RiggedBoy
+  m_Name: LegacyRiggedBoy
   m_TagString: NPC
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -79,6 +79,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 319853ba0faabac458bdd40ee85961ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  useLegacyAnimation: 1
   state: 0
   chaseSpeed: 5
   chaseDistance: 10

@@ -6,6 +6,8 @@ using UnityEngine.AI;
 namespace ExploreTogether {
     public class GenericNPC : MonoBehaviour{
 
+        public bool useLegacyAnimation;
+
         private Rigidbody[] ragdollRigidbodies; // Array to store the rigidbodies of the ragdoll bones
 
         public enum State{
@@ -36,6 +38,7 @@ namespace ExploreTogether {
         private bool isFrozen = false;
         private float freezeTime = 0f;
         Animation npcAnimation;
+        Animator npcAnimator;
 
         private bool deathHandled = false;
         
@@ -45,9 +48,17 @@ namespace ExploreTogether {
 
         private void Start(){
             ragdollRigidbodies = GetComponentsInChildren<Rigidbody>(); // Get the rigidbodies of the ragdoll bones
-            npcAnimation = GetComponentInChildren<Animation>();
-            foreach(AnimationState animState in npcAnimation){
-                Debug.Log("Available animation: " + animState.name);
+            if(useLegacyAnimation==true){
+                npcAnimation = GetComponentInChildren<Animation>();
+                foreach(AnimationState animState in npcAnimation){
+                    Debug.Log("Available animation: " + animState.name);
+                }
+            }else{
+                // new version
+                npcAnimator = GetComponentInChildren<Animator>();
+                if(npcAnimator==null){
+                    Debug.LogError("Animator component not found on " + gameObject.name);
+                }
             }
 
             agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
@@ -94,7 +105,11 @@ namespace ExploreTogether {
         }
 
         private void WanderState(){
-            npcAnimation.Play("Idle.001");
+            if(useLegacyAnimation==true){
+                npcAnimation.Play("Idle.001");
+            }else{
+                npcAnimator.Play("Walk");
+            }
             if (!agent.hasPath || agent.remainingDistance <= agent.stoppingDistance)
             {
                 // Generate a random point on the NavMesh within a specified range
@@ -118,7 +133,11 @@ namespace ExploreTogether {
 
 
         private void ChaseState(){
-            npcAnimation.Play("Idle.001");
+            if(useLegacyAnimation==true){
+                npcAnimation.Play("Idle.001");
+            }else{
+                npcAnimator.Play("Walk");
+            }
             // Get the chase target's position from the VisionSystem
             if(visionSystem==null){
                 return;
@@ -172,8 +191,13 @@ namespace ExploreTogether {
                 StartCoroutine(DelayDamageCheck(target));
             }
             //  the target should be null... because it's dead you know?
-            npcAnimation.Play("Punch");
-            yield return new WaitForSeconds(3); // we need to ensure this is eventually the length of time of attack animation
+            if(useLegacyAnimation==true){
+                npcAnimation.Play("Punch");
+                // Debug.Log(npcAnimation);
+            }else{
+                npcAnimator.Play("Punch");
+            }
+            yield return new WaitForSeconds(2); // we need to ensure this is eventually the length of time of attack animation
             isAttacking = false;
             SetState(previousState);
             isCoroutineRunning = false;
@@ -191,7 +215,7 @@ namespace ExploreTogether {
         }
 
         private IEnumerator DelayDamageCheck(GameObject target){
-            yield return new WaitForSeconds(2);
+            yield return new WaitForSeconds(1);
             CheckMeleeAttackDistance(target);
         }
 
@@ -234,7 +258,9 @@ namespace ExploreTogether {
             // Enable the ragdoll rigidbodies
             SetRagdollEnabled(true);
 
-            npcAnimation.enabled = false;
+            if(useLegacyAnimation==true){
+                npcAnimation.enabled = false;
+            }
         }
 
         private void SetRagdollEnabled(bool enabled)
