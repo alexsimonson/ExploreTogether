@@ -4,14 +4,11 @@ using UnityEngine;
 using UnityEngine.AI;
 
 namespace ExploreTogether {
-    public class GenericNPC : MonoBehaviour
-    {
+    public class GenericNPC : MonoBehaviour{
+
         private Rigidbody[] ragdollRigidbodies; // Array to store the rigidbodies of the ragdoll bones
 
-        public State state;
-        private State previousState;    // used after attack to return back to prior state
-        public enum State
-        {
+        public enum State{
             Wander,
             Chase,
             Attack,
@@ -21,6 +18,8 @@ namespace ExploreTogether {
             Frozen,
             Death
         }
+        public State state;
+        private State previousState;    // used after attack to return back to prior state
 
         // Start is called before the first frame update
         UnityEngine.AI.NavMeshAgent agent;
@@ -32,18 +31,24 @@ namespace ExploreTogether {
         public float actionDistance = 5f; // Distance at which the NPC can take action
 
         private bool isAttacking = false;
-        private bool isAttackCoroutineRunning = false;
+        private bool isCoroutineRunning = false;  // I think this variable could be generic
+
+        private bool isFrozen = false;
+        private float freezeTime = 0f;
         Animation npcAnimation;
 
         private bool deathHandled = false;
         
         Vector3 knockback_vector;
 
+        private Rigidbody rb;
 
-        private void Start()
-        {
+        private void Start(){
             ragdollRigidbodies = GetComponentsInChildren<Rigidbody>(); // Get the rigidbodies of the ragdoll bones
             npcAnimation = GetComponentInChildren<Animation>();
+            foreach(AnimationState animState in npcAnimation){
+                Debug.Log("Available animation: " + animState.name);
+            }
 
             agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
             // Get the VisionSystem component from the GameObject
@@ -51,6 +56,8 @@ namespace ExploreTogether {
 
             // Disable the ragdoll rigidbodies initially
             SetRagdollEnabled(false);
+
+            rb = GetComponent<Rigidbody>();
         }
 
         private void Update()
@@ -86,8 +93,8 @@ namespace ExploreTogether {
             }
         }
 
-        private void WanderState()
-        {
+        private void WanderState(){
+            npcAnimation.Play("Idle.001");
             if (!agent.hasPath || agent.remainingDistance <= agent.stoppingDistance)
             {
                 // Generate a random point on the NavMesh within a specified range
@@ -111,7 +118,11 @@ namespace ExploreTogether {
 
 
         private void ChaseState(){
+            npcAnimation.Play("Idle.001");
             // Get the chase target's position from the VisionSystem
+            if(visionSystem==null){
+                return;
+            }
             Vector3 chaseTargetPosition = visionSystem.GetChaseTargetPosition();
 
             // Calculate the distance between the NPC and the chase target
@@ -144,25 +155,44 @@ namespace ExploreTogether {
 
         private void AttackState(){
             // Logic for the Attack state
-            if (isAttackCoroutineRunning==false){
-                isAttackCoroutineRunning = true;
-                Debug.Log("Beginning of attack state");
+            if (isCoroutineRunning==false){
+                isCoroutineRunning = true;
                 StartCoroutine(Attack());
             }
         }
 
         private IEnumerator Attack(){
             // animator.Play("AttackSlash");
+            // AnimationState testAnimState = npcAnimation[npcAnimation.clip.name];
+            // float length = testAnimState.length;
+            // Debug.Log("TESTING TIME: " + length.ToString());
             isAttacking = true;
             GameObject target = visionSystem.GetChaseTargetObject();
             if (target != null){
-                target.GetComponent<Health>().DealDamage(20);
+                StartCoroutine(DelayDamageCheck(target));
             }
             //  the target should be null... because it's dead you know?
-            yield return new WaitForSeconds(2); // we need to ensure this is eventually the length of time of attack animation
+            npcAnimation.Play("Punch");
+            yield return new WaitForSeconds(3); // we need to ensure this is eventually the length of time of attack animation
             isAttacking = false;
-            isAttackCoroutineRunning = false;
             SetState(previousState);
+            isCoroutineRunning = false;
+        }
+
+        private void CheckMeleeAttackDistance(GameObject target){
+            float distance = (target.transform.position - gameObject.transform.position).magnitude;
+            Debug.Log("Distance after time: " + distance);
+
+            if(distance <= 2f){
+                target.GetComponent<Health>().DealDamage(20);
+            }else{
+                Debug.Log("EVADED ATTACK");
+            }
+        }
+
+        private IEnumerator DelayDamageCheck(GameObject target){
+            yield return new WaitForSeconds(2);
+            CheckMeleeAttackDistance(target);
         }
 
         private void DefendState()
@@ -183,6 +213,12 @@ namespace ExploreTogether {
         private void FrozenState()
         {
             // Logic for the Frozen state
+            if(isFrozen==true && isCoroutineRunning==false){
+                isCoroutineRunning = true;
+                StartCoroutine(IFreezeTime(freezeTime));
+            }else if(isFrozen==false){
+                SetState(previousState);    // return to last activity
+            }
         }
 
         private void DeathState()
@@ -214,6 +250,10 @@ namespace ExploreTogether {
             return isAttacking;
         }
 
+        public bool GetIsFrozen(){
+            return isFrozen;
+        }
+
         public bool SetState(State newState)
         {
             if (state == State.Death && newState != State.Death)
@@ -231,7 +271,7 @@ namespace ExploreTogether {
             }
             previousState = state;
             state = newState;
-            Debug.Log("New state set: " + newState.ToString());
+            // Debug.Log("New state set: " + newState.ToString());
             return true;
         }
 
@@ -284,16 +324,19 @@ namespace ExploreTogether {
             state = State.Wander;
         }
 
-        public void FreezeNPC(float time){
-            StartCoroutine(IFreezeTime(time));
+        public void HelpFreezeNPC(float time){
+            SetState(State.Frozen);
+            agent.isStopped = true;
+            isFrozen = true;
+            freezeTime = time;
         }
 
         IEnumerator IFreezeTime(float time){
             Debug.Log("Freezing NPC");
-            var prior_state = state;
-            state = State.Frozen;
             yield return new WaitForSeconds(time);
-            state = prior_state;
+            isFrozen = false;
+            isCoroutineRunning = false;
+            agent.isStopped = false;
             Debug.Log("NPC UNFrozen");
         }
     }

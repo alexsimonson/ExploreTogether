@@ -29,7 +29,9 @@ namespace ExploreTogether {
         void PlayerInput(){
             if(Input.GetKeyDown("f")){
                 if(interactWith){
-                    interactWith.GetComponent<IInteraction>().Interaction(gameObject);
+                    if(interactWith.GetComponent<IInteraction>()!=null){
+                        interactWith.GetComponent<IInteraction>().Interaction(gameObject);
+                    }
                     ChangeInteractionWithText();
                 }
             }

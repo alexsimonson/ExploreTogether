@@ -41,14 +41,13 @@ namespace ExploreTogether {
             lineRenderer.endWidth = 0.05f;
         }
 
-        private void Update()
-        {
+        private void Update(){
             // Reset current line index
             currentLineIndex = 0;
 
             // Check if the player is within the field of view and visible
             // Debug.Log("Current State: " + GetComponent<GenericNPC>().GetState());
-            if(GetComponent<GenericNPC>().GetIsAttacking()){
+            if(GetComponent<GenericNPC>().GetIsAttacking() || GetComponent<GenericNPC>().GetIsFrozen()){
                 // we don't need to bother with setting chase state here
             }else if(IsPlayerVisible()){
                 // Player detected!

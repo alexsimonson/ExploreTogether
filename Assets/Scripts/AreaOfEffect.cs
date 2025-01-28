@@ -20,7 +20,8 @@ namespace ExploreTogether {
             Debug.Log("WE FOUND THE CORRECT NPC FOR AFFLICTION");
             afflicted.gameObject.GetComponent<Health>().DealDamage(weapon.last_damage);
             if(weapon.magicStyle==Magic.MagicStyle.Frost){
-                afflicted.gameObject.GetComponent<GenericNPC>().FreezeNPC(weapon.timer);
+                // call helper function on class to handle the freeze logic, since we must pass freeze time here
+                afflicted.gameObject.GetComponent<GenericNPC>().HelpFreezeNPC(weapon.timer);
             }else if(weapon.magicStyle==Magic.MagicStyle.Blood){
                 weapon.BloodMagic();
             }
