@@ -64,11 +64,11 @@ public class MainMenuLogicUI : MonoBehaviour{
         bool MakeNewCharacter(){
             string san_input = SanitizeCharacterName(CharacterNameInput.text);
             if(san_input.Length < 1){
-                Debug.Log("Character name too short.  Must be between 1 and 20 characters.")
+                Debug.Log("Character name too short.  Must be between 1 and 20 characters.");
                 return false;
             }
             if(san_input.Length > 20){
-                Debug.Log("Character name too long.  Must be between 1 and 20 characters.")
+                Debug.Log("Character name too long.  Must be between 1 and 20 characters.");
                 return false;
             }
         }
