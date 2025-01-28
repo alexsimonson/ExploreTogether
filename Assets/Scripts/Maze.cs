@@ -50,7 +50,7 @@ namespace ExploreTogether {
             xJunc = Resources.Load("Prefabs/Dungeon/X-Junction", typeof(GameObject)) as GameObject;
             cJunc = Resources.Load("Prefabs/Dungeon/C-Junction", typeof(GameObject)) as GameObject;
             itemSpawn = Resources.Load("Prefabs/Item", typeof(GameObject)) as GameObject;
-            enemyPrefab = Resources.Load("Prefabs/DetectionAI", typeof(GameObject)) as GameObject;
+            enemyPrefab = Resources.Load("Prefabs/ModernMan", typeof(GameObject)) as GameObject;
             torchPrefab = Resources.Load("Prefabs/Torch Particle", typeof(GameObject)) as GameObject;
             treePrefab = Resources.Load("Prefabs/TreeResource", typeof(GameObject)) as GameObject;
         }
@@ -121,6 +121,22 @@ namespace ExploreTogether {
             existing_rot.y = rotation_degrees;
             io.transform.rotation = Quaternion.Euler(existing_rot);
             io.name = "Testing " + node.index.ToString() + " - " + prefab.name.ToString();
+
+            // EXPERIMENTAL****************
+            // Get the prefab's rotation
+
+            // Calculate texture offset or rotation_degrees correction
+            // Vector2 offset = Vector2.zero;
+            // if (Mathf.Approximately(rotation_degrees % 360, 90f) || Mathf.Approximately(rotation_degrees % 360, 270f))
+            // {
+            //     offset = new Vector2(0.5f, 0.5f); // Example adjustment for 90-degree rotations
+            // }
+
+            // // Apply offset to the material
+            // Material material = io.transform.Find("Floor").GetComponent<MeshRenderer>().material;
+            // material.mainTextureOffset = offset;
+            // material.mainTextureScale = new Vector2(5, 5); // Ensure tiling stays consistent
+            // EXPERIMENTAL****************
             return io;
         }
 

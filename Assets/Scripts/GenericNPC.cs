@@ -253,13 +253,15 @@ namespace ExploreTogether {
             agent.enabled = false;
 
             // Disable the NPC's collider
-            GetComponent<Collider>().enabled = false;
+            // GetComponent<Collider>().enabled = false;
 
             // Enable the ragdoll rigidbodies
             SetRagdollEnabled(true);
 
             if(useLegacyAnimation==true){
                 npcAnimation.enabled = false;
+            }else{
+                npcAnimator.enabled = false;
             }
         }
 
