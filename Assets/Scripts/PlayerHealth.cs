@@ -28,7 +28,7 @@ namespace ExploreTogether {
             Cursor.visible = true;
         }
 
-        public override void HealthAmount(int heal){
+        public override void AddHealthAmount(int heal){
             currentHealth += heal;	// we want to cap this at the maxHealth
             if(currentHealth > maxHealth) currentHealth = maxHealth;
             onPlayerHealthChanged.Raise(this, currentHealth);

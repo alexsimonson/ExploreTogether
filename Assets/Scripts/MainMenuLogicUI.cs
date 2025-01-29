@@ -1,8 +1,13 @@
+using System.Collections.Generic;
+using System;
+using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
 public class MainMenuLogicUI : MonoBehaviour{
+
+    private string character_save_path;
 
     [Header("Main Menu UI")]
     public Canvas MainMenuCanvas;
@@ -30,6 +35,7 @@ public class MainMenuLogicUI : MonoBehaviour{
 
 
     private void Start(){
+        
         // start all canvas except MainMenu hidden
         SwitchCanvas(MainMenuCanvas);
 
@@ -57,21 +63,40 @@ public class MainMenuLogicUI : MonoBehaviour{
         }
 
         void InitializeNewStart(){
-            MakeNewCharacter();
-            // StartGame();
+            CharacterData new_character = MakeNewCharacter();
+            if(new_character==null){
+                Debug.LogError("Error making new character");
+            }else{
+                StartGame(new_character);
+            }
         }
 
-        bool MakeNewCharacter(){
-            string san_input = SanitizeCharacterName(CharacterNameInput.text);
-            if(san_input.Length < 1){
+        CharacterData MakeNewCharacter(){
+            string sanitized_name = SanitizeCharacterName(CharacterNameInput.text);
+            if(sanitized_name==null){
+                Debug.Log("Name already exists");
+                return null;
+            }
+            if(sanitized_name.Length < 1){
                 Debug.Log("Character name too short.  Must be between 1 and 20 characters.");
-                return false;
+                return null;
             }
-            if(san_input.Length > 20){
+            if(sanitized_name.Length > 20){
                 Debug.Log("Character name too long.  Must be between 1 and 20 characters.");
-                return false;
+                return null;
             }
-            return true;
+            // character name is ok
+            CharacterData character_data = ScriptableObject.CreateInstance("CharacterData") as CharacterData;
+            character_data.name = sanitized_name;
+            character_data.health = 100;
+            character_data.experience = 0;
+
+            // Convert the object to JSON
+            string character_json_data = JsonUtility.ToJson(character_data);
+            character_save_path = Path.Combine(Application.persistentDataPath, sanitized_name + "_character_save.json");
+             // Write the JSON string to a file
+            File.WriteAllText(character_save_path, character_json_data);
+            return character_data;
         }
 
         string SanitizeCharacterName(string raw_input){
@@ -79,11 +104,14 @@ public class MainMenuLogicUI : MonoBehaviour{
             string san_input = raw_input.Trim();
             san_input = san_input.Replace("<", "&lt;").Replace(">", "&gt;"); // Escape HTML tags
             san_input = san_input.Replace(";", ""); // Optionally, remove semicolons (to prevent code injection)
-            // Add any other rules
+            // make sure character with name doesn't already exist
+            if(CheckNameExists(san_input)){
+                return null;
+            }
             return san_input;
         }
 
-        void StartGame(CharacterData chosenCharacter){
+        void StartGame(CharacterData chosenCharacterData){
             Debug.Log("This should launch the game with player data");
         }
 
@@ -94,6 +122,64 @@ public class MainMenuLogicUI : MonoBehaviour{
                 Application.Quit();
             #endif
         }
+    }
+
+    string[] GetSavesInDir(){
+        var path = Application.persistentDataPath;
+        if (Directory.Exists(path)==false){    
+            // directory doesn't exist
+            return Array.Empty<string>();
+        }
+        // Get all file paths in the directory
+        string[] filePaths = Directory.GetFiles(path);
+
+        if(filePaths==null || filePaths.Length==0){
+            // no save files found
+            return Array.Empty<string>();
+        }
+
+        // return all files found
+        return filePaths;
+    }
+
+    // form character list from result of GetSavesInDir
+    List<string> GetCharacterList(string[] character_save_paths){
+        List<string> character_list = new List<string>();
+        if(character_save_paths==null || character_save_paths.Length==0){
+            // no save files found
+            return new List<string>();
+        }
+        // Iterate through the file paths and print them to the console
+        foreach (var filePath in character_save_paths){
+            string found_name = filePath.Replace(Application.persistentDataPath + "\\", "").Replace("_character_save.json", "");
+            // Debug.Log("Character name found: " + found_name);
+            character_list.Add(found_name);
+        }
+        return character_list;
+    }
+
+    // check if character with name already exists in file dir
+    bool CheckNameExists(string check_name){
+        string[] filePaths = GetSavesInDir();
+
+        if(filePaths==null || filePaths.Length==0){
+            // no save files found
+            return false;
+        }else{
+            // Iterate through the file paths and print them to the console
+            foreach (var filePath in filePaths){
+                string found_name = ParseName(filePath);
+                // Debug.Log("Character name found: " + found_name);
+                if(found_name==check_name){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    string ParseName(string parse_this){
+        return parse_this.Replace(Application.persistentDataPath + "\\", "").Replace("_character_save.json", "");
     }
 
     private void OnButtonClick(TMP_Text pressed){

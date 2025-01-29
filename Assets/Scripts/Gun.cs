@@ -16,10 +16,10 @@ namespace ExploreTogether {
         public int magazineRounds = 10;
         public int magazineSizeMax = 10;
         public int bulletCount = 30;
-        public string name = "Gun";
 
 
         void OnEnable(){
+            name = "Gun";
             attackSound = Resources.Load("Audio/gunshot", typeof(AudioClip)) as AudioClip;
             reloadSound = Resources.Load("Audio/reload", typeof(AudioClip)) as AudioClip;
         }

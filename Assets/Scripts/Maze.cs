@@ -79,11 +79,11 @@ namespace ExploreTogether {
             if(!controlled_generation){
                 RenderGrid();
             }
-            FillMazeWithItems();
             maze_generated = true;
+            BuildMapNavigation();
+            FillMazeWithItems();
             // when the maze is generated we should alert the manager if there is one
             if(manager==null) return;
-            BuildMapNavigation();
             manager.MapSetupCallback();
         }
 

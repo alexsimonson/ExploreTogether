@@ -56,9 +56,9 @@ MonoBehaviour:
   treePrefab: {fileID: 0}
   generated_nodes: []
   xJunctions: []
-  max_width: 20
-  max_height: 20
-  max_dungeon_length: 150
+  max_width: 10
+  max_height: 10
+  max_dungeon_length: 400
   total_count: 0
   maze_generated: 0
   manager: {fileID: 0}

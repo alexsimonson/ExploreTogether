@@ -33,7 +33,7 @@ namespace ExploreTogether {
 			if(shouldDestroy) Destroy(gameObject);
 		}
 
-		public virtual void HealthAmount(int heal){
+		public virtual void AddHealthAmount(int heal){
 			currentHealth += heal;	// we want to cap this at the maxHealth
 			if(currentHealth > maxHealth) currentHealth = maxHealth;
 		}

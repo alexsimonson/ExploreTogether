@@ -48,8 +48,8 @@ namespace ExploreTogether {
 
         public void BloodMagic(){
             Debug.Log("Testing Blood Magic");
-            // weapon_owner.GetComponent<PlayerHealth>().HealthAmount(last_damage);
-            weapon_owner.GetComponent<PlayerHealth>().HealthAmount(10);
+            // weapon_owner.GetComponent<PlayerHealth>().AddHealthAmount(last_damage);
+            weapon_owner.GetComponent<PlayerHealth>().AddHealthAmount(10);
         }
 
         public void FrostMagic(){
