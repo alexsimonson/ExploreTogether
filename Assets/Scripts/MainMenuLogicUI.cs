@@ -26,6 +26,7 @@ public class MainMenuLogicUI : MonoBehaviour{
     [Header("Load Character UI")]
     public Canvas LoadCanvas;
     public Button LoadBackButton;
+    public Transform LoadCharacterContent;
 
     [Header("Options UI")]
     public Canvas OptionsCanvas;
@@ -41,7 +42,7 @@ public class MainMenuLogicUI : MonoBehaviour{
 
         // Add listeners for Main Menu UI elements
         NewButton.GetComponent<Button>().onClick.AddListener(() => SwitchCanvas(NewCanvas));
-        LoadButton.GetComponent<Button>().onClick.AddListener(() => SwitchCanvas(LoadCanvas));
+        LoadButton.GetComponent<Button>().onClick.AddListener(HandleLoad);
         OptionsButton.GetComponent<Button>().onClick.AddListener(() => SwitchCanvas(OptionsCanvas));
         QuitButton.GetComponent<Button>().onClick.AddListener(QuitGame);
 
@@ -53,75 +54,157 @@ public class MainMenuLogicUI : MonoBehaviour{
         LoadBackButton.GetComponent<Button>().onClick.AddListener(() => SwitchCanvas(MainMenuCanvas));
         OptionsBackButton.GetComponent<Button>().onClick.AddListener(() => SwitchCanvas(MainMenuCanvas));
 
-        void SwitchCanvas(Canvas visibleCanvas){
-            // given all available canvas options, show the one that is passed in
-            MainMenuCanvas.gameObject.SetActive(false);
-            NewCanvas.gameObject.SetActive(false);
-            LoadCanvas.gameObject.SetActive(false);
-            OptionsCanvas.gameObject.SetActive(false);
-            visibleCanvas.gameObject.SetActive(true);
-        }
+    }
 
-        void InitializeNewStart(){
-            CharacterData new_character = MakeNewCharacter();
-            if(new_character==null){
-                Debug.LogError("Error making new character");
-            }else{
-                StartGame(new_character);
-            }
-        }
+    void SwitchCanvas(Canvas visibleCanvas){
+        // given all available canvas options, show the one that is passed in
+        MainMenuCanvas.gameObject.SetActive(false);
+        NewCanvas.gameObject.SetActive(false);
+        LoadCanvas.gameObject.SetActive(false);
+        OptionsCanvas.gameObject.SetActive(false);
+        visibleCanvas.gameObject.SetActive(true);
+    }
 
-        CharacterData MakeNewCharacter(){
-            string sanitized_name = SanitizeCharacterName(CharacterNameInput.text);
-            if(sanitized_name==null){
-                Debug.Log("Name already exists");
-                return null;
-            }
-            if(sanitized_name.Length < 1){
-                Debug.Log("Character name too short.  Must be between 1 and 20 characters.");
-                return null;
-            }
-            if(sanitized_name.Length > 20){
-                Debug.Log("Character name too long.  Must be between 1 and 20 characters.");
-                return null;
-            }
-            // character name is ok
-            CharacterData character_data = ScriptableObject.CreateInstance("CharacterData") as CharacterData;
-            character_data.name = sanitized_name;
-            character_data.health = 100;
-            character_data.experience = 0;
-
-            // Convert the object to JSON
-            string character_json_data = JsonUtility.ToJson(character_data);
-            character_save_path = Path.Combine(Application.persistentDataPath, sanitized_name + "_character_save.json");
-             // Write the JSON string to a file
-            File.WriteAllText(character_save_path, character_json_data);
-            return character_data;
+    void InitializeNewStart(){
+        CharacterData new_character = MakeNewCharacter();
+        if(new_character==null){
+            Debug.LogError("Error making new character");
+        }else{
+            StartGame(new_character);
         }
+    }
 
-        string SanitizeCharacterName(string raw_input){
-            Debug.Log("Testing raw_input: " + raw_input);
-            string san_input = raw_input.Trim();
-            san_input = san_input.Replace("<", "&lt;").Replace(">", "&gt;"); // Escape HTML tags
-            san_input = san_input.Replace(";", ""); // Optionally, remove semicolons (to prevent code injection)
-            // make sure character with name doesn't already exist
-            if(CheckNameExists(san_input)){
-                return null;
-            }
-            return san_input;
+    CharacterData MakeNewCharacter(){
+        string sanitized_name = SanitizeCharacterName(CharacterNameInput.text);
+        if(sanitized_name==null){
+            Debug.Log("Name already exists");
+            return null;
         }
+        if(sanitized_name.Length < 1){
+            Debug.Log("Character name too short.  Must be between 1 and 20 characters.");
+            return null;
+        }
+        if(sanitized_name.Length > 20){
+            Debug.Log("Character name too long.  Must be between 1 and 20 characters.");
+            return null;
+        }
+        // character name is ok
+        CharacterData character_data = ScriptableObject.CreateInstance("CharacterData") as CharacterData;
+        character_data.name = sanitized_name;
+        character_data.health = 100;
+        character_data.experience = 0;
 
-        void StartGame(CharacterData chosenCharacterData){
-            Debug.Log("This should launch the game with player data");
-        }
+        // Convert the object to JSON
+        string character_json_data = JsonUtility.ToJson(character_data);
+        character_save_path = Path.Combine(Application.persistentDataPath, CreateCharacterSaveFileName(sanitized_name));
+            // Write the JSON string to a file
+        File.WriteAllText(character_save_path, character_json_data);
+        return character_data;
+    }
 
-        void QuitGame(){
-            #if UNITY_EDITOR
-                UnityEditor.EditorApplication.isPlaying = false;
-            #else
-                Application.Quit();
-            #endif
+    CharacterData LoadCharacterData(string character_name){
+        string filePath = CreateCharacterSaveFileName(character_name, true);
+        if (File.Exists(filePath)){
+            string jsonData = File.ReadAllText(filePath);
+            CharacterData loaded_data = ScriptableObject.CreateInstance<CharacterData>();
+            JsonUtility.FromJsonOverwrite(jsonData, loaded_data);
+            return loaded_data;
         }
+        // error otherwise...
+        Debug.LogError("No saved character data found.  Why are we calling this?");
+        return null;
+    }
+
+    string CreateCharacterSaveFileName(string character_name, bool fullPath=false){
+        if(fullPath==true){
+            return Application.persistentDataPath + "\\" + character_name + "_character_save.json";
+        }else{
+            return character_name + "_character_save.json";
+        }
+    }
+
+    string SanitizeCharacterName(string raw_input){
+        Debug.Log("Testing raw_input: " + raw_input);
+        string san_input = raw_input.Trim();
+        san_input = san_input.Replace("<", "&lt;").Replace(">", "&gt;"); // Escape HTML tags
+        san_input = san_input.Replace(";", ""); // Optionally, remove semicolons (to prevent code injection)
+        // make sure character with name doesn't already exist
+        if(CheckNameExists(san_input)){
+            return null;
+        }
+        return san_input;
+    }
+
+    void HandleLoad(){
+        SwitchCanvas(LoadCanvas);
+        List<string> character_list = GetCharacterList(GetSavesInDir());
+        AddCharactersToScrollView(character_list);
+    }
+
+    void AttemptLoadGame(string character_name){
+        CharacterData loaded_data = LoadCharacterData(character_name);
+        if(loaded_data==null){
+            Debug.LogError("attempted to load data but nothing came back");
+        }else{
+            StartGame(loaded_data);
+        }
+    }
+
+    // Method to add buttons dynamically
+    void AddCharactersToScrollView(List<string> character_list){
+        float buttonHeight = 40f;  // Height of each button
+        float spacing = 10f;  // Spacing between buttons
+        float yOffset = -110f;  // Initialize the Y offset for positioning
+        foreach(string character_name in character_list){
+            Debug.Log("Add Button to list with charname: " + character_name);
+            // Create a new button GameObject
+            GameObject newButton = new GameObject(character_name + "_select_button");
+
+            // Add the Button component to the GameObject
+            Button buttonComponent = newButton.AddComponent<Button>();
+            RectTransform rt = newButton.AddComponent<RectTransform>();
+            Image nbImage = newButton.AddComponent<Image>();
+
+            // Add a Text component for the button's label
+            GameObject buttonText = new GameObject("Text");
+            buttonText.transform.SetParent(newButton.transform, false);
+            Text text = buttonText.AddComponent<Text>();
+            text.text = character_name;
+            text.font = Resources.GetBuiltinResource<Font>("Arial.ttf");  // Use a built-in font
+            text.alignment = TextAnchor.MiddleCenter;
+
+            // Style the button (set size, background color, etc.)
+            RectTransform rectTransform = newButton.GetComponent<RectTransform>();
+            rectTransform.sizeDelta = new Vector2(160, buttonHeight);  // Adjust button size as needed
+            nbImage.color = Color.green;  // Button background color
+
+            // Set the button as a child of the content panel
+            newButton.transform.SetParent(LoadCharacterContent, false);
+
+            // Adjust the position of the button (manually setting the Y position)
+            rectTransform.anchoredPosition = new Vector2(0f, -yOffset);
+
+            // Increase the Y offset to prevent overlapping (button height + spacing)
+            yOffset += buttonHeight + spacing;
+
+
+            // Optionally add a click event listener to the button
+            buttonComponent.onClick.AddListener(() => AttemptLoadGame(character_name));
+        }
+    }
+
+    void StartGame(CharacterData chosenCharacterData){
+        Debug.Log("This should launch the game with player data");
+        Debug.Log("TESTING USE OF NAME: " + chosenCharacterData.name);
+        Debug.Log("chosen char data: " + JsonUtility.ToJson(chosenCharacterData));
+    }
+
+    void QuitGame(){
+        #if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+        #else
+            Application.Quit();
+        #endif
     }
 
     string[] GetSavesInDir(){

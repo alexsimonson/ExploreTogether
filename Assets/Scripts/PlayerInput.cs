@@ -15,6 +15,7 @@ namespace ExploreTogether {
                 // we should swap everything
                 ToggleHUD();
             }
+
         }
 
         // ? after bool allows for null assignment, which is perfect for this function

@@ -149,7 +149,7 @@ namespace ExploreTogether {
         public virtual void ListInventory(){
             foreach(ItemSlot slot in slots){
                 if(slot.item!=null){
-                    Debug.Log("Slot item: " + slot.item.name);
+                    Debug.Log("Slot " + slot.index.ToString() + " contains this item: " + slot.item.name);
                 }
             }
         }

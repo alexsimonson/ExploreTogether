@@ -91,13 +91,14 @@ namespace ExploreTogether {
         }
 
         public override void ListInventory(){
-            Debug.Log("~~~~~~~~~~~~LISTING THE GEAR BELOW~~~~~~~~~~~");
+            // let's form json with this?
             foreach(ItemSlot slot in slots){
                 if(slot!=null && slot.item!=null){
-                    Debug.Log("Slot item: " + slot.item.name);
+                    Debug.Log("Slot " + slot.index.ToString() + " contains this item: " + slot.item.name);
+                }else{
+                    // slot considered empty
                 }
             }
-            Debug.Log("~~~~~~~~~~~~LISTING THE GEAR ABOVE~~~~~~~~~~~");
         }
     }
 }

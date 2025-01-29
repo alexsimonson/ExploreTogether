@@ -52,6 +52,12 @@ namespace ExploreTogether {
                 if(gun==null) return;
                 gun.Reload(gameObject);
             }
+            
+            if ((Input.GetKeyDown("y"))){
+                Debug.Log("Show me the inventory");
+                manager.player_inventory.ListInventory();
+                manager.player_gear.ListInventory();
+            }
         }
 
         public void DrawGunAim(){
