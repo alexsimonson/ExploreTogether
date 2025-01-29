@@ -45,6 +45,8 @@ namespace ExploreTogether {
 
         public Animator firstPersonAnimator;
 
+        public AnimationClip slashTest;
+
         void Awake(){
             rb = GetComponent<Rigidbody>();
             rb.freezeRotation = true;
@@ -160,5 +162,16 @@ namespace ExploreTogether {
                 cam.transform.position = new Vector3(cam.transform.position.x, cam.transform.position.y + crouchHeightDiff, cam.transform.position.z);
             }
         }
+
+        public void ResetAnimation(){
+            StartCoroutine(IResetAnimation(slashTest.length));
+        }
+
+        public IEnumerator IResetAnimation(float length){
+            yield return new WaitForSeconds(length); // we need to ensure this is eventually the length of time of attack animation
+            firstPersonAnimator.Play("Idle");
+            firstPersonAnimator.enabled = false;
+        }
     }
+
 }

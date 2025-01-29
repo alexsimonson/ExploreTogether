@@ -44,6 +44,8 @@ namespace ExploreTogether {
             }
             owner.GetComponent<PlayerMovement>().firstPersonAnimator.enabled = true;
             owner.GetComponent<PlayerMovement>().firstPersonAnimator.Play("Slash");
+            // wait for length of animation to then stop animator
+            owner.GetComponent<PlayerMovement>().ResetAnimation();
             // owner.GetComponent<PlayerCombat>().audioSource.GetComponent<AudioSource>().PlayOneShot(attackSound);
         }
 

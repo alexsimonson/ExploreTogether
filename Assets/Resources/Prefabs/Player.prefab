@@ -305,6 +305,8 @@ MonoBehaviour:
   isCrouching: 0
   crouchHeightDiff: 0.7
   revoke_movement: 0
+  firstPersonAnimator: {fileID: 0}
+  slashTest: {fileID: 7509640188325939964, guid: b7b345064be54374da2d070db6f2c768, type: 3}
 --- !u!114 &5364875320611121767
 MonoBehaviour:
   m_ObjectHideFlags: 0
