@@ -43,12 +43,16 @@ namespace ExploreTogether {
 
         Camera cam;
 
+        public Animator firstPersonAnimator;
+
         void Awake(){
             rb = GetComponent<Rigidbody>();
             rb.freezeRotation = true;
             capsuleCollider = GetComponent<CapsuleCollider>();
             originalColliderCenter = capsuleCollider.center;
             cam = GetComponentInChildren<Camera>();
+            firstPersonAnimator = cam.transform.GetChild(0).gameObject.GetComponent<Animator>();
+            firstPersonAnimator.enabled = false;
         }
 
         private void Update(){
@@ -128,12 +132,13 @@ namespace ExploreTogether {
 
         void HandleAnimation(){
             if(gameObject.GetComponentInChildren<Animation>()==null) return;
-            if(moveDirection==Vector3.zero){
-                // stop animation
-                gameObject.GetComponentInChildren<Animation>().Stop();
-            }else{
-                gameObject.GetComponentInChildren<Animation>().Play("Walk");
-            }
+            // UPDATE THIS SHIT CUNT
+            // if(moveDirection==Vector3.zero){
+            //     // stop animation
+            //     gameObject.GetComponentInChildren<Animation>().Stop();
+            // }else{
+            //     gameObject.GetComponentInChildren<Animation>().Play("Walk");
+            // }
         }
 
         private void ToggleCrouch()

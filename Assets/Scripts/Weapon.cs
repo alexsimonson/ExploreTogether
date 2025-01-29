@@ -42,6 +42,8 @@ namespace ExploreTogether {
             }else{
                 Debug.DrawRay(owner.GetComponent<PlayerCombat>().playerCamera.transform.position, owner.GetComponent<PlayerCombat>().playerCamera.transform.forward * 1, Color.green, 2.0f, false);
             }
+            owner.GetComponent<PlayerMovement>().firstPersonAnimator.enabled = true;
+            owner.GetComponent<PlayerMovement>().firstPersonAnimator.Play("Slash");
             // owner.GetComponent<PlayerCombat>().audioSource.GetComponent<AudioSource>().PlayOneShot(attackSound);
         }
 
