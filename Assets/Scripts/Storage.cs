@@ -109,8 +109,7 @@ namespace ExploreTogether {
             int maxRange = storage_inventory.max_slots;
             int randomNumItemsInt = Random.Range(minRange, maxRange + 1);
             for(int i=0;i<randomNumItemsInt;i++){
-                var new_item = manager.item_bank[Random.Range(minRange, manager.item_bank.Length)];
-                storage_inventory.AddItem(new_item);
+                storage_inventory.AddItem(manager.GenerateItem());
             }
         }
     }

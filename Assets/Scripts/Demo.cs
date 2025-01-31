@@ -36,11 +36,11 @@ namespace ExploreTogether {
 
         public override void Initialize(){
             Debug.Log("Initializing player inventory with some test items");
-            manager.player_inventory.AddItem(sword_test);
-            manager.player_inventory.AddItem(gun_test);
-            manager.player_inventory.AddItem(blood_wand);
-            manager.player_inventory.AddItem(ice_wand);
-            manager.player_inventory.AddItem(axe);
+            // manager.player_inventory.AddItem(sword_test);
+            // manager.player_inventory.AddItem(gun_test);
+            // manager.player_inventory.AddItem(blood_wand);
+            // manager.player_inventory.AddItem(ice_wand);
+            // manager.player_inventory.AddItem(axe);
         }
 
         public override void SetupNextRound(){

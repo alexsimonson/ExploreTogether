@@ -117,10 +117,10 @@ namespace ExploreTogether {
 
         public override void Initialize(){
             // there's something about the loading that's preventing items from being loaded at this exact point in time...
-            manager.player_inventory.AddItem(sword_test);
-            manager.player_inventory.AddItem(gun_test);
-            manager.player_inventory.AddItem(blood_wand);
-            manager.player_inventory.AddItem(ice_wand);
+            // manager.player_inventory.AddItem(sword_test);
+            // manager.player_inventory.AddItem(gun_test);
+            // manager.player_inventory.AddItem(blood_wand);
+            // manager.player_inventory.AddItem(ice_wand);
             EndRound("Initialize");
         }
 

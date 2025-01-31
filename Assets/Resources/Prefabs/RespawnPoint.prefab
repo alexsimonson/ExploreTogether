@@ -32,6 +32,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -13.402356, y: -0.84563065, z: 12.784563}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -55,6 +56,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -111,7 +113,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isPlayerSpawn: 0
-  enemy_prefab: {fileID: 7711685710632532350, guid: bae0a0659e0df9f4b8add2f62f0fb7f0, type: 3}
+  enemy_prefab: {fileID: 4434156940295093137, guid: f499ec566115d54478115d7fb846761b, type: 3}
   manager: {fileID: 0}
 --- !u!114 &4754408011343612663
 MonoBehaviour:

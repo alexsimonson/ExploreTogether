@@ -1,9 +1,14 @@
 using UnityEngine;
+using System.Collections.Generic;
 
-[CreateAssetMenu(fileName = "CharacterData", menuName = "Character/CharacterData")]
-[System.Serializable]
-public class CharacterData : ScriptableObject{
-    public string name;
-    public float health;
-    public int experience;
+namespace ExploreTogether{
+    [CreateAssetMenu(fileName = "CharacterData", menuName = "Character/CharacterData")]
+    [System.Serializable]
+    public class CharacterData : ScriptableObject{
+        public string name;
+        public float health;
+        public int experience;
+        public List<int> inventory;
+        public List<int> gear;
+    }
 }

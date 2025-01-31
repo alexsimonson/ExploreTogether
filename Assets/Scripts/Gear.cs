@@ -93,12 +93,42 @@ namespace ExploreTogether {
         public override void ListInventory(){
             // let's form json with this?
             foreach(ItemSlot slot in slots){
-                if(slot!=null && slot.item!=null){
+                if(slot==null){
+                    Debug.LogError("Gear slot is null... why is the gear slot null?");
+                    continue;
+                }
+                if(slot.item!=null){
                     Debug.Log("Slot " + slot.index.ToString() + " contains this item: " + slot.item.name);
                 }else{
                     // slot considered empty
+                    Debug.Log("Slot " + slot.index.ToString() + " is empty");
                 }
             }
+            ExportGear();
+        }
+
+        public void ExportGear(){
+            // slot index will correlate with array index
+            List<int> gear_item_ids = new List<int>();
+            foreach(ItemSlot slot in slots){
+                if(slot.item==null){
+                    gear_item_ids.Add(-1);
+                }else{
+                    gear_item_ids.Add(slot.item.id);
+                }
+            }
+            Debug.Log("We have created gear item ids: " + string.Join(", ", gear_item_ids));
+        }
+
+        public bool ImportGear(List<int> gear_item_ids){
+            for(int i=0;i<gear_item_ids.Count;i++){ 
+                if(gear_item_ids[i]==null) continue;
+                // I need to assign the item based on the id...
+                if(manager.item_bank.ContainsKey(gear_item_ids[i])){
+                    slots[i].item = manager.item_bank[gear_item_ids[i]];
+                }
+            }
+            return true;
         }
     }
 }

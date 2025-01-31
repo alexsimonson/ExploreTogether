@@ -82,9 +82,9 @@ namespace ExploreTogether {
 
         // Start is called before the first frame update
         public override void Initialize(){
-            manager.player_inventory.AddItem(sword_test);
-            manager.player_inventory.AddItem(gun_test);
-            manager.player_inventory.AddItem(dungeon_pass);
+            // manager.player_inventory.AddItem(sword_test);
+            // manager.player_inventory.AddItem(gun_test);
+            // manager.player_inventory.AddItem(dungeon_pass);
             EndRound();
         }
 

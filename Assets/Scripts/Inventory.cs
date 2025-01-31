@@ -41,11 +41,11 @@ namespace ExploreTogether {
 
         public virtual void AddItem(Item new_item){
             if(new_item==null) return;
+            ItemSlot item_slot = ScriptableObject.CreateInstance("ItemSlot") as ItemSlot;
             if(new_item.stack){
                 // we should FindItemInSlot
                 int slot_index = FindItemInSlot(new_item);
                 if(slot_index >= 0){
-                    ItemSlot item_slot = ScriptableObject.CreateInstance("ItemSlot") as ItemSlot;
                     item_slot.index = slot_index;
                     item_slot.item = new_item;
                     item_slot.stack_size = slots[slot_index].stack_size;
@@ -65,7 +65,6 @@ namespace ExploreTogether {
                 // we should add to this slot
                 slots[empty_slot_index].item = new_item;
                 slots[empty_slot_index].stack_size = 1;
-                ItemSlot item_slot = ScriptableObject.CreateInstance("ItemSlot") as ItemSlot;
                 item_slot.index = empty_slot_index;
                 item_slot.item = new_item;
                 item_slot.stack_size = slots[empty_slot_index].stack_size;
@@ -150,8 +149,37 @@ namespace ExploreTogether {
             foreach(ItemSlot slot in slots){
                 if(slot.item!=null){
                     Debug.Log("Slot " + slot.index.ToString() + " contains this item: " + slot.item.name);
+                }else{
+                    Debug.Log("Slot " + slot.index.ToString() + " is empty");
                 }
             }
+            ExportInventory();
+        }
+
+        // testing out saving to json
+        public List<int> ExportInventory(){
+            // slot index will correlate with array index
+            List<int> inventory_item_ids = new List<int>();   // ? allows null
+            foreach(ItemSlot slot in slots){
+                if(slot.item==null){
+                    inventory_item_ids.Add(-1);
+                }else{
+                    inventory_item_ids.Add(slot.item.id);
+                }
+            }
+            Debug.Log("We have created inventory item ids: " + string.Join(", ", inventory_item_ids));
+            return inventory_item_ids;
+        }
+
+        public bool ImportInventory(List<int> inventory_item_ids){
+            for(int i=0;i<inventory_item_ids.Count;i++){ 
+                if(inventory_item_ids[i]==-1) continue;
+                // I need to assign the item based on the id...
+                if(manager.item_bank.ContainsKey(inventory_item_ids[i])){
+                    slots[i].item = manager.item_bank[inventory_item_ids[i]];
+                }
+            }
+            return true;
         }
     }
 }

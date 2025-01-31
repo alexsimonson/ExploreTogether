@@ -7,6 +7,10 @@ using UnityEditor;
 namespace ExploreTogether {
     public class Manager : MonoBehaviour {
 
+        public CharacterData chosen_character_data = null;
+
+        public bool instant_setup;
+
         public GameObject hudPrefab;
         public GameMode game_mode;
         public GameObject playerPrefab;
@@ -18,7 +22,7 @@ namespace ExploreTogether {
 
         public GameObject map;
 
-        public Item[] item_bank;
+        public Dictionary<int, Item> item_bank = new Dictionary<int, Item>();
 
         public bool pause_functionality = false;
 
@@ -45,7 +49,11 @@ namespace ExploreTogether {
         public GameState current_game_state;
         
         void Awake(){
-            item_bank = Resources.LoadAll<Item>("Items");
+            foreach(Item item in Resources.LoadAll<Item>("Items")){
+                if(!item_bank.ContainsKey(item.id)){
+                    item_bank.Add(item.id, item);
+                }
+            }
             hudPrefab = Resources.Load("Prefabs/HUD", typeof(GameObject)) as GameObject;
             playerPrefab = Resources.Load("Prefabs/Player", typeof(GameObject)) as GameObject;
             // we should load the game mode prefab based on the enum set
@@ -54,7 +62,7 @@ namespace ExploreTogether {
 
         // Start is called before the first frame update
         void Start(){
-            SetGameState(Manager.GameState.Transition);
+            // SetGameState(Manager.GameState.Transition);  // considering setting this by default on obj
             hud = Instantiate(hudPrefab);
             hud.name = "HUD";
             hud.transform.GetChild(8).gameObject.SetActive(true);
@@ -67,7 +75,10 @@ namespace ExploreTogether {
             hud.transform.GetChild(5).gameObject.GetComponent<GearUI>().SetWatchingGearByReference(ref player_gear);
             hud.transform.GetChild(5).gameObject.GetComponent<GearUI>().DrawInventoryUI();
             player_gear.Initialize();
-            Setup();
+            if(instant_setup){
+                Setup();
+            }
+            HandlePanels(current_game_state);
         }
 
         public GameMode LoadGameMode(){
@@ -105,8 +116,15 @@ namespace ExploreTogether {
             Item generated = null;
             while(generated == null || generated.id==999){
                 // we should generate a new item to try and return
-                int rnd_index = Random.Range(0, item_bank.Length);
-                generated = item_bank[rnd_index];
+                int rnd_index = Random.Range(0, item_bank.Count);
+                int cur_index=0;
+                foreach(var item_kv in item_bank){
+                    if(cur_index==rnd_index){
+                        generated = item_kv.Value;
+                        break;
+                    }
+                    cur_index++;
+                }
             }
             return generated;
         }
@@ -135,31 +153,28 @@ namespace ExploreTogether {
         // this logic probably makes more sense in the individual panels themselves
         // maybe even handle this as an event on the HUD
         private void HandlePanels(GameState _state){
+            Debug.Log("HandlePanels called");
+            // set all competing panels inactive, then choose one based on state to set true
+            hud.transform.GetChild(2).gameObject.SetActive(false);
+            hud.transform.GetChild(7).gameObject.SetActive(false);
+            hud.transform.GetChild(8).gameObject.SetActive(false);
+            hud.transform.GetChild(13).gameObject.SetActive(false);
             if(_state==GameState.Dead){
                 // show the death panel
                 hud.transform.GetChild(2).gameObject.SetActive(true);
-                // hide other competing panels
-                hud.transform.GetChild(7).gameObject.SetActive(false);
-                hud.transform.GetChild(8).gameObject.SetActive(false);
             }else if(_state==GameState.Alive){
                 // this will be called after a transition period, set all of these to false
-                hud.transform.GetChild(2).gameObject.SetActive(false);
-                hud.transform.GetChild(7).gameObject.SetActive(false);
-                hud.transform.GetChild(8).gameObject.SetActive(false);
             }else if(_state==GameState.Win){
                 // show the objective panel
                 hud.transform.GetChild(7).gameObject.SetActive(true);
-                // hide other competing panels
-                hud.transform.GetChild(2).gameObject.SetActive(false);
-                hud.transform.GetChild(8).gameObject.SetActive(false);
             }else if(_state==GameState.Transition){
                 // show the transition panel
                 hud.transform.GetChild(8).gameObject.SetActive(true);
-                // hide other competing panels
-                hud.transform.GetChild(2).gameObject.SetActive(false);
-                hud.transform.GetChild(7).gameObject.SetActive(false);
             }else if(_state==GameState.Menu){
-                Debug.Log("Still need to setup a main menu");   // eventually this will just load the main menu scene
+                Debug.Log("Handle main menu");
+                // show the MainMenuCanvasContainer
+                hud.transform.GetChild(13).gameObject.SetActive(true);
+                hud.transform.GetChild(13).gameObject.GetComponent<MainMenuLogicUI>().InitializeMainMenuPanels();
             }
         }
 
