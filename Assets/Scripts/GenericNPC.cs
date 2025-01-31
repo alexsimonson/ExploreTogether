@@ -205,7 +205,7 @@ namespace ExploreTogether {
 
         private void CheckMeleeAttackDistance(GameObject target){
             float distance = (target.transform.position - gameObject.transform.position).magnitude;
-            Debug.Log("Distance after time: " + distance);
+            // Debug.Log("Distance after time: " + distance);
 
             if(distance <= 2f){
                 target.GetComponent<Health>().DealDamage(20);

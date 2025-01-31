@@ -54,6 +54,7 @@ namespace ExploreTogether {
                     item_bank.Add(item.id, item);
                 }
             }
+            Debug.Log("all item ids: " + string.Join(", ", item_bank.Keys));
             hudPrefab = Resources.Load("Prefabs/HUD", typeof(GameObject)) as GameObject;
             playerPrefab = Resources.Load("Prefabs/Player", typeof(GameObject)) as GameObject;
             // we should load the game mode prefab based on the enum set

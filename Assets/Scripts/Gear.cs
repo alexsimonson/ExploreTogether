@@ -126,6 +126,7 @@ namespace ExploreTogether {
                 // I need to assign the item based on the id...
                 if(manager.item_bank.ContainsKey(gear_item_ids[i])){
                     slots[i].item = manager.item_bank[gear_item_ids[i]];
+                    onInventoryChanged.Raise(null, slots[i]);
                 }
             }
             return true;

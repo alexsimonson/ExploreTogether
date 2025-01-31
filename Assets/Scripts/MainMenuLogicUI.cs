@@ -66,13 +66,15 @@ namespace ExploreTogether{
         }
 
         void SwitchPanel(RectTransform visiblePanel){
-            Debug.Log("switching to " + visiblePanel.name);
             // given all available Panel options, show the one that is passed in
             MainMenuPanel.gameObject.SetActive(false);
             NewPanel.gameObject.SetActive(false);
             LoadPanel.gameObject.SetActive(false);
             OptionsPanel.gameObject.SetActive(false);
-            visiblePanel.gameObject.SetActive(true);
+            // this allows us to turn all off with this function
+            if(visiblePanel!=null){
+                visiblePanel.gameObject.SetActive(true);
+            }
         }
 
         void InitializeNewStart(){
@@ -226,6 +228,7 @@ namespace ExploreTogether{
             Vector3 firstTileLocation = manager.map.transform.GetChild(0).transform.position;
             Debug.Log("First Tile Location: " + firstTileLocation.ToString());
             manager.player.transform.position = new Vector3(0, 1.5f, 0);
+            SwitchPanel(null);
         }
 
         void QuitGame(){
