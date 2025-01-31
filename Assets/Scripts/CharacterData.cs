@@ -6,6 +6,7 @@ namespace ExploreTogether{
     [System.Serializable]
     public class CharacterData : ScriptableObject{
         public string name;
+        public GameMode.Mode game_mode;
         public float health;
         public int experience;
         public List<int> inventory;

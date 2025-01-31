@@ -24,6 +24,7 @@ namespace ExploreTogether{
         public RectTransform NewPanel;
         public TMP_InputField CharacterNameInput;
         public Toggle HardcoreToggle;
+        public TMP_Dropdown GameModeDropdown;
         public Button StartButton;
         public Button NewBackButton;
 
@@ -103,6 +104,7 @@ namespace ExploreTogether{
             // character name is ok
             CharacterData character_data = ScriptableObject.CreateInstance("CharacterData") as CharacterData;
             character_data.name = sanitized_name;
+            character_data.game_mode = (GameMode.Mode)GameModeDropdown.value;
             character_data.health = 100;
             character_data.experience = 0;
 
@@ -223,10 +225,18 @@ namespace ExploreTogether{
             Debug.Log("TESTING USE OF NAME: " + chosenCharacterData.name);
             Debug.Log("chosen char data: " + JsonUtility.ToJson(chosenCharacterData));
             manager.chosen_character_data = chosenCharacterData;
+            // eventually this should be changed so that we setup an enum or something for mode types, and use that for both the dropdown and this...
+            // it's probably already setup...
+            manager.lobby_mode = chosenCharacterData.game_mode;
+            manager.game_mode = manager.LoadGameMode();
+            // manager.lobby_mode = GameModeDropdown.value;
+            // Debug.Log("Just set lobby_mode to " + manager.lobby_mode.ToString());
             manager.game_mode.SpawnMap();
             // Debug.Log("Name of game object manager map: " + manager.map.gameObject.name);
-            Vector3 firstTileLocation = manager.map.transform.GetChild(0).transform.position;
-            Debug.Log("First Tile Location: " + firstTileLocation.ToString());
+            // Debug.Log("testing transform position manager map: " + manager.map.transform.position.ToString());
+            // Debug.Log("testing child 0 name: " + manager.map.transform.GetChild(0).gameObject.name);
+            // Vector3 firstTileLocation = manager.map.transform.GetChild(0).position;
+            // Debug.Log("First Tile Location: " + firstTileLocation.ToString());
             manager.player.transform.position = new Vector3(0, 1.5f, 0);
             SwitchPanel(null);
         }

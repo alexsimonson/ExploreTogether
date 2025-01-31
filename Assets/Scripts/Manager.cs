@@ -58,7 +58,7 @@ namespace ExploreTogether {
             hudPrefab = Resources.Load("Prefabs/HUD", typeof(GameObject)) as GameObject;
             playerPrefab = Resources.Load("Prefabs/Player", typeof(GameObject)) as GameObject;
             // we should load the game mode prefab based on the enum set
-            game_mode = LoadGameMode();
+            // game_mode = LoadGameMode(); // this shouldn't happen until StartGame is called
         }
 
         // Start is called before the first frame update
