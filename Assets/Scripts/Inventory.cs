@@ -153,7 +153,6 @@ namespace ExploreTogether {
                     Debug.Log("Slot " + slot.index.ToString() + " is empty");
                 }
             }
-            ExportInventory();
         }
 
         // testing out saving to json

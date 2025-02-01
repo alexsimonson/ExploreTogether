@@ -107,26 +107,39 @@ namespace ExploreTogether{
             character_data.game_mode = (GameMode.Mode)GameModeDropdown.value;
             character_data.health = 100;
             character_data.experience = 0;
+            character_data.position = new Vector3(0, 1.5f, 0);  // initial starting position of generation
 
             // Convert the object to JSON
-            string character_json_data = JsonUtility.ToJson(character_data);
-            character_save_path = Path.Combine(Application.persistentDataPath, CreateCharacterSaveFileName(sanitized_name));
-                // Write the JSON string to a file
-            File.WriteAllText(character_save_path, character_json_data);
+            if(SaveCharacterData(character_data, true)==false){
+                Debug.LogError("Refusing to overwrite existing save game data as new character.");
+                return null;
+            }
             return character_data;
         }
 
         CharacterData LoadCharacterData(string character_name){
             string filePath = CreateCharacterSaveFileName(character_name, true);
-            if (File.Exists(filePath)){
-                string jsonData = File.ReadAllText(filePath);
-                CharacterData loaded_data = ScriptableObject.CreateInstance<CharacterData>();
-                JsonUtility.FromJsonOverwrite(jsonData, loaded_data);
-                return loaded_data;
+            if (File.Exists(filePath)==false){
+                Debug.LogError("No character data to load");
+                return null;
             }
-            // error otherwise...
-            Debug.LogError("No saved character data found.  Why are we calling this?");
-            return null;
+            string jsonData = File.ReadAllText(filePath);
+            CharacterData loaded_data = ScriptableObject.CreateInstance<CharacterData>();
+            JsonUtility.FromJsonOverwrite(jsonData, loaded_data);
+            return loaded_data;
+        }
+
+        bool SaveCharacterData(CharacterData _character_data, bool isNew=false){
+            string filePath = CreateCharacterSaveFileName(_character_data.name, true);
+            if(File.Exists(filePath)==true && isNew){
+                Debug.LogError("Save file already exists.  Preventing overwrite on new character.");
+                return false;
+            }
+            // Convert the object to JSON
+            string character_json_data = JsonUtility.ToJson(_character_data);
+            // Write the JSON string to a file
+            File.WriteAllText(filePath, character_json_data);
+            return true;
         }
 
         string CreateCharacterSaveFileName(string character_name, bool fullPath=false){
@@ -231,23 +244,18 @@ namespace ExploreTogether{
             // it's probably already setup...
             manager.lobby_mode = chosenCharacterData.game_mode;
             manager.game_mode = manager.LoadGameMode();
-            // manager.lobby_mode = GameModeDropdown.value;
-            // Debug.Log("Just set lobby_mode to " + manager.lobby_mode.ToString());
             manager.game_mode.SpawnMap();
-            // Debug.Log("Name of game object manager map: " + manager.map.gameObject.name);
-            // Debug.Log("testing transform position manager map: " + manager.map.transform.position.ToString());
-            // Debug.Log("testing child 0 name: " + manager.map.transform.GetChild(0).gameObject.name);
-            // Vector3 firstTileLocation = manager.map.transform.GetChild(0).position;
-            // Debug.Log("First Tile Location: " + firstTileLocation.ToString());
-            manager.player.transform.position = new Vector3(0, 1.5f, 0);
+            manager.player.transform.position = chosenCharacterData.position;
             SwitchPanel(null);
         }
 
         void QuitGame(){
             #if UNITY_EDITOR
                 UnityEditor.EditorApplication.isPlaying = false;
+                Debug.Log("TESTING ONE PLACE");
             #else
                 Application.Quit();
+                Debug.Log("TESTING ANOTHER PLACE");
             #endif
         }
 
@@ -312,5 +320,15 @@ namespace ExploreTogether{
         private void OnButtonClick(TMP_Text pressed){
             pressed.text = "Button Clicked!";
         }
+
+        void OnApplicationQuit(){
+            // this seems to work for editor and quit button... probably also works for X button
+            Debug.Log("ON APPLICATION QUIT TESTING");
+            manager.chosen_character_data.gear = manager.player_gear.ExportGear();
+            manager.chosen_character_data.inventory = manager.player_inventory.ExportInventory();
+            // get latest character data and save
+            SaveCharacterData(manager.chosen_character_data);
+        }
     }
+
 }

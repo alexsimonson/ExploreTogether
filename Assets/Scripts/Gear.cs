@@ -107,7 +107,7 @@ namespace ExploreTogether {
             ExportGear();
         }
 
-        public void ExportGear(){
+        public List<int> ExportGear(){
             // slot index will correlate with array index
             List<int> gear_item_ids = new List<int>();
             foreach(ItemSlot slot in slots){
@@ -118,6 +118,7 @@ namespace ExploreTogether {
                 }
             }
             Debug.Log("We have created gear item ids: " + string.Join(", ", gear_item_ids));
+            return gear_item_ids;
         }
 
         public bool ImportGear(List<int> gear_item_ids){
