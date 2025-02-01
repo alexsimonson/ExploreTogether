@@ -181,7 +181,7 @@ namespace ExploreTogether{
         void AddCharactersToScrollView(List<string> character_list){
             float buttonHeight = 40f;  // Height of each button
             float spacing = 10f;  // Spacing between buttons
-            float yOffset = -110f;  // Initialize the Y offset for positioning
+            float yOffset = -30f;  // Initialize the Y offset for positioning
             foreach(string character_name in character_list){
                 Debug.Log("Add Button to list with charname: " + character_name);
                 // Create a new button GameObject
@@ -199,6 +199,7 @@ namespace ExploreTogether{
                 text.text = character_name;
                 text.font = Resources.GetBuiltinResource<Font>("Arial.ttf");  // Use a built-in font
                 text.alignment = TextAnchor.MiddleCenter;
+                text.fontSize = 60;
 
                 // Style the button (set size, background color, etc.)
                 RectTransform rectTransform = newButton.GetComponent<RectTransform>();
@@ -218,6 +219,7 @@ namespace ExploreTogether{
                 // Optionally add a click event listener to the button
                 buttonComponent.onClick.AddListener(() => AttemptLoadGame(character_name));
             }
+            // adjust the size of scroll view
         }
 
         void StartGame(CharacterData chosenCharacterData){

@@ -83,6 +83,9 @@ namespace ExploreTogether {
 
         void PlacePortal(Magic weapon){
             placedGhostAim = Instantiate(portal, pos, gameObject.transform.rotation);
+            // Vector3 local_flip = placedGhostAim.transform.localEulerAngles;
+            // local_flip.y += 180;
+            // placedGhostAim.transform.localRotation = Quaternion.Euler(local_flip);
             placedGhostAim.gameObject.GetComponent<MeshRenderer>().material = red_material;
             placedGhostAim.gameObject.GetComponent<AreaOfEffect>().areaToEffect = true;
             placedGhostAim.gameObject.GetComponent<AreaOfEffect>().weapon = weapon;
