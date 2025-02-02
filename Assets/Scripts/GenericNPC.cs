@@ -142,15 +142,20 @@ namespace ExploreTogether {
             if(visionSystem==null){
                 return;
             }
-            Vector3 chaseTargetPosition = visionSystem.GetChaseTargetPosition();
+            Vector3? chaseTargetPosition = visionSystem.GetChaseTargetPosition();
+
+            if(chaseTargetPosition==null){
+                state = State.Wander;
+                return;
+            }
 
             // Calculate the distance between the NPC and the chase target
-            float distanceToTarget = Vector3.Distance(transform.position, chaseTargetPosition);
+            float distanceToTarget = Vector3.Distance(transform.position, chaseTargetPosition.Value);
 
             // Check if the chase target is within chase distance
             if (distanceToTarget <= chaseDistance){
                 // Rotate towards the chase target's position
-                Vector3 direction = (chaseTargetPosition - transform.position).normalized;
+                Vector3 direction = (chaseTargetPosition.Value - transform.position).normalized;
                 Quaternion targetRotation = Quaternion.LookRotation(new Vector3(direction.x, 0f, direction.z));
                 transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 5f);
 
@@ -162,11 +167,10 @@ namespace ExploreTogether {
                 }
                 else{
                     // Move towards the chase target's position
-                    agent.SetDestination(chaseTargetPosition);
+                    agent.SetDestination(chaseTargetPosition.Value);
                     agent.speed = chaseSpeed;
                 }
-            }
-            else{
+            }else{
                 // Chase target is out of chase distance, transition to another state (e.g., Wander)
                 state = State.Wander;
             }
@@ -353,8 +357,15 @@ namespace ExploreTogether {
         }
 
         public void HelpFreezeNPC(float time){
+            if(deathHandled){
+                return;
+            }
             SetState(State.Frozen);
-            agent.isStopped = true;
+            if(agent.isActiveAndEnabled){
+                agent.isStopped = true;
+            }else{
+                Debug.LogError("NAV MESH AGENT NOT ACTIVE, NPC probably died...");
+            }
             isFrozen = true;
             freezeTime = time;
         }

@@ -135,15 +135,11 @@ namespace ExploreTogether {
             currentLineIndex++;
         }
 
-        public Vector3 GetChaseTargetPosition()
-        {
-            if (chaseTargetTransform != null)
-            {
+        public Vector3? GetChaseTargetPosition(){
+            if (chaseTargetTransform != null){
                 return chaseTargetTransform.position;
-            }
-            else
-            {
-                return Vector3.zero; // Return a default position if the chase target is not set
+            }else{
+                return null;
             }
         }
 

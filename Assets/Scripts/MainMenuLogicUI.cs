@@ -58,7 +58,6 @@ namespace ExploreTogether{
             NewBackButton.GetComponent<Button>().onClick.AddListener(() => SwitchPanel(MainMenuPanel));
             LoadBackButton.GetComponent<Button>().onClick.AddListener(() => SwitchPanel(MainMenuPanel));
             OptionsBackButton.GetComponent<Button>().onClick.AddListener(() => SwitchPanel(MainMenuPanel));
-
         }
 
         public void InitializeMainMenuPanels(){
@@ -118,6 +117,7 @@ namespace ExploreTogether{
         }
 
         CharacterData LoadCharacterData(string character_name){
+            Debug.Log("LOADING CHARACTER NAME: " + character_name);
             string filePath = CreateCharacterSaveFileName(character_name, true);
             if (File.Exists(filePath)==false){
                 Debug.LogError("No character data to load");

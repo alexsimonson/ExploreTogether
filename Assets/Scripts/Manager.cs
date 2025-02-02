@@ -58,7 +58,6 @@ namespace ExploreTogether {
             hudPrefab = Resources.Load("Prefabs/HUD", typeof(GameObject)) as GameObject;
             playerPrefab = Resources.Load("Prefabs/Player", typeof(GameObject)) as GameObject;
             // we should load the game mode prefab based on the enum set
-            // game_mode = LoadGameMode(); // this shouldn't happen until StartGame is called
         }
 
         // Start is called before the first frame update
@@ -79,11 +78,19 @@ namespace ExploreTogether {
             if(instant_setup){
                 Setup();
             }
+            if(lobby_mode==GameMode.Mode.Demo){
+                game_mode = LoadGameMode();
+                // need to figure out why this shit is so fucked
+                game_mode.mode = GameMode.Mode.Demo;
+                current_game_state = GameState.Alive;
+                HandleRound();
+            }
             HandlePanels(current_game_state);
         }
 
         public GameMode LoadGameMode(){
             if(lobby_mode==GameMode.Mode.Demo){
+                Debug.Log("LOADING DEMO GAME MODE");
                 return ScriptableObject.CreateInstance("Demo") as GameMode;
             }else if(lobby_mode==GameMode.Mode.DungeonCrawler){
                 return ScriptableObject.CreateInstance("DungeonCrawler") as GameMode;
