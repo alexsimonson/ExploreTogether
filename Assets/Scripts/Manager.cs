@@ -66,6 +66,7 @@ namespace ExploreTogether {
             hud = Instantiate(hudPrefab);
             hud.name = "HUD";
             hud.transform.GetChild(8).gameObject.SetActive(true);
+            Debug.Log("INSTANTIATING PLAYER AT SPAWN POINT IS THIS THE ISSUE?");
             player = Instantiate(playerPrefab, playerSpawnPoint, Quaternion.identity);
             player.name = "Player";
             player_inventory = ScriptableObject.CreateInstance("Inventory") as Inventory;

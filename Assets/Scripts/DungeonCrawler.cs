@@ -83,6 +83,8 @@ namespace ExploreTogether {
             if(import_dun_result==true){
                 Debug.Log("Properly imported maze");
                 manager.map.GetComponent<Maze>().needs_generation = false;
+                manager.player.transform.position = manager.chosen_character_data.position;
+                manager.player.transform.rotation = Quaternion.Euler(0, manager.chosen_character_data.yRotation, 0);
             }else{
                 // generate a new maze?
                 Debug.Log("Failed to load maze");
