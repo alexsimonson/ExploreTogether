@@ -384,7 +384,7 @@ namespace ExploreTogether {
             // ensure the mazePosition is n-depth away from the player (we need a function for this)
             GameObject enemy = null;
             enemy = Instantiate(enemyPrefab, new Vector3(generated_nodes[random_index].mazePosition.x * prefabSize, generated_nodes[random_index].mazePosition.y * prefabSize + 1.5f, generated_nodes[random_index].mazePosition.z * prefabSize), Quaternion.identity);
-            enemy.transform.SetParent(gameObject.transform);
+            // enemy.transform.SetParent(gameObject.transform);
             enemy.name = "Enemy";
         }
     }
