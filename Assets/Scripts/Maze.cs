@@ -387,5 +387,16 @@ namespace ExploreTogether {
             // enemy.transform.SetParent(gameObject.transform);
             enemy.name = "Enemy";
         }
+
+        public List<GeneratedNodeSerializable> ExportMaze(){
+            // slot index will correlate with array index
+            List<GeneratedNodeSerializable> export_maze_data = new List<GeneratedNodeSerializable>();
+            
+            foreach(GeneratedNode node in manager.map.GetComponent<Maze>().generated_nodes){
+                // convert to serializable list
+                export_maze_data.Add(new GeneratedNodeSerializable(node));
+            }
+            return export_maze_data;
+        }
     }
 }

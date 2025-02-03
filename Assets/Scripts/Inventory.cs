@@ -158,7 +158,7 @@ namespace ExploreTogether {
         // testing out saving to json
         public List<int> ExportInventory(){
             // slot index will correlate with array index
-            List<int> inventory_item_ids = new List<int>();   // ? allows null
+            List<int> inventory_item_ids = new List<int>();
             foreach(ItemSlot slot in slots){
                 if(slot.item==null){
                     inventory_item_ids.Add(-1);
