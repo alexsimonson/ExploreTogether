@@ -10,6 +10,7 @@ namespace ExploreTogether{
     public class MainMenuLogicUI : MonoBehaviour{
 
         private string character_save_path;
+        private List<Button> character_select_buttons;
 
         public Manager manager;
 
@@ -30,8 +31,11 @@ namespace ExploreTogether{
 
         [Header("Load Character UI")]
         public RectTransform LoadPanel;
+        public TMP_Text SelectedCharacterText;
+        public Button LoadLoadButton;   // this name really is coding at its finest
         public Button LoadBackButton;
         public Transform LoadCharacterContent;
+        private string selected_character_name;
 
         [Header("Options UI")]
         public RectTransform OptionsPanel;
@@ -53,6 +57,9 @@ namespace ExploreTogether{
 
             // Add listeners for New Character UI elements
             StartButton.GetComponent<Button>().onClick.AddListener(InitializeNewStart);
+
+            // Add listeners for Load Character UI elements
+            LoadLoadButton.GetComponent<Button>().onClick.AddListener(() => AttemptLoadGame(selected_character_name));
 
             // Add listeners for Back Buttons in all UI elements
             NewBackButton.GetComponent<Button>().onClick.AddListener(() => SwitchPanel(MainMenuPanel));
@@ -164,8 +171,7 @@ namespace ExploreTogether{
 
         void HandleLoad(){
             SwitchPanel(LoadPanel);
-            List<string> character_list = GetCharacterList(GetSavesInDir());
-            AddCharactersToScrollView(character_list);
+            AddCharactersToScrollView(GetCharacterList(GetSavesInDir()));
         }
 
         void AttemptLoadGame(string character_name){
@@ -187,11 +193,27 @@ namespace ExploreTogether{
             }
         }
 
+        void UpdateSelectedCharacter(string character_name, Button _button_component){
+            selected_character_name = character_name;
+            SelectedCharacterText.text = selected_character_name;
+            // set selected color differently
+            foreach (Button update_button in character_select_buttons){
+                if (ReferenceEquals(_button_component, update_button)){
+                    Debug.Log("Found matching button: " + update_button.name);
+                    // Handle the matched button here
+                    _button_component.GetComponent<Image>().color = Color.blue;
+                }else{
+                    _button_component.GetComponent<Image>().color = Color.green;
+                }
+            }
+        }
+
         // Method to add buttons dynamically
         void AddCharactersToScrollView(List<string> character_list){
             float buttonHeight = 40f;  // Height of each button
             float spacing = 10f;  // Spacing between buttons
             float yOffset = -30f;  // Initialize the Y offset for positioning
+            character_select_buttons = new List<Button>();
             foreach(string character_name in character_list){
                 Debug.Log("Add Button to list with charname: " + character_name);
                 // Create a new button GameObject
@@ -199,35 +221,36 @@ namespace ExploreTogether{
 
                 // Add the Button component to the GameObject
                 Button buttonComponent = newButton.AddComponent<Button>();
-                RectTransform rt = newButton.AddComponent<RectTransform>();
+                RectTransform nbrt = newButton.AddComponent<RectTransform>();
                 Image nbImage = newButton.AddComponent<Image>();
+
+                // Set the button as a child of the content panel FIRST
 
                 // Add a Text component for the button's label
                 GameObject buttonText = new GameObject("Text");
+                RectTransform btrt = buttonText.AddComponent<RectTransform>();
+                btrt.sizeDelta = new Vector2(160, buttonHeight);
                 buttonText.transform.SetParent(newButton.transform, false);
                 Text text = buttonText.AddComponent<Text>();
                 text.text = character_name;
                 text.font = Resources.GetBuiltinResource<Font>("Arial.ttf");  // Use a built-in font
                 text.alignment = TextAnchor.MiddleCenter;
-                text.fontSize = 60;
+                text.fontSize = 30;
+                text.verticalOverflow = VerticalWrapMode.Overflow;
 
                 // Style the button (set size, background color, etc.)
-                RectTransform rectTransform = newButton.GetComponent<RectTransform>();
-                rectTransform.sizeDelta = new Vector2(160, buttonHeight);  // Adjust button size as needed
+                nbrt.sizeDelta = new Vector2(160, buttonHeight);
+                nbrt.anchorMin = new Vector2(0.5f, 1);  // Center horizontally, start from top
+                nbrt.anchorMax = new Vector2(0.5f, 1);
+                nbrt.pivot = new Vector2(0.5f, 1); // Pivot at top-center
+                nbrt.anchoredPosition = new Vector2(0f, -yOffset);  // Positioning
                 nbImage.color = Color.green;  // Button background color
-
                 // Set the button as a child of the content panel
                 newButton.transform.SetParent(LoadCharacterContent, false);
-
-                // Adjust the position of the button (manually setting the Y position)
-                rectTransform.anchoredPosition = new Vector2(0f, -yOffset);
-
                 // Increase the Y offset to prevent overlapping (button height + spacing)
                 yOffset += buttonHeight + spacing;
-
-
-                // Optionally add a click event listener to the button
-                buttonComponent.onClick.AddListener(() => AttemptLoadGame(character_name));
+                character_select_buttons.Add(buttonComponent);
+                buttonComponent.onClick.AddListener(() => UpdateSelectedCharacter(character_name, buttonComponent));
             }
             // adjust the size of scroll view
         }
