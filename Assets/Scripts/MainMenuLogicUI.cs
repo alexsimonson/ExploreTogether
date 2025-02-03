@@ -169,24 +169,21 @@ namespace ExploreTogether{
         }
 
         void AttemptLoadGame(string character_name){
-            CharacterData loaded_data = LoadCharacterData(character_name);
-            if(loaded_data==null){
+            manager.chosen_character_data = LoadCharacterData(character_name);
+            if(manager.chosen_character_data==null){
                 Debug.LogError("attempted to load data but nothing came back");
             }else{
                 // setup player shit, then start game...
-                // start looping through the loaded_data for inventory/gear
-                if(loaded_data.inventory!=null){
-                    bool import_inv_result = manager.player_inventory.ImportInventory(loaded_data.inventory);
-                    Debug.Log("Have we imported the inventory correctly: " + import_inv_result.ToString());
-                    manager.player_inventory.ExportInventory();
+                // start looping through the manager.chosen_character_data for inventory/gear
+                if(manager.chosen_character_data.inventory!=null){
+                    bool import_inv_result = manager.player_inventory.ImportInventory(manager.chosen_character_data.inventory);
                 }
 
-                if(loaded_data.gear!=null){
-                    bool import_inv_result = manager.player_gear.ImportGear(loaded_data.gear);
-                    Debug.Log("Have we imported the gear correctly: " + import_inv_result.ToString());
-                    manager.player_gear.ExportGear();
+                if(manager.chosen_character_data.gear!=null){
+                    bool import_inv_result = manager.player_gear.ImportGear(manager.chosen_character_data.gear);
                 }
-                StartGame(loaded_data);
+                // game mode dependent stuff should happen within that class...
+                StartGame(manager.chosen_character_data);
             }
         }
 

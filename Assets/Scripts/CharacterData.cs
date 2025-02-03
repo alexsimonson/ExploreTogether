@@ -11,6 +11,6 @@ namespace ExploreTogether{
         public int experience;
         public List<int> inventory;
         public List<int> gear;
-        public List<GeneratedNodeSerializable>? dungeon_nodes;  // based on game modes, this may be null
+        public List<GeneratedNodeSerializable> dungeon_nodes;  // based on game modes, this may be null
     }
 }

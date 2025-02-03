@@ -78,6 +78,15 @@ namespace ExploreTogether {
             // I have no idea why I'm setting below... or how it's obtaining this correctly...
             // I'm going to "correct" it and hope for the best
             manager.map.GetComponent<Maze>().manager = manager;    // still works... so let's just do this
+            // dungeon shit
+            bool import_dun_result = manager.map.GetComponent<Maze>().ImportMaze(manager.chosen_character_data.dungeon_nodes);
+            if(import_dun_result==true){
+                Debug.Log("Properly imported maze");
+                manager.map.GetComponent<Maze>().needs_generation = false;
+            }else{
+                // generate a new maze?
+                Debug.Log("Failed to load maze");
+            }
         }
 
         // Start is called before the first frame update

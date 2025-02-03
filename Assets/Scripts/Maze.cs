@@ -35,6 +35,7 @@ namespace ExploreTogether {
         bool controlled_render = false;
         bool controlled_generation = true;
         public bool maze_generated = false;
+        public bool needs_generation = true;
 
         public Manager manager;
 
@@ -62,10 +63,19 @@ namespace ExploreTogether {
 
         // Start is called before the first frame update
         void Update(){
-            if(controlled_generation){
+            // we should only generate a new maze if we do not have a list of generated nodes
+            // && generated_nodes.Count==0
+            if(controlled_generation && needs_generation){
                 controlled_generation = false;
                 GenerateRandomMaze();
             }
+
+            if(controlled_generation && !needs_generation){
+                controlled_generation = false;
+                RenderGrid();
+            }
+
+            // Debug.Log("Testing generated nodes length: " + generated_nodes.Count.ToString());
             if(controlled_render){
                 controlled_render = false;
                 StartCoroutine(ControlledRender());
@@ -395,8 +405,51 @@ namespace ExploreTogether {
             foreach(GeneratedNode node in manager.map.GetComponent<Maze>().generated_nodes){
                 // convert to serializable list
                 export_maze_data.Add(new GeneratedNodeSerializable(node));
+                if(node.northNeighbor!=null){
+                    export_maze_data[node.index].northNeighbor = node.northNeighbor.index;
+                }
+                if(node.southNeighbor!=null){
+                    export_maze_data[node.index].southNeighbor = node.southNeighbor.index;
+                }
+                if(node.eastNeighbor!=null){
+                    export_maze_data[node.index].eastNeighbor = node.eastNeighbor.index;
+                }
+                if(node.westNeighbor!=null){
+                    export_maze_data[node.index].westNeighbor = node.westNeighbor.index;
+                }
+
             }
             return export_maze_data;
+        }
+
+        public bool ImportMaze(List<GeneratedNodeSerializable> dungeon_nodes){
+            if(dungeon_nodes==null){
+                return false;
+            }
+            if(dungeon_nodes.Count==0){
+                return false;
+            }
+            // reset nodes
+            manager.map.GetComponent<Maze>().generated_nodes.Clear();
+            for(int i=0;i<dungeon_nodes.Count;i++){ 
+                manager.map.GetComponent<Maze>().generated_nodes.Add(dungeon_nodes[i].ToScriptableObject());
+            }
+            // after we import/adjust the generated_nodes... we should update the neighbors
+            for(int i=0;i<manager.map.GetComponent<Maze>().generated_nodes.Count;i++){
+                if(dungeon_nodes[i].northNeighbor!=-1 && dungeon_nodes[i].northNeighbor < manager.map.GetComponent<Maze>().generated_nodes.Count){
+                    manager.map.GetComponent<Maze>().generated_nodes[i].northNeighbor = manager.map.GetComponent<Maze>().generated_nodes[dungeon_nodes[i].northNeighbor];
+                }
+                if(dungeon_nodes[i].southNeighbor!=-1 && dungeon_nodes[i].southNeighbor < manager.map.GetComponent<Maze>().generated_nodes.Count){
+                    manager.map.GetComponent<Maze>().generated_nodes[i].southNeighbor = manager.map.GetComponent<Maze>().generated_nodes[dungeon_nodes[i].southNeighbor];
+                }
+                if(dungeon_nodes[i].eastNeighbor!=-1 && dungeon_nodes[i].eastNeighbor < manager.map.GetComponent<Maze>().generated_nodes.Count){
+                    manager.map.GetComponent<Maze>().generated_nodes[i].eastNeighbor = manager.map.GetComponent<Maze>().generated_nodes[dungeon_nodes[i].eastNeighbor];
+                }
+                if(dungeon_nodes[i].westNeighbor!=-1 && dungeon_nodes[i].westNeighbor < manager.map.GetComponent<Maze>().generated_nodes.Count){
+                    manager.map.GetComponent<Maze>().generated_nodes[i].westNeighbor = manager.map.GetComponent<Maze>().generated_nodes[dungeon_nodes[i].westNeighbor];
+                }
+            }
+            return true;
         }
     }
 }
