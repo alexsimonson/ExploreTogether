@@ -197,15 +197,10 @@ namespace ExploreTogether{
             selected_character_name = character_name;
             SelectedCharacterText.text = selected_character_name;
             // set selected color differently
-            foreach (Button update_button in character_select_buttons){
-                if (ReferenceEquals(_button_component, update_button)){
-                    Debug.Log("Found matching button: " + update_button.name);
-                    // Handle the matched button here
-                    _button_component.GetComponent<Image>().color = Color.blue;
-                }else{
-                    _button_component.GetComponent<Image>().color = Color.green;
-                }
+            foreach (Transform _character_select_button in LoadCharacterContent.transform){
+                _character_select_button.gameObject.GetComponent<Image>().color = Color.blue;
             }
+            GameObject.Find(character_name + "_select_button").GetComponent<Image>().color = Color.green;
         }
 
         // Method to add buttons dynamically
@@ -244,7 +239,7 @@ namespace ExploreTogether{
                 nbrt.anchorMax = new Vector2(0.5f, 1);
                 nbrt.pivot = new Vector2(0.5f, 1); // Pivot at top-center
                 nbrt.anchoredPosition = new Vector2(0f, -yOffset);  // Positioning
-                nbImage.color = Color.green;  // Button background color
+                nbImage.color = Color.blue;  // Button background color
                 // Set the button as a child of the content panel
                 newButton.transform.SetParent(LoadCharacterContent, false);
                 // Increase the Y offset to prevent overlapping (button height + spacing)
