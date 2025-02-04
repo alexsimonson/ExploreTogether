@@ -86,8 +86,10 @@ namespace ExploreTogether {
             ItemSlot item_slot = ScriptableObject.CreateInstance("ItemSlot") as ItemSlot;
             item_slot = slots[index];
             if(shouldDrop){
-                GameObject dropped_item = Instantiate(Resources.Load("Prefabs/Item", typeof(GameObject)) as GameObject, manager.player.transform.position, Quaternion.identity);
+                Vector3 drop_position = manager.player.transform.position;
+                GameObject dropped_item = Instantiate(Resources.Load("Prefabs/Item", typeof(GameObject)) as GameObject, drop_position, Quaternion.identity);
                 dropped_item.GetComponent<ItemSpawn>().item = removedItem;
+                manager.map.GetComponent<Maze>().AddSpawnedItem(dropped_item.GetComponent<ItemSpawn>().item.id, drop_position);
             }
             if(isStorage){
                 onStorageChanged.Raise(null, item_slot);

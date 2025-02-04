@@ -525,5 +525,26 @@ namespace ExploreTogether {
             }
             return true;
         }
+
+        public bool FindAndRemoveItem(int _item_id, Vector3 _position){
+            for(int i=0;i<spawned_items.Count;i++){
+                if(spawned_items[i].Key!=_item_id || spawned_items[i].Value!=_position){
+                    continue;   // not the right item...
+                }
+                spawned_items.RemoveAt(i);
+                return true;
+            }
+            Debug.LogError("Failed to find and remove item");
+            return false;
+        }
+
+        public bool AddSpawnedItem(int _item_id ,Vector3 _drop_position){
+            if(_item_id==null || _drop_position==null){
+                Debug.LogError("Invalid item add attempt");
+                return false;
+            }
+            manager.map.GetComponent<Maze>().spawned_items.Add(new KeyValuePair<int, Vector3>(_item_id, _drop_position));
+            return true;
+        }
     }
 }

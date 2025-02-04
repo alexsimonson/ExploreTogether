@@ -18,6 +18,9 @@ namespace ExploreTogether {
             if(item){
                 Debug.Log("Interaction is running from itemspawn.cs");
                 manager.player_inventory.AddItem(item);
+                // nasty, nasty loop instead of sending in the proper index from the list based on interaction
+                // could be done but big overhaul needed and bigger brain
+                manager.map.GetComponent<Maze>().FindAndRemoveItem(item.id, gameObject.transform.position);
                 Destroy(gameObject);
             }else{
                 Debug.Log("No item to reward lol");
