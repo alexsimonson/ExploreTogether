@@ -42,6 +42,9 @@ namespace ExploreTogether {
         public List<NavMeshSurface> surfaces = new List<NavMeshSurface>();
         public NavigationBuilder nav_builder;
 
+        // just need to track the data of spawned items for save/load
+        private List<KeyValuePair<int, Vector3>> spawned_items = new List<KeyValuePair<int, Vector3>>();
+
 
 
         void Awake(){
@@ -72,6 +75,9 @@ namespace ExploreTogether {
 
             if(controlled_generation && !needs_generation){
                 controlled_generation = false;
+                if(ImportSavedItems(manager.chosen_character_data.spawned_items)==false){
+                    Debug.LogError("We failed to import spawned items");
+                }
                 RenderGrid();
             }
 
@@ -328,7 +334,7 @@ namespace ExploreTogether {
             Debug.Log("surfaces is ready");
         }
 
-        void FillMazeWithItems(){
+        void FillMazeWithItems(int _num_items=20){
 
             // x junction is not reliable in smaller mazes, until we overhaul our random generation algorithm to more randomly place junctions
             // I could experiment with randomly overriding an x-junc into the map??
@@ -351,19 +357,8 @@ namespace ExploreTogether {
             objective.name = "Objective";
             
             // item spawning
-            for(int i=0;i<20;i++){
-                random_index = Random.Range(5, generated_nodes.Count - 5);
-                // we need to adjust the items position by a minimal amount to allow the AI to pass during navigation.
-                // providing random offset for x and z positions
-                int xOffset = Random.Range(0, 1)==0 ? -1 : 1;
-                int zOffset = Random.Range(0, 1)==0 ? -1 : 1;
-
-                Vector3 adjustItemSpawnPoint = new Vector3(generated_nodes[random_index].mazePosition.x * prefabSize + xOffset, generated_nodes[random_index].mazePosition.y * prefabSize + 1.5f, generated_nodes[random_index].mazePosition.z * prefabSize + zOffset);
-                GameObject itemSpawned = Instantiate(itemSpawn, adjustItemSpawnPoint, Quaternion.identity);
-                // GameObject itemSpawned = Instantiate(itemSpawn, new Vector3(generated_nodes[random_index].mazePosition.x * prefabSize, generated_nodes[random_index].mazePosition.y * prefabSize + 1.5f, generated_nodes[random_index].mazePosition.z * prefabSize), Quaternion.identity);
-                itemSpawned.transform.SetParent(gameObject.transform);
-                itemSpawned.name = "Item: " + itemSpawn.GetComponent<ItemSpawn>().item.name.ToString();
-                itemSpawn.GetComponent<ItemSpawn>().item = manager.GenerateItem();
+            for(int i=0;i<_num_items;i++){
+                SpawnItem(manager.GenerateItem().id, null);
                 // spawn enemy every 3rd item
                 if(i%4==2){
                     SpawnEnemy(random_index);    // this function needs to be the standardized spawn function.... not a different one here
@@ -372,6 +367,35 @@ namespace ExploreTogether {
                     SpawnPrefab(treePrefab, random_index, "tree_prefab_"+i.ToString());
                 }
             }
+        }
+
+        bool SpawnItem(int _item_id, Vector3? _position=null){
+            int random_index = Random.Range(5, generated_nodes.Count - 5);
+            // we need to adjust the items position by a minimal amount to allow the AI to pass during navigation.
+            // providing random offset for x and z positions
+            int xOffset = Random.Range(0, 1)==0 ? -1 : 1;
+            int zOffset = Random.Range(0, 1)==0 ? -1 : 1;
+            
+
+            if(manager.item_bank.ContainsKey(_item_id)==false){
+                Debug.LogError("Invalid item id during SpawnItem");
+                return false;
+            }
+            itemSpawn.GetComponent<ItemSpawn>().item = manager.item_bank[_item_id];  // this should be passed in
+            Vector3 adjustItemSpawnPoint;
+            
+            if(_position!=null){
+                adjustItemSpawnPoint = _position.Value;
+            }else{
+                adjustItemSpawnPoint = new Vector3(generated_nodes[random_index].mazePosition.x * prefabSize + xOffset, generated_nodes[random_index].mazePosition.y * prefabSize + 1.5f, generated_nodes[random_index].mazePosition.z * prefabSize + zOffset);
+            }
+            GameObject itemSpawned = Instantiate(itemSpawn, adjustItemSpawnPoint, Quaternion.identity);
+            // after instantiation, track for export
+            // GameObject itemSpawned = Instantiate(itemSpawn, new Vector3(generated_nodes[random_index].mazePosition.x * prefabSize, generated_nodes[random_index].mazePosition.y * prefabSize + 1.5f, generated_nodes[random_index].mazePosition.z * prefabSize), Quaternion.identity);
+            itemSpawned.transform.SetParent(gameObject.transform);
+            itemSpawned.name = "Item: " + itemSpawn.GetComponent<ItemSpawn>().item.name.ToString();
+            spawned_items.Add(new KeyValuePair<int, Vector3>(itemSpawn.GetComponent<ItemSpawn>().item.id, adjustItemSpawnPoint));
+            return true;
         }
 
         public void SpawnPrefab(GameObject prefab, int index=-1, string _name="spawned prefab"){
@@ -448,6 +472,30 @@ namespace ExploreTogether {
                 if(dungeon_nodes[i].westNeighbor!=-1 && dungeon_nodes[i].westNeighbor < manager.map.GetComponent<Maze>().generated_nodes.Count){
                     manager.map.GetComponent<Maze>().generated_nodes[i].westNeighbor = manager.map.GetComponent<Maze>().generated_nodes[dungeon_nodes[i].westNeighbor];
                 }
+            }
+            return true;
+        }
+
+        public List<MazeSpawnedItemSerializable> ExportSpawnedItems(){
+            List<MazeSpawnedItemSerializable> export_spawned_items = new List<MazeSpawnedItemSerializable>();
+            foreach(KeyValuePair<int, Vector3> spawned_item in spawned_items){
+                export_spawned_items.Add(new MazeSpawnedItemSerializable(spawned_item.Key, spawned_item.Value));
+            }
+            return export_spawned_items;
+        }
+
+        public bool ImportSavedItems(List<MazeSpawnedItemSerializable> _load_spawned_items){
+            if(_load_spawned_items==null){
+                return false;
+            }
+            if(_load_spawned_items.Count==0){
+                return false;
+            }
+            manager.map.GetComponent<Maze>().spawned_items.Clear();
+            for(int i=0;i<_load_spawned_items.Count;i++){
+                // really... this function should call the Instantiation of the items...
+                // manager.map.GetComponent<Maze>().spawned_items.Add(_load_spawned_items[i].ToKeyValue()); // this will happen within the spawn item function...
+                SpawnItem(_load_spawned_items[i].item_id, _load_spawned_items[i].maze_position);
             }
             return true;
         }

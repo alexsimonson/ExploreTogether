@@ -341,7 +341,8 @@ namespace ExploreTogether{
             Debug.Log("ON APPLICATION QUIT TESTING");
             manager.chosen_character_data.gear = manager.player_gear.ExportGear();
             manager.chosen_character_data.inventory = manager.player_inventory.ExportInventory();
-            manager.chosen_character_data.dungeon_nodes = manager.map.GetComponent<Maze>().ExportMaze();
+            manager.chosen_character_data.dungeon_nodes = manager.map.GetComponent<Maze>().ExportMaze();    // this should probably be dependent on game mode?
+            manager.chosen_character_data.spawned_items = manager.map.GetComponent<Maze>().ExportSpawnedItems();
             manager.chosen_character_data.position = manager.player.transform.position;
             manager.chosen_character_data.yRotation = manager.player.transform.eulerAngles.y;
             // get latest character data and save
