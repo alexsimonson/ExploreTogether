@@ -77,13 +77,14 @@ namespace ExploreTogether {
 
             if(controlled_generation && !needs_generation){
                 controlled_generation = false;
+                RenderGrid();
+                BuildMapNavigation();
                 if(ImportSavedItems(manager.chosen_character_data.spawned_items)==false){
                     Debug.LogError("We failed to import spawned items");
                 }
                 if(ImportSavedEnemies(manager.chosen_character_data.enemy_positions)==false){
                     Debug.LogError("We failed to import spawned enemies");
                 }
-                RenderGrid();
             }
 
             // Debug.Log("Testing generated nodes length: " + generated_nodes.Count.ToString());
