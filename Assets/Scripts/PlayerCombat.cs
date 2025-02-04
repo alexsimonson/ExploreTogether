@@ -11,6 +11,11 @@ namespace ExploreTogether {
         public GameObject crosshair;
         public GameObject audioSource;
         Manager manager;
+        
+        public GameObject prefab_weapon_slot;
+        public GameObject prefab_wand;
+        public GameObject prefab_xbow;
+        public GameObject prefab_sword;
 
         void Start(){
             manager = GameObject.Find("Manager").GetComponent<Manager>();
@@ -20,11 +25,31 @@ namespace ExploreTogether {
             crosshair = manager.hud.transform.GetChild(6).gameObject;
             audioSource = gameObject.transform.GetChild(1).gameObject;
             audioSource.GetComponent<AudioSource>().volume = .2f;
+            
         }
 
         void Update(){
             DrawGunAim();
             PlayerInput();
+            DrawWeaponHeld();   // this is a very unoptimal solution but works for now
+        }
+
+        public void DrawWeaponHeld(){
+            prefab_wand.SetActive(false);
+            prefab_xbow.SetActive(false);
+            prefab_sword.SetActive(false);
+            if(manager.player_gear.slots[9].item==null){
+                return;
+            }
+            Debug.Log("Item id in hand: " + manager.player_gear.slots[9].item.id.ToString());
+            Weapon weapon = manager.player_gear.slots[9].item as Weapon;
+            if(weapon.style==Weapon.Style.Melee){
+                prefab_sword.SetActive(true);
+            }else if(weapon.style==Weapon.Style.Gun){
+                prefab_xbow.SetActive(true);
+            }else if(weapon.style==Weapon.Style.Magic){
+                prefab_wand.SetActive(true);
+            }
         }
 
         void PlayerInput(){

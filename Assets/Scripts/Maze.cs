@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using System.Threading.Tasks;
 
 
 namespace ExploreTogether {
@@ -114,6 +115,7 @@ namespace ExploreTogether {
         }
 
         public void BuildMapNavigation(){
+            // doesn't work because not available or something...
             nav_builder.BuildNavigation(surfaces);
         }
 
