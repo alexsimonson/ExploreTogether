@@ -33,6 +33,7 @@ namespace ExploreTogether{
         public RectTransform LoadPanel;
         public TMP_Text SelectedCharacterText;
         public Button LoadLoadButton;   // this name really is coding at its finest
+        public Button LoadDeleteButton;
         public Button LoadBackButton;
         public Transform LoadCharacterContent;
         private string selected_character_name;
@@ -60,6 +61,7 @@ namespace ExploreTogether{
 
             // Add listeners for Load Character UI elements
             LoadLoadButton.GetComponent<Button>().onClick.AddListener(() => AttemptLoadGame(selected_character_name));
+            LoadDeleteButton.GetComponent<Button>().onClick.AddListener(() => DeleteCharacterData(selected_character_name));
 
             // Add listeners for Back Buttons in all UI elements
             NewBackButton.GetComponent<Button>().onClick.AddListener(() => SwitchPanel(MainMenuPanel));
@@ -171,7 +173,36 @@ namespace ExploreTogether{
 
         void HandleLoad(){
             SwitchPanel(LoadPanel);
+            ReloadCharacters();
+        }
+
+        // need a function to handle reloading the load characters list
+        void ReloadCharacters(){
+            ClearCharactersFromScrollView();
             AddCharactersToScrollView(GetCharacterList(GetSavesInDir()));
+        }
+
+        void ClearCharactersFromScrollView(){
+            foreach(Transform child in LoadCharacterContent){
+                Destroy(child.gameObject);
+            }
+        }
+
+        bool DeleteCharacterData(string character_name){
+            string filePath = CreateCharacterSaveFileName(character_name, true);
+            if(File.Exists(filePath)==false){
+                Debug.LogError("Save file doesn't exist.  Nothing to delete.");
+                return false;
+            }
+            File.Delete(filePath);
+            // should check filepath again if file exists...
+            if(File.Exists(filePath)!=false){
+                Debug.LogError("Failed to delete file.");
+                return false;
+            }
+            // need to delete button from view, should just re-render existing elements... 
+            ReloadCharacters();
+            return true;
         }
 
         void AttemptLoadGame(string character_name){
