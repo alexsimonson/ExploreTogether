@@ -538,13 +538,25 @@ namespace ExploreTogether {
             return false;
         }
 
-        public bool AddSpawnedItem(int _item_id ,Vector3 _drop_position){
+        public bool AddSpawnedItem(int _item_id, Vector3 _drop_position){
             if(_item_id==null || _drop_position==null){
                 Debug.LogError("Invalid item add attempt");
                 return false;
             }
             manager.map.GetComponent<Maze>().spawned_items.Add(new KeyValuePair<int, Vector3>(_item_id, _drop_position));
             return true;
+        }
+
+        public bool FindAndRemoveEnemy(Transform _remove_transform){
+            for(int i=0;i<spawned_enemies.Count;i++){
+                if(spawned_enemies[i].Value.position!=_remove_transform.position){
+                    continue;   // not the right enemy...
+                }
+                spawned_enemies.RemoveAt(i);
+                return true;
+            }
+            Debug.LogError("Failed to find and remove enemy");
+            return false;
         }
     }
 }
