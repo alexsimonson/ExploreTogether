@@ -14,5 +14,6 @@ namespace ExploreTogether{
         public List<int> gear;
         public List<GeneratedNodeSerializable> dungeon_nodes;  // based on game modes, this may be null
         public List<MazeSpawnedItemSerializable> spawned_items;    // stores item id and position
+        public List<MazeSpawnedEnemySerializable> enemy_positions;
     }
 }
