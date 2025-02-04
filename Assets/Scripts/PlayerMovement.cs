@@ -47,6 +47,9 @@ namespace ExploreTogether {
 
         public AnimationClip slashTest;
 
+        private Vector3 debug_jump_prior_position;
+        private bool debug_jump = true;
+
         void Awake(){
             rb = GetComponent<Rigidbody>();
             rb.freezeRotation = true;
@@ -71,6 +74,27 @@ namespace ExploreTogether {
                     Debug.Log("Crouching key pressed");
                     ToggleCrouch();
                 }
+
+                if(Input.GetKeyDown(KeyCode.J)){
+                    
+                }
+            }
+        }
+
+        public void DebugJump(){
+            Debug.Log("DEBUG JUMPING AT THE SPEED OF LIGHT");
+            Manager manager = GameObject.Find("Manager").GetComponent<Manager>();
+            if(manager.current_game_state==Manager.GameState.Hub){
+                // we should enter new dungeon
+                // this dungeon should have generated upon exiting...
+                debug_jump_prior_position = manager.player.transform.position;
+                manager.player.transform.position = new Vector3(-100, -100, -100);
+            }else{
+                // we should enter the hub
+                if(debug_jump_prior_position==null){
+                    debug_jump_prior_position = new Vector3(0, 1.5f, 0);
+                }
+                manager.player.transform.position = debug_jump_prior_position;
             }
         }
 

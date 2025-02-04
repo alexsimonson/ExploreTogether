@@ -355,12 +355,18 @@ namespace ExploreTogether {
             dungeonPass.transform.SetParent(gameObject.transform);
             dungeonPass.GetComponent<ItemSpawn>().item = dungeonPassItem;
             dungeonPass.name = "Dungeon Pass";
+
             // let's place the objective at the final generated location
             Vector3 objective_location = generated_nodes[generated_nodes.Count - 1].mazePosition;
             GameObject objectivePrefab = Resources.Load("Prefabs/Objective", typeof(GameObject)) as GameObject;
             GameObject objective = Instantiate(objectivePrefab, new Vector3(objective_location.x * prefabSize, objective_location.y * prefabSize + 1.5f, objective_location.z * prefabSize), Quaternion.identity);
             objective.transform.SetParent(gameObject.transform);
             objective.name = "Objective";
+
+            GameObject dungeonEntrancePrefab = Resources.Load("Prefabs/DungeonEntrance", typeof(GameObject)) as GameObject;
+            GameObject dungeonEntrance = Instantiate(dungeonEntrancePrefab, new Vector3(0, 1.5f, 0), Quaternion.identity);
+            dungeonEntrance.transform.SetParent(gameObject.transform);
+            dungeonEntrance.name = "Dungeon Entrance";
             
             // item spawning
             for(int i=0;i<_num_items;i++){

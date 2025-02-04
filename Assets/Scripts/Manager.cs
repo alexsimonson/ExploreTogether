@@ -43,10 +43,14 @@ namespace ExploreTogether {
             Transition,
             Alive,
             Dead,
-            Win
+            Win,
+            Hub
         }
 
         public GameState current_game_state;
+
+        public GameObject hubPrefab;
+        public GameObject hub;
         
         void Awake(){
             foreach(Item item in Resources.LoadAll<Item>("Items")){
@@ -57,6 +61,7 @@ namespace ExploreTogether {
             Debug.Log("all item ids: " + string.Join(", ", item_bank.Keys));
             hudPrefab = Resources.Load("Prefabs/HUD", typeof(GameObject)) as GameObject;
             playerPrefab = Resources.Load("Prefabs/Player", typeof(GameObject)) as GameObject;
+            hubPrefab = Resources.Load("Prefabs/Buildings/Hub", typeof(GameObject)) as GameObject;
             // we should load the game mode prefab based on the enum set
         }
 
@@ -75,6 +80,7 @@ namespace ExploreTogether {
             player_gear = ScriptableObject.CreateInstance("Gear") as Gear;
             hud.transform.GetChild(5).gameObject.GetComponent<GearUI>().SetWatchingGearByReference(ref player_gear);
             hud.transform.GetChild(5).gameObject.GetComponent<GearUI>().DrawInventoryUI();
+            hub = Instantiate(hubPrefab, new Vector3(-100, -100, -100), Quaternion.identity);
             player_gear.Initialize();
             if(instant_setup){
                 Setup();
