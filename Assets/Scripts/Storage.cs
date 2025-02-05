@@ -61,11 +61,11 @@ namespace ExploreTogether {
                 // the HUD should match with playerInput variable here...
                 if(temp_state==true){
                     // we should set the inventory as we're about to utilize it
-                    manager.hud.transform.GetChild(11).gameObject.GetComponent<InventoryUI>().SetWatchingInventoryByReference(ref storage_inventory);
-                    manager.hud.transform.GetChild(11).gameObject.GetComponent<InventoryUI>().DrawInventoryUI();
+                    manager.hud.transform.GetChild(10).gameObject.GetComponent<InventoryUI>().SetWatchingInventoryByReference(ref storage_inventory);
+                    manager.hud.transform.GetChild(10).gameObject.GetComponent<InventoryUI>().DrawInventoryUI();
                     // if applicable, handle equipment UI for storage (looting bodies)
-                    manager.hud.transform.GetChild(12).gameObject.GetComponent<GearUI>().SetWatchingGearByReference(ref storage_gear);
-                    manager.hud.transform.GetChild(12).gameObject.GetComponent<GearUI>().DrawInventoryUI();
+                    manager.hud.transform.GetChild(11).gameObject.GetComponent<GearUI>().SetWatchingGearByReference(ref storage_gear);
+                    manager.hud.transform.GetChild(11).gameObject.GetComponent<GearUI>().DrawInventoryUI();
                     onStorageAccessed.Raise(this, manager.GetComponent<Manager>().storage_hud_visible_state);
                     // handle open animation
                     if(animator!=null){
