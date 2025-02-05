@@ -110,8 +110,8 @@ namespace ExploreTogether {
         }
 
         public void UpdateWeaponHeld(Component sender, object data){
+            Debug.Log("UPDATING PLAYER COMBAT WEAPON INFO");
             Weapon equipped_weapon = (Weapon)data;
-            var new_ui_str = "";
             // eventually this should be overhauled to just directly take the model from the item
             if(equipped_weapon==null){
                 DrawWeaponHeld();

@@ -5,8 +5,7 @@ using UnityEngine;
 namespace ExploreTogether {
     [CreateAssetMenu(fileName = "New Gun", menuName = "Gun")]
     public class Gun : Weapon {
-        [Header("Events")]
-        public GameEvent onWeaponUIChanged;
+        
         public Gun(){
             type = Type.Weapon;
             style = Style.Gun;
@@ -31,7 +30,6 @@ namespace ExploreTogether {
             }
             Shoot(owner);
             magazineRounds -= 1;
-            UpdateWeaponUI();
         }
 
         public void Reload(GameObject owner){
@@ -48,12 +46,7 @@ namespace ExploreTogether {
                 magazineRounds = magazineSizeMax;
                 bulletCount -= bulletsToFill;
             }
-            UpdateWeaponUI();
             owner.GetComponent<PlayerCombat>().audioSource.GetComponent<AudioSource>().PlayOneShot(reloadSound);
-        }
-
-        public void UpdateWeaponUI(){
-            onWeaponUIChanged.Raise(null, this);
         }
     }
 }

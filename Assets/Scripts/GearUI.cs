@@ -12,11 +12,13 @@ namespace ExploreTogether {
 
         public Gear watching_gear;
         public bool storage_ui = true;
+        private bool isPlayerGear;
 
         void Start(){
             hudView = gameObject.transform.GetChild(0).gameObject;
             content = hudView.transform.GetChild(0).gameObject;
             manager = GameObject.Find("Manager").GetComponent<Manager>();
+            isPlayerGear = !storage_ui;
             if(storage_ui){
                 // this should be set elsewhere
             }else{
@@ -40,6 +42,7 @@ namespace ExploreTogether {
 
         public override void UpdateSlot(Component sender, object data){
             Debug.Log("GEARUI ~~ UPDATE SLOT");
+            Debug.Log("Is player gear: " + isPlayerGear.ToString());
             if(data.GetType().ToString()!="ExploreTogether.ItemSlot"){
                 Debug.LogError("Invalid update data type: " +data.GetType().ToString());
                 return;
@@ -53,13 +56,17 @@ namespace ExploreTogether {
                     if(equipped_equipment.type==Equipment.Type.Weapon){
                         Weapon equipped_weapon = (Weapon)equipped_equipment;
                         if(equipped_weapon!=null){
-                            onWeaponChanged.Raise(this, equipped_weapon);
+                            if(isPlayerGear){
+                                onWeaponChanged.Raise(this, equipped_weapon);
+                            }
                         }
                     }
                 }
             }else{
                 // we dropped an item so fix this shit
-                onWeaponChanged.Raise(this, null);
+                if(isPlayerGear){
+                    onWeaponChanged.Raise(this, null);
+                }
             }
             
             Color newColor = inventorySlots[slot.index].GetComponent<SlotContainer>().inventorySlot.transform.GetChild(1).GetComponent<Image>().color;

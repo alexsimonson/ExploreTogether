@@ -10027,6 +10027,10 @@ PrefabInstance:
       value: Soldier Equipment
       objectReference: {fileID: 0}
     - target: {fileID: 2470145115455101339, guid: e4a558133edc7064680c23ced167634a, type: 3}
+      propertyPath: storage_ui
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2470145115455101339, guid: e4a558133edc7064680c23ced167634a, type: 3}
       propertyPath: onWeaponChanged
       value: 
       objectReference: {fileID: 11400000, guid: 1b27aed22c120fa4d9db05fc23444b47, type: 2}

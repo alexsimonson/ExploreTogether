@@ -5,6 +5,7 @@ namespace ExploreTogether {
     public class WeaponUI : MonoBehaviour {
 
         public void UpdateWeaponUI(Component sender, object data){
+            Debug.Log("Sender name: " + sender.name);
             Debug.Log("Update WeaponUI Called and received");
             Weapon equipped_weapon = (Weapon)data;
             var new_ui_str = "";
