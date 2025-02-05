@@ -5,9 +5,15 @@ namespace ExploreTogether {
     public class WeaponUI : MonoBehaviour {
 
         public void UpdateWeaponUI(Component sender, object data){
+            Debug.Log("Update WeaponUI Called and received");
             Weapon equipped_weapon = (Weapon)data;
-            if(equipped_weapon==null) return;
             var new_ui_str = "";
+            if(equipped_weapon==null){
+                Debug.Log("Equipped weapon is null");
+                gameObject.GetComponent<Text>().text = new_ui_str;
+                return;
+            }
+            Debug.Log("Equipped weapon is NOT null");
             if(data.GetType().ToString()=="Gun"){
                 Gun equipped_gun = (Gun)equipped_weapon;
                 if(equipped_gun==null) return;

@@ -59,7 +59,7 @@ namespace ExploreTogether {
                 }
             }else{
                 // we dropped an item so fix this shit
-                
+                onWeaponChanged.Raise(this, null);
             }
             
             Color newColor = inventorySlots[slot.index].GetComponent<SlotContainer>().inventorySlot.transform.GetChild(1).GetComponent<Image>().color;

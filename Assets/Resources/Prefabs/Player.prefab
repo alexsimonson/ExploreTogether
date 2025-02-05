@@ -266,6 +266,7 @@ GameObject:
   - component: {fileID: 3076970631314084794}
   - component: {fileID: 765476320457443884}
   - component: {fileID: 5601816436168076932}
+  - component: {fileID: 5444056087768552781}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -498,6 +499,34 @@ MonoBehaviour:
       - m_Target: {fileID: 2715940773946681203}
         m_TargetAssemblyTypeName: ExploreTogether.PlayerMovement, Assembly-CSharp
         m_MethodName: SetRevokeMovement
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &5444056087768552781
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8593980595237084293}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dbac9a5f7d779254ab4671c813b4b1a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameEvent: {fileID: 11400000, guid: 1b27aed22c120fa4d9db05fc23444b47, type: 2}
+  response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 3076970631314084794}
+        m_TargetAssemblyTypeName: ExploreTogether.PlayerCombat, Assembly-CSharp
+        m_MethodName: UpdateWeaponHeld
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

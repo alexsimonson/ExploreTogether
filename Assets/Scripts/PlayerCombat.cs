@@ -25,31 +25,21 @@ namespace ExploreTogether {
             crosshair = manager.hud.transform.GetChild(6).gameObject;
             audioSource = gameObject.transform.GetChild(1).gameObject;
             audioSource.GetComponent<AudioSource>().volume = .2f;
-            
+            DrawWeaponHeld();
         }
 
         void Update(){
-            DrawGunAim();
             PlayerInput();
-            DrawWeaponHeld();   // this is a very unoptimal solution but works for now
         }
 
-        public void DrawWeaponHeld(){
+        public void DrawWeaponHeld(GameObject _prefab=null){
             prefab_wand.SetActive(false);
             prefab_xbow.SetActive(false);
             prefab_sword.SetActive(false);
-            if(manager.player_gear.slots[9].item==null){
+            if(_prefab==null){
                 return;
             }
-            Debug.Log("Item id in hand: " + manager.player_gear.slots[9].item.id.ToString());
-            Weapon weapon = manager.player_gear.slots[9].item as Weapon;
-            if(weapon.style==Weapon.Style.Melee){
-                prefab_sword.SetActive(true);
-            }else if(weapon.style==Weapon.Style.Gun){
-                prefab_xbow.SetActive(true);
-            }else if(weapon.style==Weapon.Style.Magic){
-                prefab_wand.SetActive(true);
-            }
+            _prefab.SetActive(true);
         }
 
         void PlayerInput(){
@@ -85,13 +75,14 @@ namespace ExploreTogether {
             }
         }
 
-        public void DrawGunAim(){
+        public void DrawGunAim(bool _isActive){
             if(crosshair!=null){
-                if(HoldingGun() && !revoke_combat){
-                    crosshair.SetActive(true);
-                }else{
-                    crosshair.SetActive(false);
-                }
+                crosshair.SetActive(_isActive);
+                // if(HoldingGun() && !revoke_combat){
+                //     crosshair.SetActive(true);
+                // }else{
+                //     crosshair.SetActive(false);
+                // }
             }
         }
 
@@ -116,6 +107,28 @@ namespace ExploreTogether {
 
         public void ToggleCombat(Component sender, object data){
             revoke_combat = (bool)data;
+        }
+
+        public void UpdateWeaponHeld(Component sender, object data){
+            Weapon equipped_weapon = (Weapon)data;
+            var new_ui_str = "";
+            // eventually this should be overhauled to just directly take the model from the item
+            if(equipped_weapon==null){
+                DrawWeaponHeld();
+                return;
+            }else if(equipped_weapon.style==Weapon.Style.Melee){
+                DrawWeaponHeld(prefab_sword);
+            }else if(equipped_weapon.style==Weapon.Style.Gun){
+                DrawWeaponHeld(prefab_xbow);
+            }else if(equipped_weapon.style==Weapon.Style.Magic){
+                DrawWeaponHeld(prefab_wand);
+            }
+            // might as well do this here
+            if(equipped_weapon.style==Weapon.Style.Gun){
+                DrawGunAim(true);
+            }else{
+                DrawGunAim(false);
+            }
         }
     }
 }
