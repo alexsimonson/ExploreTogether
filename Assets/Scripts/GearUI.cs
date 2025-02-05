@@ -42,7 +42,6 @@ namespace ExploreTogether {
 
         public override void UpdateSlot(Component sender, object data){
             Debug.Log("GEARUI ~~ UPDATE SLOT");
-            Debug.Log("Is player gear: " + isPlayerGear.ToString());
             if(data.GetType().ToString()!="ExploreTogether.ItemSlot"){
                 Debug.LogError("Invalid update data type: " +data.GetType().ToString());
                 return;

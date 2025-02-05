@@ -335,17 +335,21 @@ namespace ExploreTogether {
 
         // this function may simply never be necessary with type requirements...
         void SwapEquipment(PointerEventData eventData){
-            Debug.Log("RUNNING SWAP Equipment LOGIC");
+            Transform pointerDragParent = eventData.pointerDrag.transform.parent;
+            GameObject pointerDragSlotContainer = pointerDragParent.gameObject;
+            GameObject dragSlot = pointerDragParent.GetComponent<SlotContainer>().inventorySlot;
+
+            // need to check if these slots are the same... otherwise we get item duplication
+            if(inventorySlot==dragSlot) return;
+
             GearUI parent_gear = eventData.pointerDrag.transform.parent.parent.parent.parent.parent.gameObject.GetComponent<GearUI>();
             // at this point in time, inventorySlot represents the slot where our mouse let go of the button
             // this logic is necessary for preventing a bug at this time
             Equipment originalItem = inventorySlot.GetComponent<EquipmentSlot>().item;   // I need this value when the bool is false
+            // Debug.Log("original item name: " + originalItem.name);
             int originalStackSize = inventorySlot.GetComponent<EquipmentSlot>().stack_size;   // I need this value when the bool is false
             bool shouldBeEmpty = originalItem==null ? true : false; 
 
-            Transform pointerDragParent = eventData.pointerDrag.transform.parent;
-            GameObject pointerDragSlotContainer = pointerDragParent.gameObject;
-            GameObject dragSlot = pointerDragParent.GetComponent<SlotContainer>().inventorySlot;
             int drag_index = pointerDragParent.GetComponent<SlotContainer>().index;
             GameObject tempSlot = inventorySlot;
 
