@@ -20,7 +20,7 @@ namespace ExploreTogether {
         void OnRestartButtonPressed(){
             // pop the transition panel
             onGameStateChanged.Raise(this, Manager.GameState.Transition);
-            SceneManager.LoadScene("Scenes/Maze");
+            manager.game_mode.ResetGameMode();
             Cursor.visible = false;
         }
     }

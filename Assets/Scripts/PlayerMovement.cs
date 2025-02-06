@@ -83,18 +83,26 @@ namespace ExploreTogether {
         public void DebugJump(){
             Debug.Log("DEBUG JUMPING AT THE SPEED OF LIGHT");
             Manager manager = GameObject.Find("Manager").GetComponent<Manager>();
-            if(manager.current_game_state==Manager.GameState.Hub){
-                // we should enter new dungeon
-                // this dungeon should have generated upon exiting...
-                debug_jump_prior_position = manager.player.transform.position;
-                manager.player.transform.position = new Vector3(-100, -100, -100);
+            if(manager.player.transform.position.y < -50){
+                // take player back to dungeon entrance
+                manager.player.transform.position = new Vector3(0, 1.5f, 0);
             }else{
-                // we should enter the hub
-                if(debug_jump_prior_position==null){
-                    debug_jump_prior_position = new Vector3(0, 1.5f, 0);
-                }
-                manager.player.transform.position = debug_jump_prior_position;
+                // take player to the hub
+                manager.player.transform.position = new Vector3(-100, -100, -100);
             }
+            // this shit ain't thought through... let's fix this later
+            // if(manager.current_game_state==Manager.GameState.Hub){
+            //     // we should enter new dungeon
+            //     // this dungeon should have generated upon exiting...
+            //     debug_jump_prior_position = manager.player.transform.position;
+            //     manager.player.transform.position = new Vector3(-100, -100, -100);
+            // }else{
+            //     // we should enter the hub
+            //     if(debug_jump_prior_position==null){
+            //         debug_jump_prior_position = new Vector3(0, 1.5f, 0);
+            //     }
+            //     manager.player.transform.position = debug_jump_prior_position;
+            // }
         }
 
         void MyInput(){

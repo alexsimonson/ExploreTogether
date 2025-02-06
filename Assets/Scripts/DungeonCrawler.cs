@@ -155,20 +155,16 @@ namespace ExploreTogether {
         public override void ResetGameMode(){
             // we should delete every single game object that isn't essential
             manager.DestroyNonEssentialGameObjects();
-            manager.Setup();
             current_round = 0;
             enemies_spawned_this_round_max = enemies_spawned_this_round_max_default;
             manager.player.transform.position = manager.playerSpawnPoint;
+            SpawnMap();
             EndRound();
         }
 
         public override void ProgressGameMode(){
-            // pop the transition panel
-            // manager.hud.transform.GetChild(8).gameObject.SetActive(true);
             manager.DestroyNonEssentialGameObjects();
             SpawnMap();
-            // manager.player.GetComponent<PlayerLook>().AllowLook();
-            // manager.player.GetComponent<PlayerMovement>().AllowMovement();
             EndRound();
         }
 
