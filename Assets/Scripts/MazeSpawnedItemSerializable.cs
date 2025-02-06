@@ -8,7 +8,7 @@ namespace ExploreTogether{
         public Vector3 maze_position;
 
         public MazeSpawnedItemSerializable(int _item_id, Vector3 _position){
-            if(_item_id==null || _position==null){
+            if(_item_id==-1 || _position==null){
                 return;
             }            
             this.item_id = _item_id;

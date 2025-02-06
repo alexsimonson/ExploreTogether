@@ -48,7 +48,6 @@ namespace ExploreTogether {
         public AnimationClip slashTest;
 
         private Vector3 debug_jump_prior_position;
-        private bool debug_jump = true;
 
         void Awake(){
             rb = GetComponent<Rigidbody>();

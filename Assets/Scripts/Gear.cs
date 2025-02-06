@@ -123,7 +123,7 @@ namespace ExploreTogether {
 
         public bool ImportGear(List<int> gear_item_ids){
             for(int i=0;i<gear_item_ids.Count;i++){ 
-                if(gear_item_ids[i]==null) continue;
+                if(gear_item_ids[i]==-1) continue;
                 // I need to assign the item based on the id...
                 if(manager.item_bank.ContainsKey(gear_item_ids[i])){
                     slots[i].item = manager.item_bank[gear_item_ids[i]];

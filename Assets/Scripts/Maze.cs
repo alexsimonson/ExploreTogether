@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEditor;
 using System.Threading.Tasks;
 
 
@@ -46,8 +47,8 @@ namespace ExploreTogether {
         // just need to track the data of spawned items for save/load
         private List<KeyValuePair<int, Vector3>> spawned_items = new List<KeyValuePair<int, Vector3>>();
         // track enemies for save/load
-        private List<KeyValuePair<GameObject, Transform>> spawned_enemies = new List<KeyValuePair<GameObject, Transform>>();
-        private List<KeyValuePair<GameObject, Transform>> spawned_resources = new List<KeyValuePair<GameObject, Transform>>();
+        private List<KeyValuePair<string, Transform>> spawned_enemies = new List<KeyValuePair<string, Transform>>();
+        private List<KeyValuePair<string, Transform>> spawned_resources = new List<KeyValuePair<string, Transform>>();
 
 
 
@@ -358,8 +359,8 @@ namespace ExploreTogether {
             SpawnItem(999);
 
             // let's place the objective at the final generated location
-            SpawnResource(Resources.Load("Prefabs/Objective", typeof(GameObject)) as GameObject, generated_nodes.Count - 1, "Objective");
-            SpawnResource(Resources.Load("Prefabs/DungeonEntrance", typeof(GameObject)) as GameObject, 0, "DungeonEntrance");
+            SpawnResource("Prefabs/Objective", generated_nodes.Count - 1, "Objective");
+            SpawnResource("Prefabs/DungeonEntrance", 0, "DungeonEntrance");
             
             // item spawning
             for(int i=0;i<_num_items;i++){
@@ -369,7 +370,7 @@ namespace ExploreTogether {
                     SpawnEnemy(enemyPrefab, null);    // this function needs to be the standardized spawn function.... not a different one here
                 }
                 if(i%4==2){
-                    SpawnResource(treePrefab, -1, "tree_prefab_"+i.ToString());
+                    SpawnResource("Prefabs/TreeResource", -1, "tree_prefab_"+i.ToString());
                 }
             }
         }
@@ -405,22 +406,24 @@ namespace ExploreTogether {
 
         // this was probably meant to be more generic for all spawns, but let's just turn this into resource nodes
         // this will allow easy save/load
-        public void SpawnResource(GameObject _prefab, int _index=-1, string _name="spawned prefab"){
+        public void SpawnResource(string _object_prefab, int _index=-1, string _name="spawned prefab"){
             if(_index==-1){
                 _index = Random.Range(25, generated_nodes.Count - 25);
             }
             // ensure the mazePosition is n-depth away from the player (we need a function for this)
-            GameObject spawned_prefab = Instantiate(_prefab, new Vector3(generated_nodes[_index].mazePosition.x * prefabSize, generated_nodes[_index].mazePosition.y * prefabSize + 1.5f, generated_nodes[_index].mazePosition.z * prefabSize), Quaternion.identity);
+            GameObject _resource_prefab = Resources.Load(_object_prefab, typeof(GameObject)) as GameObject;
+            GameObject spawned_prefab = Instantiate(_resource_prefab, new Vector3(generated_nodes[_index].mazePosition.x * prefabSize, generated_nodes[_index].mazePosition.y * prefabSize + 1.5f, generated_nodes[_index].mazePosition.z * prefabSize), Quaternion.identity);
             spawned_prefab.transform.SetParent(gameObject.transform);
             spawned_prefab.name = _name;
-            spawned_resources.Add(new KeyValuePair<GameObject, Transform>(_prefab, spawned_prefab.transform));
+            spawned_resources.Add(new KeyValuePair<string, Transform>(_object_prefab, spawned_prefab.transform));
         }
 
-        public void SpawnResourcePosition(GameObject _prefab, Vector3 _position, string _name="spawned prefab"){
-            GameObject spawned_prefab = Instantiate(_prefab, _position, Quaternion.identity);
+        public void SpawnResourcePosition(string _object_prefab, Vector3 _position, string _name="spawned prefab"){
+            GameObject _resource_prefab = Resources.Load(_object_prefab, typeof(GameObject)) as GameObject;
+            GameObject spawned_prefab = Instantiate(_resource_prefab, _position, Quaternion.identity);
             spawned_prefab.transform.SetParent(gameObject.transform);
             spawned_prefab.name = _name;
-            spawned_resources.Add(new KeyValuePair<GameObject, Transform>(_prefab, spawned_prefab.transform));
+            spawned_resources.Add(new KeyValuePair<string, Transform>(_object_prefab, spawned_prefab.transform));
         }
 
         public void SpawnEnemy(GameObject _enemy_prefab, Vector3? _position=null){
@@ -438,7 +441,7 @@ namespace ExploreTogether {
             enemy = Instantiate(_enemy_prefab, enemySpawnPoint, Quaternion.identity);
             // enemy.transform.SetParent(gameObject.transform);
             enemy.name = "Enemy";
-            spawned_enemies.Add(new KeyValuePair<GameObject, Transform>(_enemy_prefab, enemy.transform));
+            spawned_enemies.Add(new KeyValuePair<string, Transform>("Prefabs/ModernMan", enemy.transform));
         }
 
         public List<GeneratedNodeSerializable> ExportMaze(){
@@ -515,7 +518,7 @@ namespace ExploreTogether {
 
         public List<MazeSpawnedObjectSerializable> ExportSpawnedEnemies(){
             List<MazeSpawnedObjectSerializable> export_spawned_enemies = new List<MazeSpawnedObjectSerializable>();
-            foreach(KeyValuePair<GameObject, Transform> spawned_enemy in spawned_enemies){
+            foreach(KeyValuePair<string, Transform> spawned_enemy in spawned_enemies){
                 export_spawned_enemies.Add(new MazeSpawnedObjectSerializable(spawned_enemy.Key, spawned_enemy.Value.position));
             }
             return export_spawned_enemies;
@@ -527,14 +530,15 @@ namespace ExploreTogether {
             }
             manager.map.GetComponent<Maze>().spawned_enemies.Clear();
             for(int i=0;i<_load_spawned_enemies.Count;i++){
-                SpawnEnemy(_load_spawned_enemies[i].object_prefab, _load_spawned_enemies[i].maze_position);
+                GameObject _enemy_prefab = Resources.Load(_load_spawned_enemies[i].object_prefab, typeof(GameObject)) as GameObject;
+                SpawnEnemy(_enemy_prefab, _load_spawned_enemies[i].maze_position);
             }
             return true;
         }
 
         public List<MazeSpawnedObjectSerializable> ExportSpawnedResources(){
             List<MazeSpawnedObjectSerializable> export_spawned_resources = new List<MazeSpawnedObjectSerializable>();
-            foreach(KeyValuePair<GameObject, Transform> spawned_resource in spawned_resources){
+            foreach(KeyValuePair<string, Transform> spawned_resource in spawned_resources){
                 export_spawned_resources.Add(new MazeSpawnedObjectSerializable(spawned_resource.Key, spawned_resource.Value.position));
             }
             return export_spawned_resources;
@@ -542,12 +546,12 @@ namespace ExploreTogether {
 
         public bool ImportSavedResources(List<MazeSpawnedObjectSerializable> _load_spawned_resources){
             if(_load_spawned_resources==null || _load_spawned_resources.Count==0){
-                Debug.LogError("Failed cunt");
+                Debug.LogError("Failed to import saved resources");
                 return false;
             }
             manager.map.GetComponent<Maze>().spawned_resources.Clear();
             for(int i=0;i<_load_spawned_resources.Count;i++){
-                SpawnResourcePosition(_load_spawned_resources[i].object_prefab, _load_spawned_resources[i].maze_position, _load_spawned_resources[i].object_prefab.name);
+                SpawnResourcePosition(_load_spawned_resources[i].object_prefab, _load_spawned_resources[i].maze_position, "Imported Resource");
             }
             return true;
         }
@@ -565,7 +569,7 @@ namespace ExploreTogether {
         }
 
         public bool AddSpawnedItem(int _item_id, Vector3 _drop_position){
-            if(_item_id==null || _drop_position==null){
+            if(_item_id==-1 || _drop_position==null){
                 Debug.LogError("Invalid item add attempt");
                 return false;
             }

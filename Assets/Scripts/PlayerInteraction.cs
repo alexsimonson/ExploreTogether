@@ -11,7 +11,7 @@ namespace ExploreTogether {
         private GameObject interactionText;
         public List<Item> itemInteraction;  // temporary to avoid functionality loss
         Manager manager;
-        public GameObject camera;
+        public GameObject playerCamera;
 
         void Start(){
             // maybe this should be inside of the manager?
@@ -39,8 +39,8 @@ namespace ExploreTogether {
 
         private void InteractRaycast() {
             RaycastHit hit;
-            if (camera != null) {
-                if (Physics.Raycast(camera.transform.position, camera.transform.forward, out hit, 2)) {
+            if (playerCamera != null) {
+                if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out hit, 2)) {
                     Transform giveInteractionTo = IsInLayerRecursively(hit.transform, 7);
                     if (giveInteractionTo!=null) {
                         GiveInteractWith(giveInteractionTo.gameObject);

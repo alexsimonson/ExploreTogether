@@ -47,7 +47,6 @@ namespace ExploreTogether{
 
         private void Awake(){
             manager = GameObject.Find("Manager").GetComponent<Manager>();
-            Debug.Log("Type of thing: " + MainMenuPanel.gameObject.name);
             // start all Panel except MainMenu hidden
 
             // Add listeners for Main Menu UI elements
@@ -111,7 +110,7 @@ namespace ExploreTogether{
             }
             // character name is ok
             CharacterData character_data = ScriptableObject.CreateInstance("CharacterData") as CharacterData;
-            character_data.name = sanitized_name;
+            character_data.character_name = sanitized_name;
             character_data.game_mode = (GameMode.Mode)GameModeDropdown.value;
             character_data.health = 100;
             character_data.experience = 0;
@@ -139,7 +138,7 @@ namespace ExploreTogether{
         }
 
         bool SaveCharacterData(CharacterData _character_data, bool isNew=false){
-            string filePath = CreateCharacterSaveFileName(_character_data.name, true);
+            string filePath = CreateCharacterSaveFileName(_character_data.character_name, true);
             if(File.Exists(filePath)==true && isNew){
                 Debug.LogError("Save file already exists.  Preventing overwrite on new character.");
                 return false;
@@ -283,7 +282,7 @@ namespace ExploreTogether{
 
         void StartGame(CharacterData chosenCharacterData){
             Debug.Log("This should launch the game with player data");
-            Debug.Log("TESTING USE OF NAME: " + chosenCharacterData.name);
+            Debug.Log("TESTING USE OF NAME: " + chosenCharacterData.character_name);
             Debug.Log("chosen char data: " + JsonUtility.ToJson(chosenCharacterData));
             manager.chosen_character_data = chosenCharacterData;
             // eventually this should be changed so that we setup an enum or something for mode types, and use that for both the dropdown and this...

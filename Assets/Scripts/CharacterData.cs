@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace ExploreTogether{
     [CreateAssetMenu(fileName = "CharacterData", menuName = "Character/CharacterData")]
     public class CharacterData : ScriptableObject{
-        public string name;
+        public string character_name;
         public GameMode.Mode game_mode;
         public Vector3 position;
         public float yRotation;

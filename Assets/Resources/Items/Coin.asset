@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8bc08a7321d1d804ebb08eea32645b55, type: 3}
-  m_Name: Gold
+  m_Name: Coin
   m_EditorClassIdentifier: 
   id: 1
   name: 
