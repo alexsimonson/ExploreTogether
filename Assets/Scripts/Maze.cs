@@ -519,7 +519,7 @@ namespace ExploreTogether {
         public List<MazeSpawnedObjectSerializable> ExportSpawnedEnemies(){
             List<MazeSpawnedObjectSerializable> export_spawned_enemies = new List<MazeSpawnedObjectSerializable>();
             foreach(KeyValuePair<string, Transform> spawned_enemy in spawned_enemies){
-                export_spawned_enemies.Add(new MazeSpawnedObjectSerializable(spawned_enemy.Key, spawned_enemy.Value.position));
+                export_spawned_enemies.Add(new MazeSpawnedObjectSerializable(spawned_enemy.Key, spawned_enemy.Value.position, spawned_enemy.Value.gameObject.name));
             }
             return export_spawned_enemies;
         }
@@ -539,7 +539,7 @@ namespace ExploreTogether {
         public List<MazeSpawnedObjectSerializable> ExportSpawnedResources(){
             List<MazeSpawnedObjectSerializable> export_spawned_resources = new List<MazeSpawnedObjectSerializable>();
             foreach(KeyValuePair<string, Transform> spawned_resource in spawned_resources){
-                export_spawned_resources.Add(new MazeSpawnedObjectSerializable(spawned_resource.Key, spawned_resource.Value.position));
+                export_spawned_resources.Add(new MazeSpawnedObjectSerializable(spawned_resource.Key, spawned_resource.Value.position, spawned_resource.Value.gameObject.name));
             }
             return export_spawned_resources;
         }
@@ -551,7 +551,7 @@ namespace ExploreTogether {
             }
             manager.map.GetComponent<Maze>().spawned_resources.Clear();
             for(int i=0;i<_load_spawned_resources.Count;i++){
-                SpawnResourcePosition(_load_spawned_resources[i].object_prefab, _load_spawned_resources[i].maze_position, "Imported Resource");
+                SpawnResourcePosition(_load_spawned_resources[i].object_prefab, _load_spawned_resources[i].maze_position, _load_spawned_resources[i].object_name);
             }
             return true;
         }

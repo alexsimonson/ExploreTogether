@@ -502,7 +502,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interactWith: {fileID: 0}
   itemInteraction: []
-  camera: {fileID: 86083475107608459}
+  playerCamera: {fileID: 86083475107608459}
 --- !u!114 &3076970631314084794
 MonoBehaviour:
   m_ObjectHideFlags: 0
