@@ -173,7 +173,8 @@ namespace ExploreTogether {
             hud.transform.GetChild(2).gameObject.SetActive(false);
             hud.transform.GetChild(7).gameObject.SetActive(false);
             hud.transform.GetChild(8).gameObject.SetActive(false);
-            hud.transform.GetChild(13).gameObject.SetActive(false);
+            hud.transform.GetChild(13).gameObject.GetComponent<MainMenuLogicUI>().SwitchPanel(null);
+            // hud.transform.GetChild(13).gameObject.SetActive(false); // THIS CAN NEVER BE INACTIVE OR SHIT BREAKS
             if(_state==GameState.Dead){
                 // show the death panel
                 hud.transform.GetChild(2).gameObject.SetActive(true);
@@ -188,7 +189,6 @@ namespace ExploreTogether {
             }else if(_state==GameState.Menu){
                 Debug.Log("Handle main menu");
                 // show the MainMenuCanvasContainer
-                hud.transform.GetChild(13).gameObject.SetActive(true);
                 hud.transform.GetChild(13).gameObject.GetComponent<MainMenuLogicUI>().InitializeMainMenuPanels();
             }
         }

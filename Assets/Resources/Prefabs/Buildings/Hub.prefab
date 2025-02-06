@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5724834096668955788}
   m_Layer: 3
   m_Name: BuildingContainer
-  m_TagString: Untagged
+  m_TagString: essential
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -51,7 +51,7 @@ GameObject:
   - component: {fileID: 5640490115452093526}
   m_Layer: 0
   m_Name: Cube (4)
-  m_TagString: Untagged
+  m_TagString: essential
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -148,7 +148,7 @@ GameObject:
   - component: {fileID: 5640490116625695359}
   m_Layer: 0
   m_Name: Cube
-  m_TagString: Untagged
+  m_TagString: essential
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -245,7 +245,7 @@ GameObject:
   - component: {fileID: 5640490116681034556}
   m_Layer: 0
   m_Name: Cube (2)
-  m_TagString: Untagged
+  m_TagString: essential
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -342,7 +342,7 @@ GameObject:
   - component: {fileID: 5640490116817071684}
   m_Layer: 3
   m_Name: Hub
-  m_TagString: Untagged
+  m_TagString: essential
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 40
@@ -442,7 +442,7 @@ GameObject:
   - component: {fileID: 5640490116851541301}
   m_Layer: 0
   m_Name: Cube (3)
-  m_TagString: Untagged
+  m_TagString: essential
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -535,6 +535,10 @@ PrefabInstance:
     - target: {fileID: 5892147812065948267, guid: e5cf613c0e5ec5a4c9aa148ac8edd518, type: 3}
       propertyPath: m_Name
       value: DungeonEntrance
+      objectReference: {fileID: 0}
+    - target: {fileID: 5892147812065948267, guid: e5cf613c0e5ec5a4c9aa148ac8edd518, type: 3}
+      propertyPath: m_TagString
+      value: essential
       objectReference: {fileID: 0}
     - target: {fileID: 7959738623148645021, guid: e5cf613c0e5ec5a4c9aa148ac8edd518, type: 3}
       propertyPath: m_RootOrder
@@ -662,6 +666,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Storage
       objectReference: {fileID: 0}
+    - target: {fileID: 8008905546502474104, guid: a79fcce40042b8148b38c86ccc3bd249, type: 3}
+      propertyPath: m_TagString
+      value: essential
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a79fcce40042b8148b38c86ccc3bd249, type: 3}
 --- !u!4 &2300728160582933871 stripped
@@ -735,6 +743,10 @@ PrefabInstance:
     - target: {fileID: 7711685710632532350, guid: b9b1c2d43ac599a4192467e82f37ee58, type: 3}
       propertyPath: m_Layer
       value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 7711685710632532350, guid: b9b1c2d43ac599a4192467e82f37ee58, type: 3}
+      propertyPath: m_TagString
+      value: essential
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b9b1c2d43ac599a4192467e82f37ee58, type: 3}

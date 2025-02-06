@@ -73,7 +73,7 @@ namespace ExploreTogether{
             SwitchPanel(MainMenuPanel);
         }
 
-        void SwitchPanel(RectTransform visiblePanel){
+        public void SwitchPanel(RectTransform visiblePanel){
             // given all available Panel options, show the one that is passed in
             MainMenuPanel.gameObject.SetActive(false);
             NewPanel.gameObject.SetActive(false);
@@ -289,7 +289,7 @@ namespace ExploreTogether{
             // it's probably already setup...
             manager.lobby_mode = chosenCharacterData.game_mode;
             manager.game_mode = manager.LoadGameMode();
-            manager.game_mode.SpawnMap();
+            manager.game_mode.SpawnMap(true);
             // manager.player.transform.position = chosenCharacterData.position;
             SwitchPanel(null);
         }

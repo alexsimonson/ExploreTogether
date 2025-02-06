@@ -11,7 +11,7 @@ namespace ExploreTogether {
         GameObject[] GetPlayerInventoryBackup();
         GameObject[] GetPlayerGearBackup();
         void ProgressGameMode();
-        void SpawnMap();
+        void SpawnMap(bool isLoading=false);
         List<KeyValuePair<string, int>> GetScoreData();
         int GetUnspentScore();
     }

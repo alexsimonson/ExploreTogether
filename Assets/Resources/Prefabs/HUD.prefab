@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1078694687008750581}
   m_Layer: 5
   m_Name: Handle
-  m_TagString: Untagged
+  m_TagString: essential
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -89,7 +89,7 @@ GameObject:
   - component: {fileID: 1192796726827774371}
   m_Layer: 5
   m_Name: Item Label
-  m_TagString: Untagged
+  m_TagString: essential
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -222,7 +222,7 @@ GameObject:
   - component: {fileID: 2196960903170071363}
   m_Layer: 5
   m_Name: Sliding Area
-  m_TagString: Untagged
+  m_TagString: essential
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -260,7 +260,7 @@ GameObject:
   - component: {fileID: 4188977568827888988}
   m_Layer: 5
   m_Name: HardcoreToggle
-  m_TagString: Untagged
+  m_TagString: essential
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -349,7 +349,7 @@ GameObject:
   - component: {fileID: 2529940041009112861}
   m_Layer: 5
   m_Name: Scroll View
-  m_TagString: Untagged
+  m_TagString: essential
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -458,7 +458,7 @@ GameObject:
   - component: {fileID: 1941919356323820805}
   m_Layer: 5
   m_Name: Text (TMP)
-  m_TagString: Untagged
+  m_TagString: essential
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -593,7 +593,7 @@ GameObject:
   - component: {fileID: 5095734554917806103}
   m_Layer: 5
   m_Name: Text (TMP)
-  m_TagString: Untagged
+  m_TagString: essential
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -728,7 +728,7 @@ GameObject:
   - component: {fileID: 6467629443714777295}
   m_Layer: 5
   m_Name: Handle
-  m_TagString: Untagged
+  m_TagString: essential
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -805,7 +805,7 @@ GameObject:
   - component: {fileID: 4459192320209235247}
   m_Layer: 5
   m_Name: Viewport
-  m_TagString: Untagged
+  m_TagString: essential
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -893,7 +893,7 @@ GameObject:
   - component: {fileID: 2232419603704382975}
   m_Layer: 5
   m_Name: Content
-  m_TagString: Untagged
+  m_TagString: essential
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -931,7 +931,7 @@ GameObject:
   - component: {fileID: 360990707413828831}
   m_Layer: 5
   m_Name: Arrow
-  m_TagString: Untagged
+  m_TagString: essential
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1007,7 +1007,7 @@ GameObject:
   - component: {fileID: 1123205628365973212}
   m_Layer: 5
   m_Name: Checkmark
-  m_TagString: Untagged
+  m_TagString: essential
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1081,7 +1081,7 @@ GameObject:
   - component: {fileID: 8634171359213319981}
   m_Layer: 5
   m_Name: Sliding Area
-  m_TagString: Untagged
+  m_TagString: essential
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1120,7 +1120,7 @@ GameObject:
   - component: {fileID: 8177303488085306123}
   m_Layer: 5
   m_Name: Text (TMP)
-  m_TagString: Untagged
+  m_TagString: essential
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1335,7 +1335,7 @@ GameObject:
   - component: {fileID: 7329917761118269698}
   m_Layer: 5
   m_Name: Item Checkmark
-  m_TagString: Untagged
+  m_TagString: essential
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1412,7 +1412,7 @@ GameObject:
   - component: {fileID: 2550861237335608960}
   m_Layer: 5
   m_Name: Placeholder
-  m_TagString: Untagged
+  m_TagString: essential
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1565,7 +1565,7 @@ GameObject:
   - component: {fileID: 2363926921802361474}
   m_Layer: 5
   m_Name: Content
-  m_TagString: Untagged
+  m_TagString: essential
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1603,7 +1603,7 @@ GameObject:
   - component: {fileID: 7063119150778663169}
   m_Layer: 5
   m_Name: Sliding Area
-  m_TagString: Untagged
+  m_TagString: essential
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1642,7 +1642,7 @@ GameObject:
   - component: {fileID: 2664662874185430622}
   m_Layer: 5
   m_Name: Label
-  m_TagString: Untagged
+  m_TagString: essential
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1778,7 +1778,7 @@ GameObject:
   - component: {fileID: 1135219978312694499}
   m_Layer: 5
   m_Name: Scrollbar Vertical
-  m_TagString: Untagged
+  m_TagString: essential
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1886,7 +1886,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 9098656456526754527}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.61
+  m_Size: 0.60999995
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -2026,7 +2026,7 @@ GameObject:
   - component: {fileID: 6144959427585868286}
   m_Layer: 5
   m_Name: Background
-  m_TagString: Untagged
+  m_TagString: essential
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2184,7 +2184,7 @@ GameObject:
   - component: {fileID: 4557969809639554494}
   m_Layer: 5
   m_Name: LoadButton
-  m_TagString: Untagged
+  m_TagString: essential
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2305,7 +2305,7 @@ GameObject:
   - component: {fileID: 6211095949882713466}
   m_Layer: 5
   m_Name: Text (TMP)
-  m_TagString: Untagged
+  m_TagString: essential
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2441,7 +2441,7 @@ GameObject:
   - component: {fileID: 2726479521632838422}
   m_Layer: 5
   m_Name: StartButton
-  m_TagString: Untagged
+  m_TagString: essential
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2562,7 +2562,7 @@ GameObject:
   - component: {fileID: 7467301518304051052}
   m_Layer: 5
   m_Name: Text (TMP)
-  m_TagString: Untagged
+  m_TagString: essential
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2696,7 +2696,7 @@ GameObject:
   - component: {fileID: 7740870928902783019}
   m_Layer: 5
   m_Name: Item
-  m_TagString: Untagged
+  m_TagString: essential
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2880,7 +2880,7 @@ GameObject:
   - component: {fileID: 5369148243184882474}
   m_Layer: 5
   m_Name: Handle Slide Area
-  m_TagString: Untagged
+  m_TagString: essential
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2919,7 +2919,7 @@ GameObject:
   - component: {fileID: 1530972812076134037}
   m_Layer: 5
   m_Name: Handle
-  m_TagString: Untagged
+  m_TagString: essential
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2996,7 +2996,7 @@ GameObject:
   - component: {fileID: 831492136802320072}
   m_Layer: 5
   m_Name: BackButton
-  m_TagString: Untagged
+  m_TagString: essential
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3116,7 +3116,7 @@ GameObject:
   - component: {fileID: 6276607237508077004}
   m_Layer: 5
   m_Name: Text Area
-  m_TagString: Untagged
+  m_TagString: essential
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3292,7 +3292,7 @@ GameObject:
   - component: {fileID: 6692202149180613156}
   m_Layer: 5
   m_Name: Handle
-  m_TagString: Untagged
+  m_TagString: essential
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3369,7 +3369,7 @@ GameObject:
   - component: {fileID: 6737677366286209165}
   m_Layer: 5
   m_Name: QuitButton
-  m_TagString: Untagged
+  m_TagString: essential
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3571,7 +3571,7 @@ GameObject:
   - component: {fileID: 4722335929743809822}
   m_Layer: 5
   m_Name: Scrollbar Vertical
-  m_TagString: Untagged
+  m_TagString: essential
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3678,7 +3678,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1530972812076134037}
   m_HandleRect: {fileID: 4757745649719728466}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -3697,7 +3697,7 @@ GameObject:
   - component: {fileID: 64177919019286192}
   m_Layer: 5
   m_Name: Text (TMP)
-  m_TagString: Untagged
+  m_TagString: essential
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3922,7 +3922,7 @@ GameObject:
   - component: {fileID: 1011415779963761719}
   m_Layer: 5
   m_Name: Text (TMP)
-  m_TagString: Untagged
+  m_TagString: essential
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4058,7 +4058,7 @@ GameObject:
   - component: {fileID: 2083115160258900343}
   m_Layer: 5
   m_Name: OptionsButton
-  m_TagString: Untagged
+  m_TagString: essential
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4179,7 +4179,7 @@ GameObject:
   - component: {fileID: 6373776175337616133}
   m_Layer: 5
   m_Name: Panel
-  m_TagString: Untagged
+  m_TagString: essential
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4260,7 +4260,7 @@ GameObject:
   - component: {fileID: 1321046834227879260}
   m_Layer: 5
   m_Name: Sliding Area
-  m_TagString: Untagged
+  m_TagString: essential
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4380,7 +4380,7 @@ GameObject:
   - component: {fileID: 1407833901000706384}
   m_Layer: 5
   m_Name: Viewport
-  m_TagString: Untagged
+  m_TagString: essential
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4470,7 +4470,7 @@ GameObject:
   - component: {fileID: 3157355663039957999}
   m_Layer: 5
   m_Name: Checkmark
-  m_TagString: Untagged
+  m_TagString: essential
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4616,7 +4616,7 @@ GameObject:
   - component: {fileID: 1154903119118819300}
   m_Layer: 5
   m_Name: Fill
-  m_TagString: Untagged
+  m_TagString: essential
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4692,7 +4692,7 @@ GameObject:
   - component: {fileID: 8366625118156297497}
   m_Layer: 5
   m_Name: TextDropdown (TMP)
-  m_TagString: Untagged
+  m_TagString: essential
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4828,7 +4828,7 @@ GameObject:
   - component: {fileID: 5485192763672971117}
   m_Layer: 5
   m_Name: NewBackButton
-  m_TagString: Untagged
+  m_TagString: essential
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4950,7 +4950,7 @@ GameObject:
   - component: {fileID: 3870595688465706493}
   m_Layer: 5
   m_Name: CharacterNameInputField (TMP)
-  m_TagString: Untagged
+  m_TagString: essential
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5125,7 +5125,7 @@ GameObject:
   - component: {fileID: 9101548275900802117}
   m_Layer: 5
   m_Name: Text (TMP)
-  m_TagString: Untagged
+  m_TagString: essential
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5260,7 +5260,7 @@ GameObject:
   - component: {fileID: 5706149359621512475}
   m_Layer: 5
   m_Name: Handle
-  m_TagString: Untagged
+  m_TagString: essential
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5413,7 +5413,7 @@ GameObject:
   - component: {fileID: 9027601836451126778}
   m_Layer: 5
   m_Name: TestToggle
-  m_TagString: Untagged
+  m_TagString: essential
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5501,7 +5501,7 @@ GameObject:
   - component: {fileID: 5595536610590779017}
   m_Layer: 5
   m_Name: Label
-  m_TagString: Untagged
+  m_TagString: essential
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5659,7 +5659,7 @@ GameObject:
   - component: {fileID: 4311748220420911125}
   m_Layer: 5
   m_Name: Scrollbar Horizontal
-  m_TagString: Untagged
+  m_TagString: essential
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5767,7 +5767,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 6841328650728945477}
   m_Direction: 0
   m_Value: 1
-  m_Size: 1
+  m_Size: 0.99999994
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -5785,7 +5785,7 @@ GameObject:
   - component: {fileID: 4187049529204225228}
   m_Layer: 5
   m_Name: Text (TMP)
-  m_TagString: Untagged
+  m_TagString: essential
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5920,7 +5920,7 @@ GameObject:
   - component: {fileID: 989535631307083946}
   m_Layer: 5
   m_Name: TextCharName (TMP)
-  m_TagString: Untagged
+  m_TagString: essential
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6177,7 +6177,7 @@ GameObject:
   - component: {fileID: 428933530123248255}
   m_Layer: 5
   m_Name: SelectedCharacterText (TMP)
-  m_TagString: Untagged
+  m_TagString: essential
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6313,7 +6313,7 @@ GameObject:
   - component: {fileID: 5437138893588016983}
   m_Layer: 5
   m_Name: Template
-  m_TagString: Untagged
+  m_TagString: essential
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6421,7 +6421,7 @@ GameObject:
   - component: {fileID: 8048480167065046991}
   m_Layer: 5
   m_Name: Item Background
-  m_TagString: Untagged
+  m_TagString: essential
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6497,7 +6497,7 @@ GameObject:
   - component: {fileID: 208015214989138900}
   m_Layer: 5
   m_Name: Label
-  m_TagString: Untagged
+  m_TagString: essential
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6578,7 +6578,7 @@ GameObject:
   - component: {fileID: 337959508570227750}
   m_Layer: 5
   m_Name: LoadButton
-  m_TagString: Untagged
+  m_TagString: essential
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6700,7 +6700,7 @@ GameObject:
   - component: {fileID: 4090855350217826796}
   m_Layer: 5
   m_Name: Viewport
-  m_TagString: Untagged
+  m_TagString: essential
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6790,7 +6790,7 @@ GameObject:
   - component: {fileID: 6457449974680855810}
   m_Layer: 5
   m_Name: Text (TMP)
-  m_TagString: Untagged
+  m_TagString: essential
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7006,7 +7006,7 @@ GameObject:
   - component: {fileID: 8767682712592010773}
   m_Layer: 5
   m_Name: DeleteButton
-  m_TagString: Untagged
+  m_TagString: essential
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7128,7 +7128,7 @@ GameObject:
   - component: {fileID: 3870983881410233890}
   m_Layer: 5
   m_Name: OptionsBackButton
-  m_TagString: Untagged
+  m_TagString: essential
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7250,7 +7250,7 @@ GameObject:
   - component: {fileID: 3426282540930956912}
   m_Layer: 5
   m_Name: Scrollbar Horizontal
-  m_TagString: Untagged
+  m_TagString: essential
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7358,7 +7358,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 796644558387218497}
   m_Direction: 0
   m_Value: 1
-  m_Size: 1
+  m_Size: 0.99999994
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -7377,7 +7377,7 @@ GameObject:
   - component: {fileID: 7871620085436102838}
   m_Layer: 5
   m_Name: Scroll View
-  m_TagString: Untagged
+  m_TagString: essential
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7486,7 +7486,7 @@ GameObject:
   - component: {fileID: 6296349450494223766}
   m_Layer: 5
   m_Name: Background
-  m_TagString: Untagged
+  m_TagString: essential
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7563,7 +7563,7 @@ GameObject:
   - component: {fileID: 6517525482090018303}
   m_Layer: 5
   m_Name: NewButton
-  m_TagString: Untagged
+  m_TagString: essential
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7684,7 +7684,7 @@ GameObject:
   - component: {fileID: 950529897692764695}
   m_Layer: 5
   m_Name: Text (TMP)
-  m_TagString: Untagged
+  m_TagString: essential
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7820,7 +7820,7 @@ GameObject:
   - component: {fileID: 685779363162894555}
   m_Layer: 5
   m_Name: Scrollbar
-  m_TagString: Untagged
+  m_TagString: essential
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7946,7 +7946,7 @@ GameObject:
   - component: {fileID: 7538916110614283580}
   m_Layer: 5
   m_Name: Background
-  m_TagString: Untagged
+  m_TagString: essential
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -8023,7 +8023,7 @@ GameObject:
   - component: {fileID: 6842018925440478077}
   m_Layer: 5
   m_Name: Handle
-  m_TagString: Untagged
+  m_TagString: essential
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -8098,7 +8098,7 @@ GameObject:
   - component: {fileID: 1489981640321423351}
   m_Layer: 5
   m_Name: VolumeSlider
-  m_TagString: Untagged
+  m_TagString: essential
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -9169,7 +9169,7 @@ GameObject:
   - component: {fileID: 8039464034024628736}
   m_Layer: 5
   m_Name: Fill Area
-  m_TagString: Untagged
+  m_TagString: essential
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -9206,7 +9206,7 @@ GameObject:
   - component: {fileID: 302324655370663513}
   m_Layer: 5
   m_Name: Sliding Area
-  m_TagString: Untagged
+  m_TagString: essential
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -9326,7 +9326,7 @@ GameObject:
   - component: {fileID: 6787240867396609834}
   m_Layer: 5
   m_Name: GameModeDropdown
-  m_TagString: Untagged
+  m_TagString: essential
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -9461,7 +9461,7 @@ GameObject:
   - component: {fileID: 6323884759814598061}
   m_Layer: 5
   m_Name: Content
-  m_TagString: Untagged
+  m_TagString: essential
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -9581,7 +9581,7 @@ GameObject:
   - component: {fileID: 6972596390735763261}
   m_Layer: 5
   m_Name: Text
-  m_TagString: Untagged
+  m_TagString: essential
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -9734,6 +9734,10 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3089952267766757159, guid: 526f9528917e3684da15971eb2e3bad8, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5422235732780568839, guid: 526f9528917e3684da15971eb2e3bad8, type: 3}
       propertyPath: m_IsActive
       value: 1
@@ -9808,7 +9812,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9197403094658777516, guid: 526f9528917e3684da15971eb2e3bad8, type: 3}
       propertyPath: m_Size
-      value: 1
+      value: 0.99999994
       objectReference: {fileID: 0}
     - target: {fileID: 9197403094658777516, guid: 526f9528917e3684da15971eb2e3bad8, type: 3}
       propertyPath: m_Value

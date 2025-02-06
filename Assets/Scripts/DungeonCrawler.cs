@@ -73,21 +73,28 @@ namespace ExploreTogether {
             // DetectWaveEnd();
         }
 
-        public override void SpawnMap(){
+        public override void SpawnMap(bool isLoading=false){
             manager.map = Instantiate(maze_generator_prefab);
             // I have no idea why I'm setting below... or how it's obtaining this correctly...
             // I'm going to "correct" it and hope for the best
             manager.map.GetComponent<Maze>().manager = manager;    // still works... so let's just do this
-            // dungeon shit
-            bool import_dun_result = manager.map.GetComponent<Maze>().ImportMaze(manager.chosen_character_data.dungeon_nodes);
-            if(import_dun_result==true){
-                Debug.Log("Properly imported maze");
-                manager.map.GetComponent<Maze>().needs_generation = false;
-                manager.player.transform.position = manager.chosen_character_data.position;
-                manager.player.transform.rotation = Quaternion.Euler(0, manager.chosen_character_data.yRotation, 0);
+            if(isLoading==true){
+                // dungeon shit
+                bool import_dun_result = manager.map.GetComponent<Maze>().ImportMaze(manager.chosen_character_data.dungeon_nodes);
+                if(import_dun_result==true){
+                    Debug.Log("Properly imported maze");
+                    manager.map.GetComponent<Maze>().needs_generation = false;
+                    manager.player.transform.position = manager.chosen_character_data.position;
+                    manager.player.transform.rotation = Quaternion.Euler(0, manager.chosen_character_data.yRotation, 0);
+                }else{
+                    // generate a new maze?
+                    Debug.Log("Failed to load maze");
+                }
             }else{
-                // generate a new maze?
-                Debug.Log("Failed to load maze");
+                // this is probably called after objective completion to spawn a new dungeon
+                manager.map.GetComponent<Maze>().needs_generation = true;
+                manager.player.transform.position = manager.playerSpawnPoint;
+                manager.player.transform.rotation = Quaternion.Euler(0, 0, 0);
             }
         }
 
@@ -159,7 +166,7 @@ namespace ExploreTogether {
             // pop the transition panel
             // manager.hud.transform.GetChild(8).gameObject.SetActive(true);
             manager.DestroyNonEssentialGameObjects();
-            manager.Setup();
+            SpawnMap();
             // manager.player.GetComponent<PlayerLook>().AllowLook();
             // manager.player.GetComponent<PlayerMovement>().AllowMovement();
             EndRound();

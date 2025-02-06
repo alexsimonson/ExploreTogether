@@ -16,6 +16,6 @@ MonoBehaviour:
   name: Coin
   description: Money, Currency, Paper
   weight: 0
-  stack: 0
+  stack: 1
   max_stack_size: 1337
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: b5c696aa0b53a0646bd9dd3c490b9c67, type: 3}

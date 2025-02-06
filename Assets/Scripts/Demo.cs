@@ -67,7 +67,7 @@ namespace ExploreTogether {
             return;
         }
 
-        public override void SpawnMap(){
+        public override void SpawnMap(bool isLoading=false){
             manager.map = Instantiate(maze_generator_prefab);
             manager.map.GetComponent<Map>().manager = manager;
         }

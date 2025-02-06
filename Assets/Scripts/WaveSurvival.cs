@@ -107,7 +107,7 @@ namespace ExploreTogether {
             }
         }
 
-        public override void SpawnMap(){
+        public override void SpawnMap(bool isLoading=false){
             // we should just implement the basic wave survival scenario
             manager.map = Instantiate(maze_generator_prefab);
             // handle the navmesh now
