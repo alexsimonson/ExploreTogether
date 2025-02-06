@@ -110,6 +110,10 @@ namespace ExploreTogether {
         public override void SpawnMap(bool isLoading=false){
             // we should just implement the basic wave survival scenario
             manager.map = Instantiate(maze_generator_prefab);
+            // I have no idea why I'm setting below... or how it's obtaining this correctly...
+            // I'm going to "correct" it and hope for the best
+            manager.player.transform.position = manager.playerSpawnPoint;
+            manager.player.transform.rotation = Quaternion.Euler(0, 0, 0);
             // handle the navmesh now
             // manager.map.GetComponent<Maze>().GetArenaPieces();
             // manager.map.GetComponent<Maze>().BuildMapNavigation();

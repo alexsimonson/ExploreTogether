@@ -96,8 +96,8 @@ namespace ExploreTogether {
         }
 
         public GameMode LoadGameMode(){
+            Debug.Log("LOADING GAME MODE: " + lobby_mode.ToString());
             if(lobby_mode==GameMode.Mode.Demo){
-                Debug.Log("LOADING DEMO GAME MODE");
                 return ScriptableObject.CreateInstance("Demo") as GameMode;
             }else if(lobby_mode==GameMode.Mode.DungeonCrawler){
                 return ScriptableObject.CreateInstance("DungeonCrawler") as GameMode;
