@@ -137,7 +137,7 @@ namespace ExploreTogether{
             return loaded_data;
         }
 
-        bool SaveCharacterData(CharacterData _character_data, bool isNew=false){
+        public bool SaveCharacterData(CharacterData _character_data, bool isNew=false){
             string filePath = CreateCharacterSaveFileName(_character_data.character_name, true);
             if(File.Exists(filePath)==true && isNew){
                 Debug.LogError("Save file already exists.  Preventing overwrite on new character.");
@@ -364,21 +364,6 @@ namespace ExploreTogether{
 
         private void OnButtonClick(TMP_Text pressed){
             pressed.text = "Button Clicked!";
-        }
-
-        void OnApplicationQuit(){
-            // this seems to work for editor and quit button... probably also works for X button
-            Debug.Log("ON APPLICATION QUIT TESTING");
-            manager.chosen_character_data.gear = manager.player_gear.ExportGear();
-            manager.chosen_character_data.inventory = manager.player_inventory.ExportInventory();
-            manager.chosen_character_data.dungeon_nodes = manager.map.GetComponent<Maze>().ExportMaze();    // this should probably be dependent on game mode?
-            manager.chosen_character_data.spawned_items = manager.map.GetComponent<Maze>().ExportSpawnedItems();
-            manager.chosen_character_data.enemy_positions = manager.map.GetComponent<Maze>().ExportSpawnedEnemies();
-            manager.chosen_character_data.spawned_resources = manager.map.GetComponent<Maze>().ExportSpawnedResources();
-            manager.chosen_character_data.position = manager.player.transform.position;
-            manager.chosen_character_data.yRotation = manager.player.transform.eulerAngles.y;
-            // get latest character data and save
-            SaveCharacterData(manager.chosen_character_data);
         }
     }
 

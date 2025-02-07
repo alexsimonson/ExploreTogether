@@ -30,7 +30,7 @@ namespace ExploreTogether {
 		public virtual void Death(bool shouldDestroy=false){
 			HandleScore();
 			GetComponent<GenericNPC>().SetState(GenericNPC.State.Death);
-			manager.map.GetComponent<Maze>().FindAndRemoveEnemy(gameObject.transform);
+			manager.game_mode.FindAndRemoveEnemy(gameObject.transform);
 			if(shouldDestroy) Destroy(gameObject);
 		}
 

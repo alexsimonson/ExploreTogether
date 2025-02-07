@@ -89,7 +89,7 @@ namespace ExploreTogether {
                 Vector3 drop_position = manager.player.transform.position;
                 GameObject dropped_item = Instantiate(Resources.Load("Prefabs/Item", typeof(GameObject)) as GameObject, drop_position, Quaternion.identity);
                 dropped_item.GetComponent<ItemSpawn>().item = removedItem;
-                manager.map.GetComponent<Maze>().AddSpawnedItem(dropped_item.GetComponent<ItemSpawn>().item.id, drop_position);
+                manager.game_mode.AddSpawnedItem(dropped_item.GetComponent<ItemSpawn>().item.id, drop_position);
             }
             if(isStorage){
                 onStorageChanged.Raise(null, item_slot);

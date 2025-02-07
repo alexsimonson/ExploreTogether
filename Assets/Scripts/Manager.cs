@@ -204,5 +204,20 @@ namespace ExploreTogether {
             Debug.Log("Transition period ending.");
             transition_period = false;
         }
+
+        void OnApplicationQuit(){
+            // this seems to work for editor and quit button... probably also works for X button
+            Debug.Log("ON APPLICATION QUIT TESTING");
+            chosen_character_data.gear = player_gear.ExportGear();
+            chosen_character_data.inventory = player_inventory.ExportInventory();
+            chosen_character_data.dungeon_nodes = map.GetComponent<Maze>().ExportMaze();    // this should probably be dependent on game mode?
+            chosen_character_data.spawned_items = game_mode.ExportSpawnedItems();
+            chosen_character_data.enemy_positions = game_mode.ExportSpawnedEnemies();
+            chosen_character_data.spawned_resources = game_mode.ExportSpawnedResources();
+            chosen_character_data.position = player.transform.position;
+            chosen_character_data.yRotation = player.transform.eulerAngles.y;
+            // get latest character data and save
+            hud.transform.GetChild(13).gameObject.GetComponent<MainMenuLogicUI>().SaveCharacterData(chosen_character_data);
+        }
     }
 }
