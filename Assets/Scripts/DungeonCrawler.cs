@@ -25,12 +25,8 @@ namespace ExploreTogether {
         public Gun gun_test;
         public Item dungeon_pass;
 
-        // game mode overhaul
-        public GameObject maze_generator_prefab;
-
         public void Awake(){
             manager = GameObject.Find("Manager").GetComponent<Manager>();
-            maze_generator_prefab = Resources.Load("Prefabs/MazeGenerator", typeof(GameObject)) as GameObject;
             sword_test = Resources.Load("Items/Sword", typeof(Melee)) as Melee;
             gun_test = Resources.Load("Items/Pistol", typeof(Gun)) as Gun;
             dungeon_pass = Resources.Load("Items/Dungeon Pass", typeof(Item)) as Item;
@@ -74,7 +70,7 @@ namespace ExploreTogether {
         }
 
         public override void SpawnMap(bool isLoading=false){
-            manager.map = Instantiate(maze_generator_prefab);
+            manager.map = Instantiate(Resources.Load("Prefabs/MazeGenerator", typeof(GameObject)) as GameObject);
             // I have no idea why I'm setting below... or how it's obtaining this correctly...
             // I'm going to "correct" it and hope for the best
             manager.map.GetComponent<Maze>().manager = manager;    // still works... so let's just do this

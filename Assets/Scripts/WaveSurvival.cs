@@ -32,9 +32,6 @@ namespace ExploreTogether {
         public Magic blood_wand;
         public Magic ice_wand;
 
-        // game mode overhaul
-        public GameObject maze_generator_prefab;
-
         public void Awake(){
             enemy_prefab = Resources.Load("Prefabs/Enemy", typeof(GameObject)) as GameObject;
             manager = GameObject.Find("Manager").GetComponent<Manager>();
@@ -43,7 +40,6 @@ namespace ExploreTogether {
             dungeon_pass = Resources.Load("Items/Dungeon Pass", typeof(Item)) as Item;
             blood_wand = Resources.Load("Items/Blood Wand", typeof(Magic)) as Magic;
             ice_wand = Resources.Load("Items/Ice Wand", typeof(Magic)) as Magic;
-            maze_generator_prefab = Resources.Load("Prefabs/Arena/Arena", typeof(GameObject)) as GameObject;
         }
 
         public void Start(){
@@ -109,7 +105,7 @@ namespace ExploreTogether {
 
         public override void SpawnMap(bool isLoading=false){
             // we should just implement the basic wave survival scenario
-            manager.map = Instantiate(maze_generator_prefab);
+            manager.map = Instantiate(Resources.Load("Prefabs/Arena/Arena", typeof(GameObject)) as GameObject);
             // I have no idea why I'm setting below... or how it's obtaining this correctly...
             // I'm going to "correct" it and hope for the best
             manager.player.transform.position = manager.playerSpawnPoint;

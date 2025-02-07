@@ -23,7 +23,6 @@ namespace ExploreTogether {
             blood_wand = Resources.Load("Items/Blood Wand", typeof(Magic)) as Magic;
             ice_wand = Resources.Load("Items/Ice Wand", typeof(Magic)) as Magic;
             axe = Resources.Load("Items/Axe", typeof(Tool)) as Tool;
-            maze_generator_prefab = Resources.Load("Prefabs/Map", typeof(GameObject)) as GameObject;
         }
 
         void Start(){
@@ -68,8 +67,9 @@ namespace ExploreTogether {
         }
 
         public override void SpawnMap(bool isLoading=false){
-            manager.map = Instantiate(maze_generator_prefab);
-            manager.map.GetComponent<Map>().manager = manager;
+            // this is kinda outdated
+            // manager.map = Instantiate();
+            // manager.map.GetComponent<Map>().manager = manager;
         }
 
         public override List<KeyValuePair<string, int>> GetScoreData(){
