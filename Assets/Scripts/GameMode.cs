@@ -38,6 +38,8 @@ namespace ExploreTogether {
         private List<KeyValuePair<string, Transform>> spawned_resources = new List<KeyValuePair<string, Transform>>();
         public GameObject itemSpawn=null;
 
+        public Dictionary<string, GameObject> loaded_resources = new Dictionary<string, GameObject>();
+
         public bool SpawnItem(int _item_id, Vector3? _position=null){
             if(itemSpawn==null){
                 itemSpawn = Resources.Load("Prefabs/Item", typeof(GameObject)) as GameObject;
@@ -78,8 +80,14 @@ namespace ExploreTogether {
             return new Vector3(manager.map.GetComponent<Maze>().generated_nodes[_index].mazePosition.x * manager.map.GetComponent<Maze>().prefabSize, manager.map.GetComponent<Maze>().generated_nodes[_index].mazePosition.y * manager.map.GetComponent<Maze>().prefabSize + 1.5f, manager.map.GetComponent<Maze>().generated_nodes[_index].mazePosition.z * manager.map.GetComponent<Maze>().prefabSize);
         }
 
-        public void SpawnResource(string _object_prefab, Vector3? _position=null, string _name="spawned prefab"){
-            GameObject _resource_prefab = Resources.Load(_object_prefab, typeof(GameObject)) as GameObject;
+        public void SpawnResource(string _resource_location, Vector3? _position=null, string _name="spawned prefab"){
+            GameObject _resource_prefab;
+            if(loaded_resources.ContainsKey(_resource_location)){
+                _resource_prefab = loaded_resources[_resource_location];
+            }else{
+                _resource_prefab = Resources.Load(_resource_location, typeof(GameObject)) as GameObject;
+                loaded_resources.Add(_resource_location, _resource_prefab);
+            }
             Vector3 _resource_spawn_point;
             if(_position==null){
                 // random spawn point based on index
@@ -90,7 +98,7 @@ namespace ExploreTogether {
             GameObject spawned_prefab = Instantiate(_resource_prefab, _resource_spawn_point, Quaternion.identity);
             spawned_prefab.transform.SetParent(manager.map.transform);  // where do we instantiate this shit???
             spawned_prefab.name = _name;
-            spawned_resources.Add(new KeyValuePair<string, Transform>(_object_prefab, spawned_prefab.transform));
+            spawned_resources.Add(new KeyValuePair<string, Transform>(_resource_location, spawned_prefab.transform));
         }
 
         public void SpawnEnemy(GameObject _enemy_prefab, Vector3? _position=null, string _name="spawned_enemy_name"){
@@ -144,7 +152,13 @@ namespace ExploreTogether {
             }
             manager.game_mode.spawned_enemies.Clear();
             for(int i=0;i<_load_spawned_enemies.Count;i++){
-                GameObject _enemy_prefab = Resources.Load(_load_spawned_enemies[i].object_prefab, typeof(GameObject)) as GameObject;
+                GameObject _enemy_prefab;
+                if(loaded_resources.ContainsKey(_load_spawned_enemies[i].object_prefab)){
+                    _enemy_prefab = loaded_resources[_load_spawned_enemies[i].object_prefab];
+                }else{
+                    _enemy_prefab = Resources.Load(_load_spawned_enemies[i].object_prefab, typeof(GameObject)) as GameObject;
+                    loaded_resources.Add(_load_spawned_enemies[i].object_prefab, _enemy_prefab);
+                }
                 SpawnEnemy(_enemy_prefab, _load_spawned_enemies[i].maze_position);
             }
             return true;

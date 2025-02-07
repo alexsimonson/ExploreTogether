@@ -13,7 +13,6 @@ namespace ExploreTogether {
         int enemies_currently_spawned = 0;
         int enemies_spawned_this_round = 0;
         int enemies_eliminated_this_round = 0;
-        int spawners_this_round = 1;
         int spawners_eliminated_this_round = 0;
 
         // enemy spawners
@@ -21,36 +20,17 @@ namespace ExploreTogether {
 
         public GameObject enemy_prefab;
 
-        public Melee sword_test;
-        public Gun gun_test;
-        public Item dungeon_pass;
-
         public void Awake(){
             manager = GameObject.Find("Manager").GetComponent<Manager>();
-            sword_test = Resources.Load("Items/Sword", typeof(Melee)) as Melee;
-            gun_test = Resources.Load("Items/Pistol", typeof(Gun)) as Gun;
-            dungeon_pass = Resources.Load("Items/Dungeon Pass", typeof(Item)) as Item;
         }
 
         public void Start(){
             mode = Mode.DungeonCrawler;
         }
 
-        // I don't think this function is used within dungeon crawler
-        void DetectWaveEnd(){
-            if(spawners_eliminated_this_round!=spawners_this_round){
-                return; // game mode is not over
-            }
-            if(enemies_currently_spawned>0){
-                return; // game mode is not over
-            }
-            ProgressGameMode();
-        }
-
         public void SpawnerKilledListener(Component sender, object data){
             spawners_eliminated_this_round += 1;
             Debug.Log("spawners_eliminated_this_round: " + spawners_eliminated_this_round);
-            // DetectWaveEnd();
         }
 
         public void EnemyKilledListener(Component sender, object data){
@@ -66,7 +46,6 @@ namespace ExploreTogether {
                 int rnd_index = Random.Range(0, enemy_spawners.Length);
                 enemy_spawners[rnd_index].GetComponent<RespawnPoint>().SpawnEnemy();
             }
-            // DetectWaveEnd();
         }
 
         public override void SpawnMap(bool _isLoading=false){
@@ -97,9 +76,6 @@ namespace ExploreTogether {
 
         // Start is called before the first frame update
         public override void Initialize(){
-            // manager.player_inventory.AddItem(sword_test);
-            // manager.player_inventory.AddItem(gun_test);
-            // manager.player_inventory.AddItem(dungeon_pass);
             EndRound();
         }
 
