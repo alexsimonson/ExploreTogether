@@ -9,7 +9,7 @@ namespace ExploreTogether {
         public bool DeleteCharacterData(string _character_name){
             string filePath = CreateCharacterSaveFileName(_character_name, true);
             if(File.Exists(filePath)==false){
-                Debug.LogError("Save file doesn't exist.  Nothing to delete.");
+                Debug.LogError("Save file '" + filePath + "' doesn't exist.  Nothing to delete.");
                 return false;
             }
             File.Delete(filePath);

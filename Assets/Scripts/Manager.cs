@@ -161,6 +161,16 @@ namespace ExploreTogether {
                 GameState _state = (GameState) data;
                 SetGameState(_state);
                 HandlePanels(_state);
+                if(_state==Manager.GameState.Dead){
+                    // check if hardcore
+                    if(chosen_character_data.hardcore==true){
+                        // DELETE
+                        file.DeleteCharacterData(chosen_character_data.character_name);
+                        player_inventory.Clear();
+                        player_gear.Clear();
+                        // SetGameState(Menu);
+                    }
+                }
             }
         }
 
@@ -178,9 +188,12 @@ namespace ExploreTogether {
             hud.transform.GetChild(8).gameObject.SetActive(false);
             hud.transform.GetChild(13).gameObject.GetComponent<MainMenuLogicUI>().SwitchPanel(null);
             // hud.transform.GetChild(13).gameObject.SetActive(false); // THIS CAN NEVER BE INACTIVE OR SHIT BREAKS
-            if(_state==GameState.Dead){
+            if(_state==Manager.GameState.Dead){
                 // show the death panel
                 hud.transform.GetChild(2).gameObject.SetActive(true);
+                // hide the restart button if hardcore
+                hud.transform.GetChild(2).gameObject.GetComponent<DeathPanel>().restartButton.gameObject.SetActive(!chosen_character_data.hardcore);
+                // depending on hardcore, show certain buttons
             }else if(_state==GameState.Alive){
                 // this will be called after a transition period, set all of these to false
             }else if(_state==GameState.Win){

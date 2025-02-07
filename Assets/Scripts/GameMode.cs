@@ -216,5 +216,9 @@ namespace ExploreTogether {
             Debug.LogError("Failed to find and remove enemy");
             return false;
         }
+
+        public void DestroyGameInstance(){
+            manager.DestroyNonEssentialGameObjects();
+        }
     }
 }

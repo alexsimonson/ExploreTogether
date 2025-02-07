@@ -114,6 +114,7 @@ namespace ExploreTogether{
             // character name is ok
             CharacterData character_data = ScriptableObject.CreateInstance("CharacterData") as CharacterData;
             character_data.character_name = sanitized_name;
+            character_data.hardcore = HardcoreToggle.isOn;
             character_data.game_mode = (GameMode.Mode)GameModeDropdown.value;
             character_data.health = 100;
             character_data.experience = 0;

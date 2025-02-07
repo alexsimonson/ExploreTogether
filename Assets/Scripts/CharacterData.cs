@@ -5,6 +5,7 @@ namespace ExploreTogether{
     [CreateAssetMenu(fileName = "CharacterData", menuName = "Character/CharacterData")]
     public class CharacterData : ScriptableObject{
         public string character_name;
+        public bool hardcore;
         public GameMode.Mode game_mode;
         public Vector3 position;
         public float yRotation;

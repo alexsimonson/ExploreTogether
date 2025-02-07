@@ -29,5 +29,6 @@ namespace ExploreTogether {
         bool FindAndRemoveItem(int _item_id, Vector3 _position);
         bool AddSpawnedItem(int _item_id, Vector3 _drop_position);
         bool FindAndRemoveEnemy(Transform _remove_transform);
+        void DestroyGameInstance();
     }
 }

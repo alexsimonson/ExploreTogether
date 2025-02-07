@@ -1885,8 +1885,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 6842018925440478077}
   m_HandleRect: {fileID: 9098656456526754527}
   m_Direction: 2
-  m_Value: 1
-  m_Size: 0.60999995
+  m_Value: 1.0000002
+  m_Size: 0.6100001
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -5767,7 +5767,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 6841328650728945477}
   m_Direction: 0
   m_Value: 1
-  m_Size: 0.99999994
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -7358,7 +7358,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 796644558387218497}
   m_Direction: 0
   m_Value: 1
-  m_Size: 0.99999994
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -8271,7 +8271,7 @@ GameObject:
   - component: {fileID: 7963409244909291870}
   - component: {fileID: 7963409244909291865}
   m_Layer: 5
-  m_Name: Button (1)
+  m_Name: MainMenuButton
   m_TagString: essential
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8539,7 +8539,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Button
+  m_Text: Main Menu
 --- !u!1 &7963409245295698059
 GameObject:
   m_ObjectHideFlags: 0
@@ -8682,7 +8682,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &7963409245391575305
 RectTransform:
   m_ObjectHideFlags: 0
@@ -8756,6 +8756,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 777cce26fc07dfc4cbea8cd98574d931, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  restartButton: {fileID: 7963409245419539892}
   onGameStateChanged: {fileID: 11400000, guid: 99e6f07bed15a9945bcfc40b81c09042, type: 2}
 --- !u!1 &7963409245394511625
 GameObject:
@@ -9720,7 +9721,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2357615653279178859, guid: 526f9528917e3684da15971eb2e3bad8, type: 3}
       propertyPath: m_Value
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3043855303518097554, guid: 526f9528917e3684da15971eb2e3bad8, type: 3}
       propertyPath: m_Name
