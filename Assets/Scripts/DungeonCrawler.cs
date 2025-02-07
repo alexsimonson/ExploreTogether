@@ -69,12 +69,12 @@ namespace ExploreTogether {
             // DetectWaveEnd();
         }
 
-        public override void SpawnMap(bool isLoading=false){
+        public override void SpawnMap(bool _isLoading=false){
             manager.map = Instantiate(Resources.Load("Prefabs/MazeGenerator", typeof(GameObject)) as GameObject);
             // I have no idea why I'm setting below... or how it's obtaining this correctly...
             // I'm going to "correct" it and hope for the best
             manager.map.GetComponent<Maze>().manager = manager;    // still works... so let's just do this
-            if(isLoading==true){
+            if(_isLoading==true){
                 // dungeon shit
                 bool import_dun_result = manager.map.GetComponent<Maze>().ImportMaze(manager.chosen_character_data.dungeon_nodes);
                 if(import_dun_result==true){
@@ -82,9 +82,10 @@ namespace ExploreTogether {
                     manager.map.GetComponent<Maze>().needs_generation = false;
                     manager.player.transform.position = manager.chosen_character_data.position;
                     manager.player.transform.rotation = Quaternion.Euler(0, manager.chosen_character_data.yRotation, 0);
+                    manager.hub.GetComponent<Hub>().hub_storage.GetComponent<Storage>().storage_inventory.ImportInventory(manager.chosen_character_data.hub_storage_inventory);
                 }else{
                     // generate a new maze?
-                    Debug.Log("Failed to load maze");
+                    Debug.LogError("Failed to load maze");
                 }
             }else{
                 // this is probably called after objective completion to spawn a new dungeon

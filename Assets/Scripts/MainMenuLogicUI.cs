@@ -60,7 +60,10 @@ namespace ExploreTogether{
 
             // Add listeners for Load Character UI elements
             LoadLoadButton.GetComponent<Button>().onClick.AddListener(() => AttemptLoadGame(selected_character_name));
-            LoadDeleteButton.GetComponent<Button>().onClick.AddListener(() => DeleteCharacterData(selected_character_name));
+            LoadDeleteButton.GetComponent<Button>().onClick.AddListener(() => {
+                manager.file.DeleteCharacterData(selected_character_name);// need to delete button from view, should just re-render existing elements... 
+                ReloadCharacters();
+            });
 
             // Add listeners for Back Buttons in all UI elements
             NewBackButton.GetComponent<Button>().onClick.AddListener(() => SwitchPanel(MainMenuPanel));
@@ -86,15 +89,15 @@ namespace ExploreTogether{
         }
 
         void InitializeNewStart(){
-            CharacterData new_character = MakeNewCharacter();
-            if(new_character==null){
+            manager.chosen_character_data = MakeNewCharacter();
+            if(manager.chosen_character_data==null){
                 Debug.LogError("Error making new character");
             }else{
-                StartGame(new_character);
+                StartGame(false);
             }
         }
 
-        CharacterData MakeNewCharacter(){
+        public CharacterData MakeNewCharacter(){
             string sanitized_name = SanitizeCharacterName(CharacterNameInput.text);
             if(sanitized_name==null){
                 Debug.Log("Name already exists");
@@ -117,45 +120,11 @@ namespace ExploreTogether{
             character_data.position = new Vector3(0, 1.5f, 0);  // initial starting position of generation
 
             // Convert the object to JSON
-            if(SaveCharacterData(character_data, true)==false){
+            if(manager.file.SaveCharacterData(character_data, true)==false){
                 Debug.LogError("Refusing to overwrite existing save game data as new character.");
                 return null;
             }
             return character_data;
-        }
-
-        CharacterData LoadCharacterData(string character_name){
-            Debug.Log("LOADING CHARACTER NAME: " + character_name);
-            string filePath = CreateCharacterSaveFileName(character_name, true);
-            if (File.Exists(filePath)==false){
-                Debug.LogError("No character data to load");
-                return null;
-            }
-            string jsonData = File.ReadAllText(filePath);
-            CharacterData loaded_data = ScriptableObject.CreateInstance<CharacterData>();
-            JsonUtility.FromJsonOverwrite(jsonData, loaded_data);
-            return loaded_data;
-        }
-
-        public bool SaveCharacterData(CharacterData _character_data, bool isNew=false){
-            string filePath = CreateCharacterSaveFileName(_character_data.character_name, true);
-            if(File.Exists(filePath)==true && isNew){
-                Debug.LogError("Save file already exists.  Preventing overwrite on new character.");
-                return false;
-            }
-            // Convert the object to JSON
-            string character_json_data = JsonUtility.ToJson(_character_data);
-            // Write the JSON string to a file
-            File.WriteAllText(filePath, character_json_data);
-            return true;
-        }
-
-        string CreateCharacterSaveFileName(string character_name, bool fullPath=false){
-            if(fullPath==true){
-                return Application.persistentDataPath + "\\" + character_name + "_character_save.json";
-            }else{
-                return character_name + "_character_save.json";
-            }
         }
 
         string SanitizeCharacterName(string raw_input){
@@ -164,7 +133,7 @@ namespace ExploreTogether{
             san_input = san_input.Replace("<", "&lt;").Replace(">", "&gt;"); // Escape HTML tags
             san_input = san_input.Replace(";", ""); // Optionally, remove semicolons (to prevent code injection)
             // make sure character with name doesn't already exist
-            if(CheckNameExists(san_input)){
+            if(manager.file.CheckNameExists(san_input)){
                 return null;
             }
             return san_input;
@@ -178,8 +147,12 @@ namespace ExploreTogether{
         // need a function to handle reloading the load characters list
         void ReloadCharacters(){
             ClearCharactersFromScrollView();
-            AddCharactersToScrollView(GetCharacterList(GetSavesInDir()));
+            RenderCharactersScrollView();
         }
+
+        public void RenderCharactersScrollView(){
+            AddCharactersToScrollView(manager.file.GetCharacterList(manager.file.GetSavesInDir()));
+        }      
 
         void ClearCharactersFromScrollView(){
             foreach(Transform child in LoadCharacterContent){
@@ -187,39 +160,22 @@ namespace ExploreTogether{
             }
         }
 
-        bool DeleteCharacterData(string character_name){
-            string filePath = CreateCharacterSaveFileName(character_name, true);
-            if(File.Exists(filePath)==false){
-                Debug.LogError("Save file doesn't exist.  Nothing to delete.");
-                return false;
-            }
-            File.Delete(filePath);
-            // should check filepath again if file exists...
-            if(File.Exists(filePath)!=false){
-                Debug.LogError("Failed to delete file.");
-                return false;
-            }
-            // need to delete button from view, should just re-render existing elements... 
-            ReloadCharacters();
-            return true;
-        }
-
         void AttemptLoadGame(string character_name){
-            manager.chosen_character_data = LoadCharacterData(character_name);
+            manager.chosen_character_data = manager.file.LoadCharacterData(character_name);
             if(manager.chosen_character_data==null){
                 Debug.LogError("attempted to load data but nothing came back");
             }else{
                 // setup player shit, then start game...
                 // start looping through the manager.chosen_character_data for inventory/gear
                 if(manager.chosen_character_data.inventory!=null){
-                    bool import_inv_result = manager.player_inventory.ImportInventory(manager.chosen_character_data.inventory);
+                    bool import_inv_result = manager.player_inventory.ImportInventory(manager.chosen_character_data.inventory, true);
                 }
 
                 if(manager.chosen_character_data.gear!=null){
-                    bool import_inv_result = manager.player_gear.ImportGear(manager.chosen_character_data.gear);
+                    bool import_inv_result = manager.player_gear.ImportGear(manager.chosen_character_data.gear, true);
                 }
                 // game mode dependent stuff should happen within that class...
-                StartGame(manager.chosen_character_data);
+                StartGame(true);
             }
         }
 
@@ -280,16 +236,12 @@ namespace ExploreTogether{
             // adjust the size of scroll view
         }
 
-        void StartGame(CharacterData chosenCharacterData){
-            Debug.Log("This should launch the game with player data");
-            Debug.Log("TESTING USE OF NAME: " + chosenCharacterData.character_name);
-            Debug.Log("chosen char data: " + JsonUtility.ToJson(chosenCharacterData));
-            manager.chosen_character_data = chosenCharacterData;
+        void StartGame(bool _isLoading){
             // eventually this should be changed so that we setup an enum or something for mode types, and use that for both the dropdown and this...
             // it's probably already setup...
-            manager.lobby_mode = chosenCharacterData.game_mode;
+            manager.lobby_mode = manager.chosen_character_data.game_mode;
             manager.game_mode = manager.LoadGameMode();
-            manager.game_mode.SpawnMap(true);
+            manager.game_mode.SpawnMap(_isLoading);
             // manager.player.transform.position = chosenCharacterData.position;
             SwitchPanel(null);
         }
@@ -297,69 +249,11 @@ namespace ExploreTogether{
         void QuitGame(){
             #if UNITY_EDITOR
                 UnityEditor.EditorApplication.isPlaying = false;
-                Debug.Log("TESTING ONE PLACE");
+                Debug.Log("Quit Game Unity Editor");
             #else
                 Application.Quit();
-                Debug.Log("TESTING ANOTHER PLACE");
+                Debug.Log("Quitting application");
             #endif
-        }
-
-        string[] GetSavesInDir(){
-            var path = Application.persistentDataPath;
-            if (Directory.Exists(path)==false){    
-                // directory doesn't exist
-                return Array.Empty<string>();
-            }
-            // Get all file paths in the directory
-            string[] filePaths = Directory.GetFiles(path);
-
-            if(filePaths==null || filePaths.Length==0){
-                // no save files found
-                return Array.Empty<string>();
-            }
-
-            // return all files found
-            return filePaths;
-        }
-
-        // form character list from result of GetSavesInDir
-        List<string> GetCharacterList(string[] character_save_paths){
-            List<string> character_list = new List<string>();
-            if(character_save_paths==null || character_save_paths.Length==0){
-                // no save files found
-                return new List<string>();
-            }
-            // Iterate through the file paths and print them to the console
-            foreach (var filePath in character_save_paths){
-                string found_name = filePath.Replace(Application.persistentDataPath + "\\", "").Replace("_character_save.json", "");
-                // Debug.Log("Character name found: " + found_name);
-                character_list.Add(found_name);
-            }
-            return character_list;
-        }
-
-        // check if character with name already exists in file dir
-        bool CheckNameExists(string check_name){
-            string[] filePaths = GetSavesInDir();
-
-            if(filePaths==null || filePaths.Length==0){
-                // no save files found
-                return false;
-            }else{
-                // Iterate through the file paths and print them to the console
-                foreach (var filePath in filePaths){
-                    string found_name = ParseName(filePath);
-                    // Debug.Log("Character name found: " + found_name);
-                    if(found_name==check_name){
-                        return true;
-                    }
-                }
-            }
-            return false;
-        }
-
-        string ParseName(string parse_this){
-            return parse_this.Replace(Application.persistentDataPath + "\\", "").Replace("_character_save.json", "");
         }
 
         private void OnButtonClick(TMP_Text pressed){

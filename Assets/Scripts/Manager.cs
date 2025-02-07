@@ -37,6 +37,8 @@ namespace ExploreTogether {
 
         public bool transition_period = false;
 
+        public FileHandler file;
+
         // eventually convert this to SO enum
         public enum GameState{
             Menu,
@@ -68,6 +70,7 @@ namespace ExploreTogether {
         // Start is called before the first frame update
         void Start(){
             // SetGameState(Manager.GameState.Transition);  // considering setting this by default on obj
+            file = ScriptableObject.CreateInstance("FileHandler") as FileHandler;
             hud = Instantiate(hudPrefab);
             hud.name = "HUD";
             hud.transform.GetChild(8).gameObject.SetActive(true);
@@ -208,6 +211,8 @@ namespace ExploreTogether {
         void OnApplicationQuit(){
             // this seems to work for editor and quit button... probably also works for X button
             Debug.Log("ON APPLICATION QUIT TESTING");
+            // WOULD BE A GREAT IDEA TO SETUP A NEW VARIABLE HERE, THEN CALL A FUNCTION ON GAME MODE FOR MODE SPECIFIC DATA
+            chosen_character_data.hub_storage_inventory = hub.GetComponent<Hub>().hub_storage.GetComponent<Storage>().storage_inventory.ExportInventory();
             chosen_character_data.gear = player_gear.ExportGear();
             chosen_character_data.inventory = player_inventory.ExportInventory();
             chosen_character_data.dungeon_nodes = map.GetComponent<Maze>().ExportMaze();    // this should probably be dependent on game mode?
@@ -217,7 +222,7 @@ namespace ExploreTogether {
             chosen_character_data.position = player.transform.position;
             chosen_character_data.yRotation = player.transform.eulerAngles.y;
             // get latest character data and save
-            hud.transform.GetChild(13).gameObject.GetComponent<MainMenuLogicUI>().SaveCharacterData(chosen_character_data);
+            file.SaveCharacterData(chosen_character_data);
         }
     }
 }

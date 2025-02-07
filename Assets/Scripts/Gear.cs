@@ -121,13 +121,15 @@ namespace ExploreTogether {
             return gear_item_ids;
         }
 
-        public bool ImportGear(List<int> gear_item_ids){
+        public bool ImportGear(List<int> gear_item_ids, bool _player_gear){
             for(int i=0;i<gear_item_ids.Count;i++){ 
                 if(gear_item_ids[i]==-1) continue;
                 // I need to assign the item based on the id...
                 if(manager.item_bank.ContainsKey(gear_item_ids[i])){
                     slots[i].item = manager.item_bank[gear_item_ids[i]];
-                    onInventoryChanged.Raise(null, slots[i]);
+                    if(_player_gear==true){
+                        onInventoryChanged.Raise(null, slots[i]);
+                    }
                 }
             }
             return true;

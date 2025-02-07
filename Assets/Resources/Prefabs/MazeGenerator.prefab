@@ -50,17 +50,18 @@ MonoBehaviour:
   tJunc: {fileID: 2616338808247977977, guid: 5d8bbed389838b34e967ffc5b459b272, type: 3}
   xJunc: {fileID: 6742300973328605398, guid: f4e46c870dbe5f44695d4d09534820da, type: 3}
   cJunc: {fileID: 3089725247197783406, guid: fb4094d99c18e0f448f499b1064888de, type: 3}
-  itemSpawn: {fileID: 4061282081970076034, guid: 8c1e847575265b54b8c73d502dda2a08, type: 3}
   enemyPrefab: {fileID: 0}
   torchPrefab: {fileID: 0}
   treePrefab: {fileID: 0}
+  prefabSize: 5
   generated_nodes: []
   xJunctions: []
-  max_width: 10
-  max_height: 10
+  max_width: 5
+  max_height: 5
   max_dungeon_length: 400
   total_count: 0
   maze_generated: 0
+  needs_generation: 1
   manager: {fileID: 0}
   surfaces: []
   nav_builder: {fileID: 0}

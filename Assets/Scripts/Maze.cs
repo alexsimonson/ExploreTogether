@@ -320,7 +320,6 @@ namespace ExploreTogether {
             }
             GameObject spawnedMazePiece = InstantiateModified(node, node_prefab, rotation_degrees);
             spawnedMazePiece.transform.SetParent(gameObject.transform);
-            // surfaces.Add(spawnedMazePiece.transform.GetChild(0).GetComponent<NavMeshSurface>());
             surfaces.Add(spawnedMazePiece.GetComponent<NavMeshSurface>());
         }
 
@@ -389,6 +388,12 @@ namespace ExploreTogether {
 
         public bool ImportMaze(List<GeneratedNodeSerializable> dungeon_nodes){
             if(dungeon_nodes==null || dungeon_nodes.Count==0){
+                if(dungeon_nodes==null){
+                    Debug.LogError("ImportMaze Error: Dungeon_nodes is null");
+                }
+                if(dungeon_nodes.Count==0){
+                    Debug.LogError("ImportMaze Error: Dungeon_nodes count is 0");
+                }
                 return false;
             }
             // reset nodes

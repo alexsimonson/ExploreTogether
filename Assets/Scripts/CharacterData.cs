@@ -16,5 +16,6 @@ namespace ExploreTogether{
         public List<MazeSpawnedItemSerializable> spawned_items;    // stores item id and position
         public List<MazeSpawnedObjectSerializable> enemy_positions;
         public List<MazeSpawnedObjectSerializable> spawned_resources;  // anything spawned using SpawnResource
+        public List<int> hub_storage_inventory;
     }
 }

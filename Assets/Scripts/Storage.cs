@@ -105,12 +105,12 @@ namespace ExploreTogether {
 
             // let's spawn a bunch of random items to storage_inventory
             // this will be for number of items
-            int minRange = 0;
-            int maxRange = storage_inventory.max_slots;
-            int randomNumItemsInt = Random.Range(minRange, maxRange + 1);
-            for(int i=0;i<randomNumItemsInt;i++){
-                storage_inventory.AddItem(manager.GenerateItem());
-            }
+            // int minRange = 0;
+            // int maxRange = storage_inventory.max_slots;
+            // int randomNumItemsInt = Random.Range(minRange, maxRange + 1);
+            // for(int i=0;i<randomNumItemsInt;i++){
+            //     storage_inventory.AddItem(manager.GenerateItem());
+            // }
         }
     }
 }

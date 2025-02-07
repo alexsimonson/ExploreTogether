@@ -172,13 +172,15 @@ namespace ExploreTogether {
             return inventory_item_ids;
         }
 
-        public bool ImportInventory(List<int> inventory_item_ids){
+        public bool ImportInventory(List<int> inventory_item_ids, bool _player_inventory=false){
             for(int i=0;i<inventory_item_ids.Count;i++){ 
                 if(inventory_item_ids[i]==-1) continue;
                 // I need to assign the item based on the id...
                 if(manager.item_bank.ContainsKey(inventory_item_ids[i])){
                     slots[i].item = manager.item_bank[inventory_item_ids[i]];
-                    onInventoryChanged.Raise(null, slots[i]);
+                    if(_player_inventory==true){
+                        onInventoryChanged.Raise(null, slots[i]);
+                    }
                 }
             }
             return true;
